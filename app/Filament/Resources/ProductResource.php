@@ -42,7 +42,7 @@ class ProductResource extends Resource
                     Forms\Components\TextInput::make('price')
                         ->required()
                         ->numeric()
-                        ->prefix('€'), // O tu moneda
+                        ->prefix('S/.'), // O tu moneda
                     Forms\Components\TextInput::make('stock')
                         ->required()
                         ->numeric()
@@ -97,7 +97,7 @@ class ProductResource extends Resource
                 ->searchable()
                 ->sortable(),
             Tables\Columns\TextColumn::make('price')
-                ->money('eur') // Formatear como moneda
+                ->money('S/.') // Formatear como moneda
                 ->sortable(),
             Tables\Columns\TextColumn::make('stock')
                 ->numeric()
