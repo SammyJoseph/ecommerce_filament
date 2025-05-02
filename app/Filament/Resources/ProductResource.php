@@ -20,7 +20,7 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
     public static function form(Form $form): Form
     {
@@ -62,7 +62,6 @@ class ProductResource extends Resource
                     Forms\Components\Toggle::make('is_featured')
                         ->label('Featured')
                         ->default(false),
-                    // ¡AQUÍ LA MAGIA PARA LAS IMÁGENES!
                     SpatieMediaLibraryFileUpload::make('product_images') // 'product_image' es el nombre de la colección que usarás
                         ->label('Main Image')
                         ->collection('product_images') // DEBE coincidir con lo que esperas en el modelo
@@ -82,11 +81,15 @@ class ProductResource extends Resource
     {
         return $table
         ->columns([
+            Tables\Columns\TextColumn::make('id')
+                ->sortable()
+                ->label('ID'),
             SpatieMediaLibraryImageColumn::make('product_images')
             ->label('Main Image')
             ->collection('product_images')
             ->conversion('thumb')
             ->columnSpanFull(),
+            
             Tables\Columns\TextColumn::make('name')
                 ->searchable()
                 ->sortable(),

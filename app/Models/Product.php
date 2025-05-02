@@ -39,7 +39,7 @@ class Product extends Model implements HasMedia
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-            ->performOnCollections('product_images') // Especifica la colección
+            ->performOnCollections('product_images') // nombre de la colección de imágenes
             ->width(150)
             ->height(150)
             ->sharpen(10)
