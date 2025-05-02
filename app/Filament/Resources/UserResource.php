@@ -17,7 +17,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?string $navigationIcon = 'heroicon-o-user';
 
     public static function form(Form $form): Form
     {
@@ -29,13 +29,21 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
+                    ->maxLength(255)
+                    ->extraAttributes(['autocomplete' => 'off']),
+                // Forms\Components\DateTimePicker::make('email_verified_at'),
+                Forms\Components\Select::make('roles')
+                    ->relationship('roles', 'name')
+                    ->preload()
+                    ->required()
+                    ->searchable()
+                    ->label('Role'),
                 Forms\Components\TextInput::make('password')
                     ->password()
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\Textarea::make('two_factor_secret')
+                    ->maxLength(255)
+                    ->extraAttributes(['autocomplete' => 'new-password']),
+                /* Forms\Components\Textarea::make('two_factor_secret')
                     ->columnSpanFull(),
                 Forms\Components\Textarea::make('two_factor_recovery_codes')
                     ->columnSpanFull(),
@@ -45,7 +53,7 @@ class UserResource extends Resource
                     ->default(null),
                 Forms\Components\TextInput::make('profile_photo_path')
                     ->maxLength(2048)
-                    ->default(null),
+                    ->default(null), */             
             ]);
     }
 
@@ -57,17 +65,21 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->label('Role')
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('two_factor_confirmed_at')
+                /* Tables\Columns\TextColumn::make('two_factor_confirmed_at')
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('current_team_id')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('profile_photo_path')
-                    ->searchable(),
+                    ->searchable(), */
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
