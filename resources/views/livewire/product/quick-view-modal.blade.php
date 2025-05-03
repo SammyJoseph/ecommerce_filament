@@ -224,7 +224,7 @@
                                 </ul>
                                 <span class="quickview__info--review__text">(5 reviews)</span>
                             </div>
-                            <p class="product__details--info__desc mb-15">{{  $product->description }}</p>
+                            <p class="product__details--info__desc mb-15">{{ Str::limit($product->description, 150) }}</p>
                             <div class="product__variant">
                                 <div class="product__variant--list mb-15">
                                     <fieldset class="variant__input--fieldset">
