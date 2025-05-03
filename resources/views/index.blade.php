@@ -24,7 +24,6 @@
 </head>
 
 <body>
-
     <!-- Start header area -->
     <header class="header__section header__transparent">
         <!-- Start Header topbar -->
@@ -645,7 +644,7 @@
                     </li>
                     @endforeach
                 </ul>
-                <div class="tab_content">
+                <div class="tab_content" x-data>
                     @foreach ($categories as $category)
                     <div id="cat-{{ $category->id }}" class="tab_pane {{ $loop->first ? 'active show' : '' }}">
                         <div class="product__section--inner">
@@ -665,10 +664,11 @@
                                             @endif
                                             <ul class="product__items--action d-flex justify-content-center">
                                                 <li class="product__items--action__list">
-                                                    <a class="product__items--action__btn" data-open="modal1" href="javascript:void(0)">
+                                                    <button class="product__items--action__btn"
+                                                        @click="$dispatch('populate-modal', { productId: {{ $product->id }} })">
                                                         <svg class="product__items--action__btn--svg" xmlns="http://www.w3.org/2000/svg"  width="20.51" height="19.443" viewBox="0 0 512 512"><path d="M255.66 112c-77.94 0-157.89 45.11-220.83 135.33a16 16 0 00-.27 17.77C82.92 340.8 161.8 400 255.66 400c92.84 0 173.34-59.38 221.79-135.25a16.14 16.14 0 000-17.47C428.89 172.28 347.8 112 255.66 112z" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/><circle cx="256" cy="256" r="80" fill="none" stroke="currentColor" stroke-miterlimit="10" stroke-width="32"/></svg>
                                                         <span class="visually-hidden">Quick View</span>
-                                                    </a>
+                                                    </button>
                                                 </li>
                                                 <li class="product__items--action__list">
                                                     <a class="product__items--action__btn" href="wishlist.html">
@@ -2101,50 +2101,17 @@
     <!-- Scroll top bar -->
     <button aria-label="scroll top btn" id="scroll__top"><svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 244l144-144 144 144M256 120v292"/></svg></button>
     
-  <!-- All Script JS Plugins here  -->
-  <script src="{{ asset('assets/js/vendor/popper.js') }}" defer="defer"></script>
-  <script src="{{ asset('assets/js/vendor/bootstrap.min.js') }}" defer="defer"></script>
-  <script src="{{ asset('assets/js/plugins/swiper-bundle.min.js') }}" defer="defer"></script>
-  <script src="{{ asset('assets/js/plugins/glightbox.min.js') }}" defer="defer"></script>
+    <!-- All Script JS Plugins here  -->
+    <script src="{{ asset('assets/js/vendor/popper.js') }}" defer></script>
+    <script src="{{ asset('assets/js/vendor/bootstrap.min.js') }}" defer></script>
+    <script src="{{ asset('assets/js/plugins/swiper-bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/glightbox.min.js') }}"></script>
 
-  <!-- Customscript js -->
-  <script src="{{ asset('assets/js/script.js') }}" defer="defer"></script>
+    <!-- Customscript js -->
+    <script src="{{ asset('assets/js/script.js') }}" defer></script>
   
-  @livewireScripts
-    <script>
-        document.addEventListener('alpine:init', () => {
-            // Escucha el evento disparado por Livewire cuando el modal se carga/actualiza
-            window.addEventListener('quick-view-modal-loaded', event => {
-                // Pequeño retraso para asegurar que el DOM esté listo
-                setTimeout(() => {
-                    // Re-inicializa Swiper (ajusta selectores según tu HTML final)
-                    // Ejemplo: si tienes un swiper para thumbs y otro para preview
-                    var thumbsSwiper = new Swiper('.quickview__main--wrapper .product__media--nav', {
-                        // Opciones de Swiper para miniaturas...
-                        spaceBetween: 10,
-                        slidesPerView: 4,
-                        freeMode: true,
-                        watchSlidesProgress: true,
-                    });
-                    var previewSwiper = new Swiper('.quickview__main--wrapper .product__media--preview ', {
-                        // Opciones de Swiper para la imagen principal...
-                        spaceBetween: 10,
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
-                        },
-                        thumbs: {
-                            swiper: thumbsSwiper,
-                        },
-                    });
+    @livewireScripts
 
-                    // Re-inicializa GLightbox (si aún lo usas)
-                    // const lightbox = GLightbox({ selector: '.quickview__main--wrapper .glightbox' });
-                    // console.log('Swiper/Lightbox re-initialized for Quick View');
-
-                }, 50); // Ajusta el timeout si es necesario
-            });
-        });
-    </script>
+    
 </body>
 </html>

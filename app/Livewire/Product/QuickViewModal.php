@@ -3,35 +3,47 @@
 namespace App\Livewire\Product;
 
 use Livewire\Component;
-use App\Models\Product; // Asegúrate de importar tu modelo Product
-use Livewire\Attributes\On; // Para Livewire 3+
+use App\Models\Product;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 
 class QuickViewModal extends Component
 {
     public ?Product $product = null;
-    public bool $showModal = true;
+    public bool $isOpen = false;
 
-    // Escucha el evento 'showQuickView' disparado desde la lista de productos
-    #[On('showQuickView')]
-    public function loadProduct($productId)
+    #[On('populate-modal')]
+    public function openModal($productId = null)
     {
-        // Carga el producto con sus relaciones necesarias (ej. media)
-        $this->product = Product::with('media')->find($productId);
+        Log::info('Abriendo modal con productId:', ['productId' => $productId]);
 
-        if ($this->product) {
-            $this->showModal = true;
-            // Disparamos un evento para que JS/Alpine pueda re-inicializar librerías si es necesario
+        if (!$productId) {
+             Log::error('productId no proporcionado');
+             return;
+        }
+
+        try {
+            $this->product = Product::with('media')->findOrFail($productId);
+            $this->isOpen = true;
+
+            Log::info('Producto cargado:', [
+                'id' => $this->product->id,
+                'name' => $this->product->name
+            ]);
+
             $this->dispatch('quick-view-modal-loaded');
-        } else {
-            // Manejar caso de producto no encontrado si es necesario
-            $this->showModal = false;
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+             Log::warning('Producto no encontrado para quick view: ID ' . $productId);
+        } catch (\Exception $e) {
+            Log::error('Error al cargar producto en quick view: ' . $e->getMessage());
         }
     }
 
     public function closeModal()
-    {
-        $this->showModal = false;
-        $this->product = null; // Limpia el producto al cerrar
+    {        
+        $this->product = null;
+        $this->isOpen = false;
     }
 
     public function render()
