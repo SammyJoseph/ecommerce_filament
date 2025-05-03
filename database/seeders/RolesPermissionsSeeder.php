@@ -23,9 +23,5 @@ class RolesPermissionsSeeder extends Seeder
         Permission::create(['name' => 'edit products']);
         Permission::create(['name' => 'delete users']);
         $adminRole->givePermissionTo(Permission::all()); // Dar todos los permisos al rol admin
-
-        // Asignar rol 'admin' al Usuario Administrador
-        $adminUser = User::where('email', 'sam@example.com')->first();
-        $adminUser->assignRole($adminRole);
     }
 }

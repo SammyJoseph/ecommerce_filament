@@ -41,13 +41,8 @@ class DatabaseSeeder extends Seeder
             $this->command->error("An unexpected error occurred while deleting media directories: " . $e->getMessage());
         }
 
-        User::factory()->create([
-            'name' => 'Sam',
-            'email' => 'sam@example.com',
-        ]);
-
         $this->call(RolesPermissionsSeeder::class);
-
+        $this->call(UserSeeder::class);
         $this->call(CategorySeeder::class);
         // $this->call(ProductSeeder::class); // ahroa los productos se crean en CategorySeeder
     }
