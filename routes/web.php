@@ -19,6 +19,11 @@ Route::middleware([
 
 Route::get('/cart', function () {
     Cart::instance('shopping');
-    
     return view('cart');
 })->name('cart');
+
+Route::get('/raw-cart', function () {
+    Cart::instance('shopping');
+    $cart = Cart::content();
+    return response()->json($cart);
+});

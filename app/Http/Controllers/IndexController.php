@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -14,7 +15,10 @@ class IndexController extends Controller
             $query->take(10); // takes 10 products per category
         }])->take(5)->get(); // takes 5 categories
 
-        return view('index', compact('categories'));
+        Cart::instance('shopping');
+        $productsInCart = Cart::content();
+
+        return view('index', compact('categories', 'productsInCart'));
     }
 
     public function productDetails(Product $product)
