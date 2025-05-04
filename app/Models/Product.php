@@ -31,6 +31,11 @@ class Product extends Model implements HasMedia
         'is_featured' => 'boolean',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

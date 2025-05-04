@@ -4,6 +4,7 @@ use App\Http\Controllers\IndexController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
+Route::get('/product/{product}', [IndexController::class, 'productDetails'])->name('product.details');
 
 Route::middleware([
     'auth:sanctum',

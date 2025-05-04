@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -14,5 +15,10 @@ class IndexController extends Controller
         }])->take(5)->get(); // takes 5 categories
 
         return view('index', compact('categories'));
+    }
+
+    public function productDetails(Product $product)
+    {
+        return view('product-details', compact('product'));
     }
 }
