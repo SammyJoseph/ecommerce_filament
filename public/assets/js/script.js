@@ -1017,10 +1017,10 @@ categoryMobileMenu();
 
 // Newsletter
 window.addEventListener('load', function() {
-  setTimeout(function() {
+  /* setTimeout(function() {
     document.body.classList.add('overlay__active');
     document.querySelector('.newsletter__popup').classList.add('newsletter__show');
-  }, 5000);
+  }, 5000); */
 
   document.addEventListener('click', function(event) {
     const newsletter = document.querySelector('.newsletter__popup');

@@ -474,7 +474,7 @@
                 <label class="minicart__conditions--label" for="accept">I agree with the <a class="minicart__conditions--link" href="privacy-policy.html">Privacy And Policy</a></label>
             </div>
             <div class="minicart__button d-flex justify-content-center">
-                <a class="primary__btn minicart__button--link" href="cart.html">View cart</a>
+                <a class="primary__btn minicart__button--link" href="{{ route('cart') }}">View cart</a>
                 <a class="primary__btn minicart__button--link" href="checkout.html">Checkout</a>
             </div>
         </div>
@@ -700,12 +700,7 @@
                                                 <span class="current__price">S/.{{ $product->price }}</span>
                                                 {{-- <span class="old__price">{{ $product->price_disc }}</span> --}}
                                             </div>
-                                            <a class="product__items--action__cart--btn primary__btn" href="cart.html">
-                                                <svg class="product__items--action__cart--btn__icon" xmlns="http://www.w3.org/2000/svg" width="13.897" height="14.565" viewBox="0 0 18.897 21.565">
-                                                    <path  d="M16.84,8.082V6.091a4.725,4.725,0,1,0-9.449,0v4.725a.675.675,0,0,0,1.35,0V9.432h5.4V8.082h-5.4V6.091a3.375,3.375,0,0,1,6.75,0v4.691a.675.675,0,1,0,1.35,0V9.433h3.374V21.581H4.017V9.432H6.041V8.082H2.667V21.641a1.289,1.289,0,0,0,1.289,1.29h16.32a1.289,1.289,0,0,0,1.289-1.29V8.082Z" transform="translate(-2.667 -1.366)" fill="currentColor"></path>
-                                                </svg>
-                                                <span class="add__to--cart__text"> Add to cart</span>
-                                            </a>
+                                            @livewire('product.add-to-cart', ['product' => $product], key($product->id))
                                         </div>
                                     </div>
                                 </div>
@@ -2105,5 +2100,17 @@
     <script src="{{ asset('assets/js/script.js') }}" defer></script>
   
     @livewireScripts
+
+    <script>
+        document.addEventListener('livewire:init', () => {
+            document.addEventListener('open-minicart', (event) => {
+                const openBtn = document.querySelector('.minicart__open--btn');
+                if (openBtn) {
+                    openBtn.click();
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>

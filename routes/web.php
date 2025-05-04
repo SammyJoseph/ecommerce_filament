@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\IndexController;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
@@ -15,3 +16,9 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::get('/cart', function () {
+    Cart::instance('shopping');
+    
+    return view('cart');
+})->name('cart');
