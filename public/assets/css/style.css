@@ -7338,6 +7338,10 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 
+.modal-dialog.quickview__main--wrapper .modal-header.quickview__header{
+  border: none;
+}
+
 .quickview__close--btn {
   font-size: 1.8rem;
   padding: 0;

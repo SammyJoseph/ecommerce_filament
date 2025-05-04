@@ -1014,3 +1014,22 @@ const categoryMobileMenu = function () {
   }
 };
 categoryMobileMenu();
+
+// Newsletter
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    document.body.classList.add('overlay__active');
+    document.querySelector('.newsletter__popup').classList.add('newsletter__show');
+  }, 5000);
+
+  document.addEventListener('click', function(event) {
+    const newsletter = document.querySelector('.newsletter__popup');
+    const newsletterInner = document.querySelector('.newsletter__popup--inner');
+    const closeBtn = document.querySelector('.newsletter__popup--close__btn');
+    
+    if (newsletter && !newsletterInner.contains(event.target) || closeBtn.contains(event.target)) {
+      document.body.classList.remove('overlay__active');
+      newsletter.classList.remove('newsletter__show');
+    }
+  });
+});
