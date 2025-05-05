@@ -13,32 +13,46 @@
     <link rel="stylesheet" href="{{ asset('assets/css/plugins/glightbox.min.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 
-    <!-- Plugin css -->
-    <link rel="stylesheet" href="{{ asset('assets/css/vendor/bootstrap.min.css') }}">
-
     <!-- Custom Style CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+
+    @stack('styles')
 
     @vite(['resources/js/app.js'])
     @livewireStyles
 </head>
 
 <body>
+    @include('layouts._partials.index-header')
     @yield('content')
+    @include('layouts._partials.index-footer')
 
     <!-- Scroll top bar -->
-    <button aria-label="scroll top btn" id="scroll__top"><svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
-            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M112 244l144-144 144 144M256 120v292" />
+    <button aria-label="scroll top btn" id="scroll__top"><svg xmlns="http://www.w3.org/2000/svg" class="ionicon"
+            viewBox="0 0 512 512">
+            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48"
+                d="M112 244l144-144 144 144M256 120v292" />
         </svg></button>
 
     <!-- All Script JS Plugins here  -->
-    <script src="{{ asset('assets/js/vendor/popper.js') }}" defer></script>
-    <script src="{{ asset('assets/js/vendor/bootstrap.min.js') }}" defer></script>
     <script src="{{ asset('assets/js/plugins/swiper-bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/glightbox.min.js') }}"></script>
 
     <!-- Customscript js -->
     <script src="{{ asset('assets/js/script.js') }}" defer></script>
+
+    <script>
+        document.addEventListener('livewire:init', () => {
+            document.addEventListener('open-minicart', (event) => {
+                const openBtn = document.querySelector('.minicart__open--btn');
+                if (openBtn) {
+                    openBtn.click();
+                }
+            });
+        });
+    </script>
+
+    @stack('scripts')
 
     @livewireScripts
 </body>

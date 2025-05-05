@@ -2164,6 +2164,22 @@ body.overlay__active::before,
   }
 }
 
+.mt-30 {
+  margin-top: 2rem;
+}
+
+@media only screen and (min-width: 992px) {
+  .mt-30 {
+    margin-top: 2.5rem;
+  }
+}
+
+@media only screen and (min-width: 1600px) {
+  .mt-30 {
+    margin-top: 3rem;
+  }
+}
+
 .mb--n30 {
   margin-bottom: -2rem;
 }
