@@ -15,10 +15,7 @@ class IndexController extends Controller
             $query->take(10); // takes 10 products per category
         }])->take(5)->get(); // takes 5 categories
 
-        Cart::instance('shopping');
-        $productsInCart = Cart::content();
-
-        return view('index', compact('categories', 'productsInCart'));
+        return view('index', compact('categories'));
     }
 
     public function productDetails(Product $product)

@@ -1,4 +1,4 @@
-<div class="modal {{ $isOpen ? 'is-visible' : '' }}"" id="modal1" data-animation="slideInUp">
+<div class="modal {{ $isOpen ? 'is-visible' : '' }}" id="modal1" data-animation="slideInUp">
     <div class="modal-dialog quickview__main--wrapper">
        <header class="modal-header quickview__header">
             <button class="close-modal quickview__close--btn" aria-label="close modal" data-close="">✕ </button>

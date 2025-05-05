@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Livewire\Product;
+
+use Livewire\Component;
+use Gloudemans\Shoppingcart\Facades\Cart as ShoppingCart;
+use Illuminate\Support\Facades\Log;
+
+class Cart extends Component
+{
+    public function render()
+    {
+        $productsInCart = ShoppingCart::instance('shopping')->content();
+
+        return view('livewire.product.cart', compact('productsInCart'));
+    }
+
+    public function removeFromCart($rowId)
+    {
+        ShoppingCart::instance('shopping')->remove($rowId);
+    }
+
+    public function clearCart()
+    {
+        ShoppingCart::instance('shopping')->destroy();
+    }
+}
