@@ -204,7 +204,10 @@
                                                 <span class="current__price">S/.{{ $product->price }}</span>
                                                 {{-- <span class="old__price">{{ $product->price_disc }}</span> --}}
                                             </div>
-                                            @livewire('product.add-to-cart', ['product' => $product], key($product->id))
+                                            @livewire('product.add-to-cart', [
+                                                'product' => $product,
+                                                'classes' => 'product__items--action__cart--btn primary__btn',
+                                                ], key($product->id))
                                         </div>
                                     </div>
                                 </div>

@@ -11,6 +11,19 @@ class QuickViewModal extends Component
 {
     public ?Product $product = null;
     public bool $isOpen = false;
+    public $quantity = 1;
+
+    public function increaseQuantity()
+    {
+        $this->quantity++;
+    }
+
+    public function decreaseQuantity()
+    {
+        if ($this->quantity > 1) {
+            $this->quantity--;
+        }
+    }
 
     #[On('populate-modal')]
     public function openModal($productId = null)

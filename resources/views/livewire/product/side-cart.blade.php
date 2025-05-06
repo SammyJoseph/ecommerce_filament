@@ -18,16 +18,16 @@
                 <h4 class="minicart__subtitle"><a href="product-details.html">{{ $product->name }}</a></h4>
                 <span class="color__variant"><b>Color:</b> Beige</span>
                 <div class="minicart__price">
-                    <span class="current__price">{{ $product->price }}</span>
+                    <span class="current__price">{{ $product->subtotal }}</span>
                     <span class="old__price">$140.00</span>
                 </div>
                 <div class="minicart__text--footer d-flex align-items-center">
                     <div class="quantity__box minicart__quantity">
-                        <button type="button" class="quantity__value decrease" aria-label="quantity value" value="Decrease Value">-</button>
+                        <button wire:click="decreaseQuantity('{{ $product->rowId }}')" type="button" class="quantity__value decrease" aria-label="quantity value" value="Decrease Value">-</button>
                         <label>
                             <input type="number" class="quantity__number" value="{{ $product->qty }}" />
                         </label>
-                        <button type="button" class="quantity__value increase" aria-label="quantity value" value="Increase Value">+</button>
+                        <button wire:click="increaseQuantity('{{ $product->rowId }}')" type="button" class="quantity__value increase" aria-label="quantity value" value="Increase Value">+</button>
                     </div>
                     <button wire:click="removeFromCart('{{ $product->rowId }}')" class="minicart__product--remove" aria-label="minicart remove btn">Remove</button>
                 </div>
@@ -48,7 +48,7 @@
         </div>
         <div class="minicart__amount_list d-flex justify-content-between">
             <span>Total:</span>
-            <span><b>$240.00</b></span>
+            <span><b>{{ Cart::subtotal() }}</b></span>
         </div>
     </div>
     <div class="minicart__conditions text-center">

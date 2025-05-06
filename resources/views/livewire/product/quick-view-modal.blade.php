@@ -178,7 +178,7 @@
                 @if ($product)
                 <div class="col">
                     <div class="quickview__info">
-                        <form action="#">
+                        <div>
                             <h2 class="product__details--info__title mb-15">{{ $product->name }}</h2>
                             <div class="product__details--info__price mb-12">
                                 <span class="current__price">{{ $product->price }}</span>
@@ -270,13 +270,17 @@
                                 </div>
                                 <div class="quickview__variant--list quantity d-flex align-items-center mb-15">
                                     <div class="quantity__box">
-                                        <button type="button" class="quantity__value quickview__value--quantity decrease" aria-label="quantity value" value="Decrease Value">-</button>
+                                        <button wire:click="decreaseQuantity" type="button" class="quantity__value quickview__value--quantity decrease" aria-label="quantity value" value="Decrease Value">-</button>
                                         <label>
-                                            <input type="number" class="quantity__number quickview__value--number" value="1">
+                                            <input wire:model="quantity" type="number" class="quantity__number quickview__value--number" value="1">
                                         </label>
-                                        <button type="button" class="quantity__value quickview__value--quantity increase" aria-label="quantity value" value="Increase Value">+</button>
+                                        <button wire:click="increaseQuantity" type="button" class="quantity__value quickview__value--quantity increase" aria-label="quantity value" value="Increase Value">+</button>
                                     </div>
-                                    <button class="primary__btn quickview__cart--btn" type="submit">Add To Cart</button>  
+                                    @livewire('product.add-to-cart', [
+                                        'product' => $product,
+                                        'quantity' => $quantity,
+                                        'classes' => 'primary__btn quickview__cart--btn',
+                                        ], key($product->id . '_' . $quantity)) {{-- se agrega $quantity para re-renderizar el componente y reconozca el nuevo valor --}}
                                 </div>
                                 <div class="quickview__variant--list variant__wishlist mb-15">
                                     <a class="variant__wishlist--icon" href="wishlist.html" title="Add to wishlist">
@@ -322,7 +326,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
                 @endif

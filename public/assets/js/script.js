@@ -788,8 +788,8 @@ const offcanvasHeader = function () {
 /* Mobile Menu Active */
 offcanvasHeader();
 
-// Qunatity Button Activation
-const quantityWrapper = document.querySelectorAll(".quantity__box");
+// Quantity Button Activation
+/* const quantityWrapper = document.querySelectorAll(".quantity__box");
 if (quantityWrapper) {
   quantityWrapper.forEach(function (singleItem) {
     let input = singleItem.querySelector(".quantity__number");
@@ -811,7 +811,7 @@ if (quantityWrapper) {
       input.value = value;
     });
   });
-}
+} */
 
 // Modal JS
 const openEls = document.querySelectorAll("[data-open]");
