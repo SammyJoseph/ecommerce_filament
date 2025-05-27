@@ -5,9 +5,11 @@ namespace App\Livewire\Product;
 use Livewire\Component;
 use Gloudemans\Shoppingcart\Facades\Cart as ShoppingCart;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 
 class Cart extends Component
 {
+    #[On('cart-updated')]
     public function render()
     {
         $productsInCart = ShoppingCart::instance('shopping')->content();

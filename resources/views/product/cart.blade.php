@@ -15,8 +15,9 @@
                             <ul class="breadcrumb__content--menu d-flex">
                                 <li class="breadcrumb__content--menu__items"><a class="text-white"
                                         href="index.html">Home</a></li>
-                                <li class="breadcrumb__content--menu__items"><span class="text-white">Shopping
-                                        Cart</span></li>
+                                <li class="breadcrumb__content--menu__items">
+                                    <span class="text-white">Shopping Cart</span>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -29,59 +30,10 @@
         <section class="cart__section section--padding">
             <div class="container-fluid">
                 <div class="cart__section--inner">
-                    <form action="#">
+                    <div>
                         <h2 class="cart__title mb-40">Shopping Cart</h2>
-                        <div class="row">
-                            <div class="col-lg-8">
-                                @livewire('product.cart')
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="cart__summary border-radius-10">
-                                    <div class="coupon__code mb-30">
-                                        <h3 class="coupon__code--title">Coupon</h3>
-                                        <p class="coupon__code--desc">Enter your coupon code if you have one.</p>
-                                        <div class="coupon__code--field d-flex">
-                                            <label>
-                                                <input class="coupon__code--field__input border-radius-5"
-                                                    placeholder="Coupon code" type="text">
-                                            </label>
-                                            <button class="coupon__code--field__btn primary__btn" type="submit">Apply
-                                                Coupon</button>
-                                        </div>
-                                    </div>
-                                    <div class="cart__note mb-20">
-                                        <h3 class="cart__note--title">Note</h3>
-                                        <p class="cart__note--desc">Add special instructions for your seller...</p>
-                                        <textarea class="cart__note--textarea border-radius-5"></textarea>
-                                    </div>
-                                    <div class="cart__summary--total mb-20">
-                                        <table class="cart__summary--total__table">
-                                            <tbody>
-                                                <tr class="cart__summary--total__list">
-                                                    <td class="cart__summary--total__title text-left">SUBTOTAL</td>
-                                                    <td class="cart__summary--amount text-right">$860.00</td>
-                                                </tr>
-                                                <tr class="cart__summary--total__list">
-                                                    <td class="cart__summary--total__title text-left">GRAND TOTAL</td>
-                                                    <td class="cart__summary--amount text-right">$860.00</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="cart__summary--footer">
-                                        <p class="cart__summary--footer__desc">Shipping & taxes calculated at checkout
-                                        </p>
-                                        <ul class="d-flex justify-content-between">
-                                            <li><button class="cart__summary--footer__btn primary__btn cart"
-                                                    type="submit">Update Cart</button></li>
-                                            <li><a class="cart__summary--footer__btn primary__btn checkout"
-                                                    href="checkout.html">Check Out</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                        @livewire('product.shopping-cart')
+                    </div>
                 </div>
             </div>
         </section>

@@ -22,13 +22,14 @@
                     <span class="old__price">$140.00</span>
                 </div>
                 <div class="minicart__text--footer d-flex align-items-center">
-                    <div class="quantity__box minicart__quantity">
+                    @livewire('product.increase-decrease', ['rowId' => $product->rowId, 'quantity' => $product->qty], key($product->rowId))
+                    {{-- <div class="quantity__box minicart__quantity">
                         <button wire:click="decreaseQuantity('{{ $product->rowId }}')" type="button" class="quantity__value decrease" aria-label="quantity value" value="Decrease Value">-</button>
                         <label>
                             <input type="number" class="quantity__number" value="{{ $product->qty }}" />
                         </label>
                         <button wire:click="increaseQuantity('{{ $product->rowId }}')" type="button" class="quantity__value increase" aria-label="quantity value" value="Increase Value">+</button>
-                    </div>
+                    </div> --}}
                     <button wire:click="removeFromCart('{{ $product->rowId }}')" class="minicart__product--remove" aria-label="minicart remove btn">Remove</button>
                 </div>
             </div>

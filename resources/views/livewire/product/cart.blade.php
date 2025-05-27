@@ -30,15 +30,16 @@
                 </td>
                 <td class="cart__table--body__list">
                     <div class="quantity__box">
-                        <button type="button" class="quantity__value quickview__value--quantity decrease" aria-label="quantity value" value="Decrease Value">-</button>
+                        @livewire('product.increase-decrease', ['rowId' => $product->rowId, 'quantity' => $product->qty], key($product->rowId))
+                        {{-- <button type="button" class="quantity__value quickview__value--quantity decrease" aria-label="quantity value" value="Decrease Value">-</button>
                         <label>
                             <input type="number" class="quantity__number quickview__value--number" value="{{ $product->qty }}" />
                         </label>
-                        <button type="button" class="quantity__value quickview__value--quantity increase" aria-label="quantity value" value="Increase Value">+</button>
+                        <button type="button" class="quantity__value quickview__value--quantity increase" aria-label="quantity value" value="Increase Value">+</button> --}}
                     </div>
                 </td>
                 <td class="cart__table--body__list">
-                    <span class="cart__price end">£130.00</span>
+                    <span class="cart__price end">{{ $product->subtotal }}</span>
                 </td>
             </tr>
             @endforeach
