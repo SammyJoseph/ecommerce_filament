@@ -15,11 +15,20 @@
                     <tbody>
                         <tr class="cart__summary--total__list">
                             <td class="cart__summary--total__title text-left">SUBTOTAL</td>
-                            <td class="cart__summary--amount text-right">$860.00</td>
+                            <td class="cart__summary--amount text-right">${{ number_format($cartSubtotal, 2) }}</td>
                         </tr>
+                        @if (session()->has('coupon'))
+                        <tr class="cart__summary--total__list">
+                            <td class="cart__summary--total__title text-left">
+                                DISCOUNT ({{ session('coupon')['code'] }})
+                                <button wire:click="removeCoupon" style="background: transparent; border: none; color: red; cursor: pointer;">[Remove]</button>
+                            </td>
+                            <td class="cart__summary--amount text-right">-${{ number_format($cartDiscount, 2) }}</td>
+                        </tr>
+                        @endif
                         <tr class="cart__summary--total__list">
                             <td class="cart__summary--total__title text-left">GRAND TOTAL</td>
-                            <td class="cart__summary--amount text-right">${{ $cart->subtotal }}</td>
+                            <td class="cart__summary--amount text-right">${{ number_format($cartGrandTotal, 2) }}</td>
                         </tr>
                     </tbody>
                 </table>

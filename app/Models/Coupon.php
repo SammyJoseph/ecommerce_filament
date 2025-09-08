@@ -20,14 +20,13 @@ class Coupon extends Model
         'is_active',
     ];
 
-    protected $casts = [ // $casts especifica cómo se deben convertir los atributos al acceder a ellos
+    protected $casts = [
         'expires_at' => 'datetime',
         'is_active' => 'boolean',
         'value' => 'decimal:2',
         'min_cart_amount' => 'decimal:2',
     ];
 
-    // Helper para validar si un cupón es utilizable (puedes añadir más lógica)
     public function isValid(): bool
     {
         if (!$this->is_active) {
@@ -39,7 +38,6 @@ class Coupon extends Model
         if ($this->usage_limit && $this->times_used >= $this->usage_limit) {
             return false;
         }
-        // Añadir comprobación de min_cart_amount donde se aplica
         return true;
     }
 }

@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
-            $table->enum('type', ['fixed', 'percentage']); // Tipo de descuento
-            $table->decimal('value', 8, 2); // Valor del descuento (monto fijo o porcentaje)
-            $table->decimal('min_cart_amount', 10, 2)->nullable(); // Monto mínimo del carrito para aplicar
-            $table->timestamp('expires_at')->nullable(); // Fecha de expiración
-            $table->unsignedInteger('usage_limit')->nullable(); // Límite de usos totales
-            $table->unsignedInteger('times_used')->default(0); // Veces que se ha usado
+            $table->enum('type', ['fixed', 'percentage']);
+            $table->decimal('value', 8, 2);
+            $table->decimal('min_cart_amount', 10, 2)->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->unsignedInteger('usage_limit')->nullable();
+            $table->unsignedInteger('times_used')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
