@@ -46,17 +46,23 @@ class ProductResource extends Resource
                         ->required()
                         ->maxLength(255)
                         ->unique(Product::class, 'slug', ignoreRecord: true),
-                    Forms\Components\RichEditor::make('description') // Un editor enriquecido
+                    Forms\Components\RichEditor::make('description')
                         ->columnSpanFull(),
-                    Forms\Components\TextInput::make('price')
-                        ->required()
-                        ->numeric()
-                        ->prefix('S/.'), // O tu moneda
-                    Forms\Components\TextInput::make('stock')
-                        ->required()
-                        ->numeric()
-                        ->default(0),
-                ])->columns(2)->columnSpan(2), // Ocupa 2/3 del ancho
+                    Forms\Components\Grid::make(3)
+                        ->schema([
+                            Forms\Components\TextInput::make('price')
+                                ->required()
+                                ->numeric()
+                                ->prefix('S/.'),
+                            Forms\Components\TextInput::make('sale_price')
+                                ->numeric()
+                                ->prefix('S/.'),
+                            Forms\Components\TextInput::make('stock')
+                                ->required()
+                                ->numeric()
+                                ->default(0),
+                        ])->columnSpanFull(),
+                ])->columns(2)->columnSpan(2),
 
             Forms\Components\Group::make()
                 ->schema([
@@ -100,16 +106,25 @@ class ProductResource extends Resource
             ->columnSpanFull(),
             
             Tables\Columns\TextColumn::make('name')
+                ->limit(20)
+                ->tooltip(function ($record) {
+                    return strlen($record->name) > 20
+                        ? $record->name
+                        : null;
+                })
                 ->searchable()
+                ->sortable(),            
+            Tables\Columns\TextColumn::make('price')
+                ->money('S/.')
+                ->sortable(),
+            Tables\Columns\TextColumn::make('sale_price')
+                ->money('S/.')
+                ->placeholder('-'),
+            Tables\Columns\TextColumn::make('stock')
+                ->numeric()
                 ->sortable(),
             Tables\Columns\TextColumn::make('category.name')
                 ->searchable()
-                ->sortable(),
-            Tables\Columns\TextColumn::make('price')
-                ->money('S/.') // Formatear como moneda
-                ->sortable(),
-            Tables\Columns\TextColumn::make('stock')
-                ->numeric()
                 ->sortable(),
             Tables\Columns\IconColumn::make('is_visible')
                 ->label('Visible')

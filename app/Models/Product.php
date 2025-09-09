@@ -20,6 +20,7 @@ class Product extends Model implements HasMedia
         'slug',
         'description',
         'price',
+        'sale_price',
         'stock',
         'is_visible',
         'is_featured',
@@ -27,6 +28,7 @@ class Product extends Model implements HasMedia
 
     protected $casts = [
         'price' => 'decimal:2',
+        'sale_price' => 'decimal:2',
         'is_visible' => 'boolean',
         'is_featured' => 'boolean',
     ];
@@ -62,6 +64,6 @@ class Product extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('product_images')
-            ->singleFile(); // Si solo quieres una imagen por producto
+            ->singleFile(); // solo una imagen por producto
     }
 }

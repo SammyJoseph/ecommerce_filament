@@ -676,7 +676,7 @@
                                         <li class="rating__list"><span class="rating__list--text">( 5.0)</span></li>
                                     </ul>
                                 </div>
-                                <p class="product__details--info__desc mb-20">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut numquam ullam is recusandae laborum explicabo id sequi quisquam, ab sunt deleniti quidem ea animi facilis quod nostrum odit! Repellendus voluptas suscipit.</p>
+                                <p class="product__details--info__desc mb-20">{{ $product->description }}</p>
                                 <div class="product__variant">
                                     <div class="product__variant--list mb-20">
                                         <fieldset class="variant__input--fieldset">

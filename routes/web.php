@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/product/{product}', [IndexController::class, 'productDetails'])->name('product.details');
 
+Route::get('/index2', [IndexController::class, 'index2'])->name('index.2');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

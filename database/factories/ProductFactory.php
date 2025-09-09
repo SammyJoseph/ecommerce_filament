@@ -21,15 +21,22 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         $name = Str::title(fake()->words(fake()->numberBetween(2, 6), true));
-
         $slugBase = Str::slug($name);
+        $price = fake()->randomFloat(2, 100, 900);
+
+        $salePrice = fake()->optional(0.4)->randomFloat(
+            2,
+            $price * 0.5,
+            $price * 0.9
+        );
 
         return [
             'category_id' => Category::query()->exists() ? Category::query()->inRandomOrder()->first()->id : null,
             'name' => $name,
             'slug' => $slugBase . '-' . fake()->unique()->randomNumber(6),
-            'description' => fake()->optional(0.85)->paragraphs(fake()->numberBetween(1, 4), true), // 85% prob.
-            'price' => fake()->randomFloat(2, 100, 900),
+            'description' => fake()->optional(0.85)->paragraphs(fake()->numberBetween(1, 4), true),
+            'price' => $price,
+            'sale_price' => $salePrice,
             'stock' => fake()->numberBetween(0, 200),
             'is_visible' => fake()->boolean(80),
             'is_featured' => fake()->boolean(20),
@@ -49,9 +56,9 @@ class ProductFactory extends Factory
                 $imageHeight = 600;
                 $imageUrl = 'https://picsum.photos/' . $imageWidth . '/' . $imageHeight . '?random=' . rand(1, 1000);
 
-                $product->addMediaFromUrl($imageUrl) // Descarga la imagen desde la URL y la añade a la colección 'product_images'
-                    ->preservingOriginal() // Opcional: si quieres guardar el original además de conversiones
-                    ->toMediaCollection('product_images'); // <-- ¡USA EL MISMO NOMBRE DE COLECCIÓN que en tu Resource y Modelo!
+                $product->addMediaFromUrl($imageUrl)
+                    ->preservingOriginal()
+                    ->toMediaCollection('product_images');
 
             } catch (\Exception $e) {
                 Log::error("Failed to add media for product ID {$product->id}: " . $e->getMessage());
