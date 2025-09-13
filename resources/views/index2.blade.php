@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="es">
 
 <head>
     <meta charset="utf-8">
@@ -8,11 +8,7 @@
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
-
-    <!-- All CSS is here
-	============================================ -->
 
     <link rel="stylesheet" href="{{  asset('assets2/css/vendor/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{  asset('assets2/css/vendor/simple-line-icons.css') }}">
@@ -26,10 +22,11 @@
     <link rel="stylesheet" href="{{  asset('assets2/css/plugins/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{  asset('assets2/css/style.css') }}">
 
+    @vite(['resources/js/app.js', 'resources/css/app.css'])
+    @livewireStyles
 </head>
 
 <body>
-
     <div class="main-wrapper">
         <header class="header-area transparent-bar section-padding-1">
             <div class="container-fluid">
@@ -228,7 +225,6 @@
                 </div>
             </div>
         </header>
-        <!-- mini cart start -->
         <div class="sidebar-cart-active">
             <div class="sidebar-cart-all">
                 <a class="cart-close" href="#"><i class="icon_close"></i></a>
@@ -270,7 +266,6 @@
                 </div>
             </div>
         </div>
-        <!-- Mobile menu start -->
         <div class="mobile-header-active mobile-header-wrapper-style">
             <div class="clickalbe-sidebar-wrap">
                 <a class="sidebar-close"><i class="icon_close"></i></a>
@@ -414,7 +409,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="hero-slider-img-1 slider-animated-1">
-                                    <img src="{{ asset('assets2/images/slider/hm-1-slider-1.png') }}">
+                                    <img class="animated" src="{{ asset('assets2/images/slider/hm-1-slider-1.png') }}">
                                 </div>
                             </div>
                         </div>
@@ -435,7 +430,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="hero-slider-img-1 slider-animated-1">
-                                    <img src="{{ asset('assets2/images/slider/hm-1-slider-2.png') }}">
+                                    <img class="animated" src="{{ asset('assets2/images/slider/hm-1-slider-3.png') }}">
                                 </div>
                             </div>
                         </div>
@@ -789,7 +784,6 @@
                 </div>
             </div>
         </footer>
-        <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -913,11 +907,7 @@
                 </div>
             </div>
         </div>
-        <!-- Modal end -->
     </div>
-
-    <!-- All JS is here
-============================================ -->
 
     <script src="{{ asset('assets2/js/vendor/modernizr-3.11.7.min.js') }}"></script>
     <script src="{{ asset('assets2/js/vendor/jquery-v3.6.0.min.js') }}"></script>
@@ -934,9 +924,9 @@
     <script src="{{ asset('assets2/js/plugins/easyzoom.js') }}"></script>
     <script src="{{ asset('assets2/js/plugins/scrollup.js') }}"></script>
     <script src="{{ asset('assets2/js/plugins/ajax-mail.js') }}"></script>
-    <!-- Main JS -->
     <script src="{{ asset('assets2/js/main.js') }}"></script>
 
+    @livewireScripts
 </body>
 
 </html>

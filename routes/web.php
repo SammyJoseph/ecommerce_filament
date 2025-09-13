@@ -5,10 +5,10 @@ use App\Http\Controllers\Product\CartController;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [IndexController::class, 'index'])->name('index');
+Route::get('/index1', [IndexController::class, 'index'])->name('index');
 Route::get('/product/{product}', [IndexController::class, 'productDetails'])->name('product.details');
 
-Route::get('/index2', [IndexController::class, 'index2'])->name('index.2');
+Route::get('/', [IndexController::class, 'index2'])->name('index.2');
 
 Route::middleware([
     'auth:sanctum',

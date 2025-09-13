@@ -46,5 +46,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CategorySeeder::class);
         // $this->call(ProductSeeder::class); // ahroa los productos se crean en CategorySeeder
         $this->call(CouponSeeder::class);
+        $this->call(OrderSeeder::class);
     }
 }

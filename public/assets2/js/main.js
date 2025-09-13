@@ -20,6 +20,8 @@
         loop: true,
         dots: true,
         arrows: true,
+        autoplay: true,
+        autoplaySpeed: 5000,
         prevArrow: '<span class="slider-icon-1-prev"><i class="icon-arrow-left"></i></span>',
         nextArrow: '<span class="slider-icon-1-next"><i class="icon-arrow-right"></i></span>',
     });

@@ -5574,14 +5574,14 @@ textarea:focus {
           animation-name: fadeInUp;
 }
 .single-animation-wrap.slick-active .slider-animated-1 h1 {
-  -webkit-animation-delay: 1.4s;
-          animation-delay: 1.4s;
+  -webkit-animation-delay: 0.5s;
+          animation-delay: 0.5s;
   -webkit-animation-name: fadeInUp;
           animation-name: fadeInUp;
 }
 .single-animation-wrap.slick-active .slider-animated-1 p {
-  -webkit-animation-delay: 1.7s;
-          animation-delay: 1.7s;
+  -webkit-animation-delay: 0.5s;
+          animation-delay: 0.5s;
   -webkit-animation-name: fadeInUp;
           animation-name: fadeInUp;
 }
@@ -5616,8 +5616,8 @@ textarea:focus {
           animation-name: fadeInUp;
 }
 .single-animation-wrap.slick-active .slider-animated-1.hero-slider-img-1 img {
-  -webkit-animation-delay: 1.7s;
-          animation-delay: 1.7s;
+  -webkit-animation-delay: 1s;
+          animation-delay: 1s;
   -webkit-animation-name: fadeInUp;
           animation-name: fadeInUp;
 }
