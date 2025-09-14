@@ -553,9 +553,9 @@
                                             <img src="{{ $product->getFirstMediaUrl('product_images', 'preview') }}" alt="{{ $product->name }}">
                                         </a>
                                         <div class="product-action-wrap">
-                                            <div class="product-action-left">
-                                                <button><i class="icon-basket-loaded"></i>Add to Cart</button>
-                                            </div>
+                                        <div class="product-action-left">
+                                            @livewire('product.add-to-cart', ['product' => $product, 'classes' => ''])
+                                        </div>
                                             <div class="product-action-right tooltip-style">
                                                 <button
                                                     x-on:click="updateProductData({{ json_encode([
