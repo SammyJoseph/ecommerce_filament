@@ -5592,8 +5592,8 @@ textarea:focus {
           animation-name: fadeInUp;
 }
 .single-animation-wrap.slick-active .slider-animated-1 a {
-  -webkit-animation-delay: 2s;
-          animation-delay: 2s;
+  -webkit-animation-delay: 0.7s;
+          animation-delay: 0.7s;
   -webkit-animation-name: fadeInUp;
           animation-name: fadeInUp;
 }

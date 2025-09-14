@@ -27,7 +27,22 @@
 </head>
 
 <body>
-    <div class="main-wrapper">
+    <div class="main-wrapper" x-data="{
+            product: {
+                name: 'Simple Black T-Shirt',
+                image: '{{ asset('assets2/images/product/product-1.jpg') }}',
+                price: '',
+                sale_price: '',
+                description: '',
+            },
+            updateProductData(product) {
+                this.product.name = product.name;
+                this.product.image = product.image;
+                this.product.price = product.price;
+                this.product.sale_price = product.sale_price;
+                this.product.description = product.description;
+            }
+        }">
         <header class="header-area transparent-bar section-padding-1">
             <div class="container-fluid">
                 <div class="header-large-device">
@@ -519,7 +534,7 @@
                         <h2>Featured Products</h2>
                     </div>
                     <div class="tab-style-1 nav">
-                        @foreach ($categories as $category)
+                        @foreach ($categories->take(4) as $category)
                         <a class="{{ $loop->first ? 'active' : '' }}" href="#product-{{ $category->id }}" data-bs-toggle="tab">{{ $category->name }}</a>
                         @endforeach
                     </div>
@@ -542,7 +557,17 @@
                                                 <button><i class="icon-basket-loaded"></i>Add to Cart</button>
                                             </div>
                                             <div class="product-action-right tooltip-style">
-                                                <button data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="icon-size-fullscreen icons"></i><span>Quick View</span></button>
+                                                <button
+                                                    x-on:click="updateProductData({{ json_encode([
+                                                        'name' => $product->name,
+                                                        'image' => $product->getFirstMediaUrl('product_images', 'preview'),
+                                                        'price' => $product->price,
+                                                        'sale_price' => $product->sale_price,
+                                                        'description' => $product->description,
+                                                    ]) }})"
+                                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                    <i class="icon-size-fullscreen icons"></i><span>Vista Rápida</span>
+                                                </button>
                                                 <button class="font-inc"><i class="icon-refresh"></i><span>Compare</span></button>
                                             </div>
                                         </div>
@@ -795,35 +820,26 @@
                             <div class="col-lg-5 col-md-6 col-12 col-sm-12">
                                 <div class="tab-content quickview-big-img">
                                     <div id="pro-1" class="tab-pane fade show active">
-                                        <img src="{{ asset('assets2/images/product/product-1.jpg') }}">
-                                    </div>
-                                    <div id="pro-2" class="tab-pane fade">
-                                        <img src="{{ asset('assets2/images/product/product-3.jpg') }}">
-                                    </div>
-                                    <div id="pro-3" class="tab-pane fade">
-                                        <img src="{{ asset('assets2/images/product/product-6.jpg') }}">
+                                        <img x-bind:src="product.image" alt="">
                                     </div>
                                 </div>
                                 <div class="quickview-wrap mt-15">
-                                    <div class="nav nav-style-6">
-                                        <button class="nav-link active" id="pro-1-tab" data-bs-toggle="tab" data-bs-target="#pro-1" type="button" role="tab"
-                                            aria-controls="pro-1" aria-selected="true">
-                                            <img src="{{ asset('assets2/images/product/quickview-s1.jpg') }}">
+                                    <div class="nav nav-style-6" role="tablist">
+                                        <button class="nav-link active" id="pro-1-tab" data-bs-toggle="tab" data-bs-target="#pro-1" type="button" role="tab" aria-controls="pro-1" aria-selected="true">
+                                            <img src="assets2/images/product/quickview-s1.jpg" alt="product-thumbnail">
                                         </button>
-                                        <button class="nav-link" id="pro-2-tab" data-bs-toggle="tab" data-bs-target="#pro-2" type="button" role="tab"
-                                            aria-controls="pro-2" aria-selected="true">
-                                            <img src="{{ asset('assets2/images/product/quickview-s2.jpg') }}">
+                                        <button class="nav-link" id="pro-2-tab" data-bs-toggle="tab" data-bs-target="#pro-2" type="button" role="tab" aria-controls="pro-2" aria-selected="false" tabindex="-1">
+                                            <img src="assets2/images/product/quickview-s2.jpg" alt="product-thumbnail">
                                         </button>
-                                        <button class="nav-link" id="pro-3-tab" data-bs-toggle="tab" data-bs-target="#pro-3" type="button" role="tab"
-                                            aria-controls="pro-3" aria-selected="true">
-                                            <img src="{{ asset('assets2/images/product/quickview-s3.jpg') }}">
+                                        <button class="nav-link" id="pro-3-tab" data-bs-toggle="tab" data-bs-target="#pro-3" type="button" role="tab" aria-controls="pro-3" aria-selected="false" tabindex="-1">
+                                            <img src="assets2/images/product/quickview-s3.jpg" alt="product-thumbnail">
                                         </button>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-7 col-md-6 col-12 col-sm-12">
                                 <div class="product-details-content quickview-content">
-                                    <h2>Simple Black T-Shirt</h2>
+                                    <h2 x-text="product.name"></h2>
                                     <div class="product-ratting-review-wrap">
                                         <div class="product-ratting-digit-wrap">
                                             <div class="product-ratting">
@@ -838,14 +854,21 @@
                                             </div>
                                         </div>
                                         <div class="product-review-order">
-                                            <span>62 Reviews</span>
-                                            <span>242 orders</span>
+                                            <span>62 Reseñas</span>
+                                            <span>242 ordenes</span>
                                         </div>
                                     </div>
-                                    <p>Seamlessly predominate enterprise metrics without performance based process improvements.</p>
+                                    <p x-html="product.description" class="tw-line-clamp-2"></p>
                                     <div class="pro-details-price">
-                                        <span class="new-price">$75.72</span>
-                                        <span class="old-price">$95.72</span>
+                                        <template x-if="product.sale_price && product.sale_price > 0">
+                                            <div>
+                                                <span class="new-price" x-text="'S/.' + product.sale_price"></span>
+                                                <span class="old-price" x-text="'S/.' + product.price"></span>
+                                            </div>
+                                        </template>
+                                        <template x-if="!product.sale_price || product.sale_price <= 0">
+                                            <span class="new-price" x-text="'S/.' + product.price"></span>
+                                        </template>
                                     </div>
                                     <div class="pro-details-color-wrap">
                                         <span>Color:</span>
@@ -861,7 +884,7 @@
                                         </div>
                                     </div>
                                     <div class="pro-details-size">
-                                        <span>Size:</span>
+                                        <span>Talla:</span>
                                         <div class="pro-details-size-content">
                                             <ul>
                                                 <li><a href="#">XS</a></li>
@@ -873,24 +896,24 @@
                                         </div>
                                     </div>
                                     <div class="pro-details-quality">
-                                        <span>Quantity:</span>
+                                        <span>Cantidad:</span>
                                         <div class="cart-plus-minus">
                                             <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1">
                                         </div>
                                     </div>
                                     <div class="product-details-meta">
                                         <ul>
-                                            <li><span>Categories:</span> <a href="#">Woman,</a> <a href="#">Dress,</a> <a href="#">T-Shirt</a></li>
-                                            <li><span>Tag: </span> <a href="#">Fashion,</a> <a href="#">Mentone</a> , <a href="#">Texas</a></li>
+                                            <li><span>Categorías:</span> <a href="#">Mujer,</a> <a href="#">Vestido,</a> <a href="#">Polo</a></li>
+                                            <li><span>Etiqueta: </span> <a href="#">Moda,</a> <a href="#">Mentone</a> , <a href="#">Texas</a></li>
                                         </ul>
                                     </div>
                                     <div class="pro-details-action-wrap">
                                         <div class="pro-details-add-to-cart">
-                                            <a title="Add to Cart" href="#">Add To Cart </a>
+                                            <a title="Add to Cart" href="#">Añadir al carrito </a>
                                         </div>
                                         <div class="pro-details-action">
-                                            <a title="Add to Wishlist" href="#"><i class="icon-heart"></i></a>
-                                            <a title="Add to Compare" href="#"><i class="icon-refresh"></i></a>
+                                            <a title="Añadir a la lista de deseos" href="#"><i class="icon-heart"></i></a>
+                                            <a title="Añadir para comparar" href="#"><i class="icon-refresh"></i></a>
                                             <a class="social" title="Social" href="#"><i class="icon-share"></i></a>
                                             <div class="product-dec-social">
                                                 <a class="facebook" title="Facebook" href="#"><i class="icon-social-facebook"></i></a>
