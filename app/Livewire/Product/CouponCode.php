@@ -48,6 +48,8 @@ class CouponCode extends Component
         // Emitir un evento para que el carrito se actualice
         $this->dispatch('couponApplied');
 
+        $this->couponCode = '';
+
         session()->flash('success', '¡Cupón aplicado con éxito!');
     }
 

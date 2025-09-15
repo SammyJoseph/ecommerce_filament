@@ -15984,7 +15984,8 @@ h3.cart-page-title {
   padding-left: 10px;
 }
 .cart-tax .discount-code form button.cart-btn-2,
-.discount-code-wrapper .discount-code form button.cart-btn-2 {
+.discount-code-wrapper .discount-code form button.cart-btn-2,
+.discount-code-wrapper .discount-code button.cart-btn-2 {
   background-color: #000000;
   border: medium none;
   color: #ffffff;
@@ -15997,7 +15998,8 @@ h3.cart-page-title {
   transition: all 0.3s ease 0s;
 }
 .cart-tax .discount-code form button.cart-btn-2:hover,
-.discount-code-wrapper .discount-code form button.cart-btn-2:hover {
+.discount-code-wrapper .discount-code form button.cart-btn-2:hover,
+.discount-code-wrapper .discount-code button.cart-btn-2:hover {
   background-color: #ff2f2f;
 }
 

@@ -20,10 +20,12 @@ class Cart extends Component
     public function removeFromCart($rowId)
     {
         ShoppingCart::instance('shopping')->remove($rowId);
+        $this->dispatch('cartUpdated');
     }
 
     public function clearCart()
     {
         ShoppingCart::instance('shopping')->destroy();
+        $this->dispatch('cartUpdated');
     }
 }

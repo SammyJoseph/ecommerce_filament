@@ -3,17 +3,17 @@
 namespace App\Livewire\Product;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ShoppingCart extends Component
 {    
-    protected $listeners = ['couponApplied' => '$refresh']; // Escucha el evento y refresca el componente
-
     public function removeCoupon()
     {
         session()->forget('coupon');
     }
 
+    #[On('couponApplied', 'cartUpdated')]
     public function render()
     {
         Cart::instance('shopping');

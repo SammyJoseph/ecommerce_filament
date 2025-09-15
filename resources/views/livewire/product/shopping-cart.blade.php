@@ -106,10 +106,7 @@
                     </div>
                     <div class="discount-code">
                         <p>Enter your coupon code if you have one.</p>
-                        <form>
-                            <input type="text" required="" name="name">
-                            <button class="cart-btn-2" type="submit">Apply Coupon</button>
-                        </form>
+                        @livewire('product.coupon-code')
                     </div>
                 </div>
             </div>
@@ -118,7 +115,13 @@
                     <div class="title-wrap">
                         <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
                     </div>
-                    <h5>Total products <span>$260.00</span></h5>
+                    <h5>Total products <span>{{ number_format($cartSubtotal, 2) }}</span></h5>
+                    @if (session()->has('coupon'))
+                    <p class="tw-mb-6">
+                        Discount
+                        <button wire:click="removeCoupon" class="tw-ml-2">x</button>
+                        <span class="tw-float-end">-{{ number_format($cartDiscount, 2) }}</span></p>
+                    @endif
                     <div class="total-shipping">
                         <h5>Total shipping</h5>
                         <ul>
@@ -126,7 +129,7 @@
                             <li><input type="checkbox"> Express <span>$30.00</span></li>
                         </ul>
                     </div>
-                    <h4 class="grand-totall-title">Grand Total <span>$260.00</span></h4>
+                    <h4 class="grand-totall-title">Grand Total <span>${{ number_format($cartGrandTotal, 2) }}</span></h4>
                     <a href="#">Proceed to Checkout</a>
                 </div>
             </div>
