@@ -25,12 +25,28 @@ class SideCart extends Component
         Cart::instance('shopping')->update($rowId, $newQuantity);
     }
 
+    #[On('cart-updated')]
     public function render()
     {
         Cart::instance('shopping');
         $productsInCart = Cart::content();
 
-        return view('livewire.product.side-cart', compact('productsInCart'));
+        $subtotal = (float) str_replace(',', '', Cart::subtotal());
+        $discount = 0;
+
+        if (session()->has('coupon')) {
+            $coupon = session('coupon');
+            
+            if ($coupon['type'] === 'fixed') {
+                $discount = $coupon['value'];
+            } elseif ($coupon['type'] === 'percentage') {
+                $discount = ($subtotal * $coupon['value']) / 100;
+            }
+        }
+
+        $grandTotal = max(0, $subtotal - $discount);
+
+        return view('livewire.product.side-cart', compact('productsInCart', 'subtotal', 'discount', 'grandTotal'));
     }
 
     #[On('open-minicart')] 

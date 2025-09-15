@@ -44,7 +44,8 @@ class AddToCart extends Component
                 ],
             ]);
     
-            $this->dispatch('open-minicart');
+            $this->dispatch('cart-updated');
+            $this->dispatch('open-side-cart');
             session()->flash('success', 'Producto agregado al carrito.');
         } catch (\Exception $e) {
             Log::error('Error al agregar producto al carrito', [

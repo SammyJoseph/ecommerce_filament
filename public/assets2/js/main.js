@@ -382,7 +382,8 @@
             wrapper.addClass('overlay-active');
         });
         
-        endTrigger.on('click', function() {
+        endTrigger.on('click', function(e) {
+            e.preventDefault();
             container.removeClass('inside');
             wrapper.removeClass('overlay-active');
         });
@@ -1057,3 +1058,9 @@
     
 })(jQuery);
 
+
+// Listen for Livewire 'open-side-cart' event to open the sidebar
+window.addEventListener('open-side-cart', function() {
+    $('.sidebar-cart-active').addClass('inside');
+    $('.main-wrapper').addClass('overlay-active');
+});

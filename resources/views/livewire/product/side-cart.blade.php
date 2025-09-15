@@ -1,4 +1,4 @@
-<div class="offCanvas__minicart {{ $isOpen ? 'active' : '' }}" tabindex="-1">
+{{-- <div class="offCanvas__minicart {{ $isOpen ? 'active' : '' }}" tabindex="-1">
     <div class="minicart__header ">
         <div class="minicart__header--top d-flex justify-content-between align-items-center">
             <h3 class="minicart__title"> Shopping Cart</h3>
@@ -23,13 +23,6 @@
                 </div>
                 <div class="minicart__text--footer d-flex align-items-center">
                     @livewire('product.increase-decrease', ['rowId' => $product->rowId, 'quantity' => $product->qty], key($product->rowId))
-                    {{-- <div class="quantity__box minicart__quantity">
-                        <button wire:click="decreaseQuantity('{{ $product->rowId }}')" type="button" class="quantity__value decrease" aria-label="quantity value" value="Decrease Value">-</button>
-                        <label>
-                            <input type="number" class="quantity__number" value="{{ $product->qty }}" />
-                        </label>
-                        <button wire:click="increaseQuantity('{{ $product->rowId }}')" type="button" class="quantity__value increase" aria-label="quantity value" value="Increase Value">+</button>
-                    </div> --}}
                     <button wire:click="removeFromCart('{{ $product->rowId }}')" class="minicart__product--remove" aria-label="minicart remove btn">Remove</button>
                 </div>
             </div>
@@ -59,5 +52,42 @@
     <div class="minicart__button d-flex justify-content-center">
         <a class="primary__btn minicart__button--link" href="{{ route('cart.index') }}">View cart</a>
         <a class="primary__btn minicart__button--link" href="checkout.html">Checkout</a>
+    </div>
+</div> --}}
+<div class="sidebar-cart-active">
+    <div class="sidebar-cart-all">
+        <a class="cart-close" href="#"><i class="icon_close"></i></a>
+        <div class="cart-content">
+            <h3>Shopping Cart</h3>
+            <ul>
+                @forelse ($productsInCart as $product)
+                    <li class="single-product-cart">
+                        <div class="cart-img">
+                            <a href="{{ route('product.details', $product->id) }}">
+                                <img src="{{ $product->options->image ?? $product->model->getFirstMediaUrl('product_images', 'thumb') ?? asset('assets2/images/cart/cart-1.jpg') }}" alt="{{ $product->name }}">
+                            </a>
+                        </div>
+                        <div class="cart-title">
+                            <h4><a href="{{ route('product.details', $product->id) }}">{{ $product->name }}</a></h4>
+                            <span>{{ $product->qty }} × ${{ number_format($product->price, 2) }}</span>
+                        </div>
+                        <div class="cart-delete">
+                            <button wire:click="removeFromCart('{{ $product->rowId }}')">×</button>
+                        </div>
+                    </li>                    
+                @empty
+                    <li class="text-center py-4">
+                        <p>No products in cart</p>
+                    </li>
+                @endforelse
+            </ul>
+            <div class="cart-total">
+                <h4>Subtotal: <span>${{ $subtotal }}</span></h4>
+            </div>
+            <div class="cart-checkout-btn">
+                <a class="btn-hover cart-btn-style" href="{{ route('cart.index') }}">view cart</a>
+                <a class="no-mrg btn-hover cart-btn-style" href="#">checkout</a>
+            </div>
+        </div>
     </div>
 </div>
