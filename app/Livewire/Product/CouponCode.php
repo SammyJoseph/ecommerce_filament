@@ -51,17 +51,10 @@ class CouponCode extends Component
 
         $this->couponCode = '';
 
-        session()->flash('success', '¡Cupón aplicado con éxito!');
+        // session()->flash('success', '¡Cupón aplicado con éxito!');
     }
 
-    #[On('removeCoupon')]
-    public function removeCoupon()
-    {
-        session()->forget('coupon');
-        $this->dispatch('couponRemoved');
-        session()->flash('success', 'Cupón eliminado.');
-    }
-
+    #[On('couponRemoved')]
     public function render()
     {
         return view('livewire.product.coupon-code');

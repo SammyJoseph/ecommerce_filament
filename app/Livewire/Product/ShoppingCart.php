@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class ShoppingCart extends Component
 {    
-    #[On('couponApplied', 'cartUpdated', 'couponRemoved')]
+    #[On('couponApplied', 'cartUpdated')]
     public function render()
     {
         Cart::instance('shopping');
@@ -32,5 +32,13 @@ class ShoppingCart extends Component
             'cartDiscount' => $discount,
             'cartGrandTotal' => $grandTotal,
         ]);
+    }
+
+    #[On('removeCoupon')]
+    public function removeCoupon()
+    {
+        session()->forget('coupon');
+        $this->dispatch('couponRemoved');
+        session()->flash('success', 'Cupón eliminado.');
     }
 }
