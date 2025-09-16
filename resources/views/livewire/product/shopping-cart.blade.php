@@ -1,61 +1,10 @@
-{{-- <div class="row">
-    <div class="col-lg-8">
-        @livewire('product.cart')
-    </div>
-    <div class="col-lg-4">
-        <div class="cart__summary border-radius-10">
-            @livewire('product.coupon-code')
-            <div class="cart__note mb-20">
-                <h3 class="cart__note--title">Note</h3>
-                <p class="cart__note--desc">Add special instructions for your seller...</p>
-                <textarea class="cart__note--textarea border-radius-5"></textarea>
-            </div>
-            <div class="cart__summary--total mb-20">
-                <table class="cart__summary--total__table">
-                    <tbody>
-                        <tr class="cart__summary--total__list">
-                            <td class="cart__summary--total__title text-left">SUBTOTAL</td>
-                            <td class="cart__summary--amount text-right">${{ number_format($cartSubtotal, 2) }}</td>
-                        </tr>
-                        @if (session()->has('coupon'))
-                        <tr class="cart__summary--total__list">
-                            <td class="cart__summary--total__title text-left">
-                                DISCOUNT ({{ session('coupon')['code'] }})
-                                <button wire:click="removeCoupon" wire:loading.attr="disabled" wire:target="removeCoupon" style="background: transparent; border: none; color: red; cursor: pointer;">
-                                    [Remove]
-                                    <span wire:loading wire:target="removeCoupon" class="tw-inline-block tw-ml-2">
-                                        <svg class="tw-animate-spin tw-h-3 tw-w-3 tw-text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                            <circle class="tw-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                            <path class="tw-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                        </svg>
-                                    </span>
-                                </button>
-                            </td>
-                            <td class="cart__summary--amount text-right">-${{ number_format($cartDiscount, 2) }}</td>
-                        </tr>
-                        @endif
-                        <tr class="cart__summary--total__list">
-                            <td class="cart__summary--total__title text-left">GRAND TOTAL</td>
-                            <td class="cart__summary--amount text-right">${{ number_format($cartGrandTotal, 2) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="cart__summary--footer">
-                <p class="cart__summary--footer__desc">Shipping & taxes calculated at checkout
-                </p>
-                <ul class="d-flex justify-content-end">
-                    <li><a class="cart__summary--footer__btn primary__btn checkout"
-                            href="checkout.html">Check Out</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div> --}}
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        {{-- Productos en el carrito --}}
         @livewire('product.cart')        
+        
         <div class="row">
+            {{-- Dirección de envío --}}
             <div class="col-lg-4 col-md-6">
                 <div class="cart-tax">
                     <div class="title-wrap">
@@ -99,6 +48,7 @@
                     </div>
                 </div>
             </div>
+            {{-- Cupón de descuento --}}
             <div class="col-lg-4 col-md-6">
                 <div class="discount-code-wrapper">
                     <div class="title-wrap">
@@ -110,6 +60,7 @@
                     </div>
                 </div>
             </div>
+            {{-- Total del carrito --}}
             <div class="col-lg-4 col-md-12">
                 <div class="grand-totall">
                     <div class="title-wrap">

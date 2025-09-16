@@ -58,7 +58,7 @@ class CouponCode extends Component
     public function removeCoupon()
     {
         session()->forget('coupon');
-        $this->dispatch('couponRemoved')->to(ShoppingCart::class);
+        $this->dispatch('couponRemoved');
         session()->flash('success', 'Cupón eliminado.');
     }
 
