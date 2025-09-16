@@ -1059,8 +1059,11 @@
 })(jQuery);
 
 
-// Listen for Livewire 'open-side-cart' event to open the sidebar
-window.addEventListener('open-side-cart', function() {
-    $('.sidebar-cart-active').addClass('inside');
-    $('.main-wrapper').addClass('overlay-active');
+// Listen for Livewire 'body-overlay' event @SideCart to toggle side cart overlay
+window.addEventListener('body-overlay', event => {
+    if (event.detail.active) {
+        $('.main-wrapper').addClass('overlay-active');
+    } else {
+        $('.main-wrapper').removeClass('overlay-active');
+    }
 });

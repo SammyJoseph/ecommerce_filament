@@ -54,7 +54,7 @@
         <a class="primary__btn minicart__button--link" href="checkout.html">Checkout</a>
     </div>
 </div> --}}
-<div class="sidebar-cart-active">
+<div class="sidebar-cart-active {{ $isOpen ? 'inside' : '' }}">
     <div class="sidebar-cart-all">
         <a class="cart-close" href="#"><i class="icon_close"></i></a>
         <div class="cart-content">

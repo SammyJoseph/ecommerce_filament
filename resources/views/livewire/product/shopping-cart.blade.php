@@ -119,7 +119,7 @@
                     @if (session()->has('coupon'))
                     <p class="tw-mb-6">
                         Discount
-                        <button wire:click="removeCoupon" class="tw-ml-2">x</button>
+                        <button wire:click="$dispatch('removeCoupon')" class="tw-ml-2">x</button>
                         <span class="tw-float-end">-{{ number_format($cartDiscount, 2) }}</span></p>
                     @endif
                     <div class="total-shipping">

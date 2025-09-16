@@ -4,6 +4,7 @@ namespace App\Livewire\Product;
 
 use App\Models\Coupon;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class CouponCode extends Component
@@ -51,6 +52,14 @@ class CouponCode extends Component
         $this->couponCode = '';
 
         session()->flash('success', '¡Cupón aplicado con éxito!');
+    }
+
+    #[On('removeCoupon')]
+    public function removeCoupon()
+    {
+        session()->forget('coupon');
+        $this->dispatch('couponRemoved')->to(ShoppingCart::class);
+        session()->flash('success', 'Cupón eliminado.');
     }
 
     public function render()

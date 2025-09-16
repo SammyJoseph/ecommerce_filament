@@ -49,6 +49,19 @@ class SideCart extends Component
         return view('livewire.product.side-cart', compact('productsInCart', 'subtotal', 'discount', 'grandTotal'));
     }
 
+    #[On('open-side-cart')] 
+    public function openCart()
+    {
+        $this->isOpen = true;
+        $this->dispatch('body-overlay', active: true);
+    }
+
+    public function closeCart()
+    {
+        $this->isOpen = false;
+        $this->dispatch('body-overlay', active: false);
+    }
+
     #[On('open-minicart')] 
     public function openMiniCart()
     {

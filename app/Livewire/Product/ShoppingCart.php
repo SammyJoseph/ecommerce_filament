@@ -8,12 +8,7 @@ use Livewire\Component;
 
 class ShoppingCart extends Component
 {    
-    public function removeCoupon()
-    {
-        session()->forget('coupon');
-    }
-
-    #[On('couponApplied', 'cartUpdated')]
+    #[On('couponApplied', 'cartUpdated', 'couponRemoved')]
     public function render()
     {
         Cart::instance('shopping');
