@@ -5,67 +5,46 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Product extends Model implements HasMedia
+class Variant extends Model implements HasMedia
 {
-    /** @use HasFactory<\Database\Factories\ProductFactory> */
     use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
-        'category_id',
+        'product_id',
         'name',
-        'slug',
-        'description',
         'price',
         'sale_price',
         'stock',
         'is_visible',
-        'is_featured',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
         'sale_price' => 'decimal:2',
         'is_visible' => 'boolean',
-        'is_featured' => 'boolean',
     ];
 
-    public function getRouteKeyName(): string
+    public function product(): BelongsTo
     {
-        return 'slug';
+        return $this->belongsTo(Product::class);
     }
 
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-    public function orderItems(): HasMany
-    {
-        return $this->hasMany(OrderItem::class);
-    }
-
-    public function variants(): HasMany
-    {
-        return $this->hasMany(Variant::class);
-    }
-    
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')
-            ->performOnCollections('product_images') // nombre de la colección de imágenes
+            ->performOnCollections('variant_images')
             ->width(150)
             ->height(150)
             ->sharpen(10)
             ->keepOriginalImageFormat()
-            ->nonQueued(); // Procesa inmediatamente
+            ->nonQueued();
 
         $this->addMediaConversion('preview')
-            ->performOnCollections('product_images')
+            ->performOnCollections('variant_images')
             ->width(600)
             ->height(600)
             ->keepOriginalImageFormat()
@@ -74,7 +53,7 @@ class Product extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('product_images')
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+        $this->addMediaCollection('variant_images')
+            ->singleFile();
     }
 }

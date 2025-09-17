@@ -3,15 +3,15 @@
 
 @section('main-wrapper-attrs')
     x-data="{
-        product: {
-            name: 'Simple Black T-Shirt',
-            image: '{{ asset('assets2/images/product/product-1.jpg') }}',
-            price: '',
-            sale_price: '',
-            description: '',
-        },
+        product: {},
+        activeImage: '',
+        activeThumbIndex: 0,
         updateProductData(product) {
             this.product = { ...product };
+            if (product.images && product.images.length > 0) {
+                this.activeImage = product.images[0];
+                this.activeThumbIndex = 0;
+            }
         }
     }"
 @endsection
@@ -173,7 +173,8 @@
                                                 <button
                                                     x-on:click="updateProductData({{ json_encode([
                                                         'name' => $product->name,
-                                                        'image' => $product->getFirstMediaUrl('product_images', 'preview'),
+                                                        'images' => $product->getMedia('product_images')->map(fn($media) => $media->getUrl('preview'))->all(),
+                                                        'thumb_images' => $product->getMedia('product_images')->map(fn($media) => $media->getUrl('thumb'))->all(),
                                                         'price' => $product->price,
                                                         'sale_price' => $product->sale_price,
                                                         'description' => $product->description,
@@ -387,21 +388,19 @@
                         <div class="row">
                             <div class="col-lg-5 col-md-6 col-12 col-sm-12">
                                 <div class="tab-content quickview-big-img">
-                                    <div id="pro-1" class="tab-pane fade show active">
-                                        <img x-bind:src="product.image" alt="">
+                                    <div class="tab-pane fade show active">
+                                        <img :src="activeImage" alt="">
                                     </div>
                                 </div>
                                 <div class="quickview-wrap mt-15">
-                                    <div class="nav nav-style-6" role="tablist">
-                                        <button class="nav-link active" id="pro-1-tab" data-bs-toggle="tab" data-bs-target="#pro-1" type="button" role="tab" aria-controls="pro-1" aria-selected="true">
-                                            <img src="assets2/images/product/quickview-s1.jpg" alt="product-thumbnail">
-                                        </button>
-                                        <button class="nav-link" id="pro-2-tab" data-bs-toggle="tab" data-bs-target="#pro-2" type="button" role="tab" aria-controls="pro-2" aria-selected="false" tabindex="-1">
-                                            <img src="assets2/images/product/quickview-s2.jpg" alt="product-thumbnail">
-                                        </button>
-                                        <button class="nav-link" id="pro-3-tab" data-bs-toggle="tab" data-bs-target="#pro-3" type="button" role="tab" aria-controls="pro-3" aria-selected="false" tabindex="-1">
-                                            <img src="assets2/images/product/quickview-s3.jpg" alt="product-thumbnail">
-                                        </button>
+                                    <div class="nav nav-style-6 tw-flex tw-flex-nowrap tw-overflow-x-auto tw-gap-2" role="tablist">
+                                        <template x-for="(thumb, index) in product.thumb_images" :key="index">
+                                            <a href="#" class="nav-link" 
+                                                    :class="{ 'active': activeThumbIndex === index }" 
+                                                    @click.prevent="activeImage = product.images[index]; activeThumbIndex = index">
+                                                <img :src="thumb" alt="product-thumbnail" class="tw-w-24 tw-h-24 tw-object-cover">
+                                            </a>
+                                        </template>
                                     </div>
                                 </div>
                             </div>

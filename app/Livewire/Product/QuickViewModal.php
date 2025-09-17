@@ -34,7 +34,7 @@ class QuickViewModal extends Component
         }
 
         try {
-            $this->product = Product::with('media')->findOrFail($productId);
+            $this->product = Product::with(['media', 'variants.media'])->findOrFail($productId);
             $this->isOpen = true;
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {

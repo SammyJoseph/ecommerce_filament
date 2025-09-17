@@ -78,9 +78,9 @@ class ProductResource extends Resource
                         ->label('Featured')
                         ->default(false),
                     SpatieMediaLibraryFileUpload::make('product_images') // 'product_image' es el nombre de la colección que usarás
-                        ->label('Main Image')
+                        ->label('Product Images')
                         ->collection('product_images') // DEBE coincidir con lo que esperas en el modelo
-                        // ->multiple() // Si quieres permitir múltiples imágenes
+                        ->multiple() // Permitir múltiples imágenes
                         ->image() // Para que valide que es una imagen y muestre previsualización
                         ->imageEditor() // Habilita un editor básico de imágenes
                         ->conversion('preview')
@@ -153,7 +153,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\VariantsRelationManager::class,
         ];
     }
 

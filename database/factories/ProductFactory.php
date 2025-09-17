@@ -44,7 +44,7 @@ class ProductFactory extends Factory
     }
 
     /**
-     * Adjuntar imagen después de crear el producto
+     * Adjuntar 3 imágenes de galería y crear variantes después de crear el producto
      *
      * @return $this
      */
@@ -52,16 +52,25 @@ class ProductFactory extends Factory
     {
         return $this->afterCreating(function (Product $product) {
             try {
-                $imageWidth = 800;
-                $imageHeight = 600;
-                $imageUrl = 'https://picsum.photos/' . $imageWidth . '/' . $imageHeight . '?random=' . rand(1, 1000);
+                // Add 3 product gallery images
+                for ($i = 0; $i < 3; $i++) {
+                    $imageWidth = 800;
+                    $imageHeight = 600;
+                    $imageUrl = 'https://picsum.photos/' . $imageWidth . '/' . $imageHeight . '?random=' . rand(1, 1000);
 
-                $product->addMediaFromUrl($imageUrl)
-                    ->preservingOriginal()
-                    ->toMediaCollection('product_images');
+                    $product->addMediaFromUrl($imageUrl)
+                        ->preservingOriginal()
+                        ->toMediaCollection('product_images');
+                }
+
+                // Create variants (1 to 5 variants per product)
+                $variantCount = fake()->numberBetween(1, 5);
+                \App\Models\Variant::factory($variantCount)->create([
+                    'product_id' => $product->id,
+                ]);
 
             } catch (\Exception $e) {
-                Log::error("Failed to add media for product ID {$product->id}: " . $e->getMessage());
+                Log::error("Failed to add media or variants for product ID {$product->id}: " . $e->getMessage());
             }
         });
     }
