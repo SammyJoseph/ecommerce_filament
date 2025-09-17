@@ -54,6 +54,11 @@ class Product extends Model implements HasMedia
         return $this->hasMany(Variant::class);
     }
     
+    public function getHasVariantsAttribute(): bool
+    {
+        return $this->variants()->exists();
+    }
+    
     public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('thumb')

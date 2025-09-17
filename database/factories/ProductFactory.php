@@ -22,12 +22,17 @@ class ProductFactory extends Factory
     {
         $name = Str::title(fake()->words(fake()->numberBetween(2, 6), true));
         $slugBase = Str::slug($name);
-        $price = fake()->randomFloat(2, 100, 900);
-
+        
+        // Randomly decide if product should have variants (30% chance of having variants)
+        $hasVariants = fake()->boolean(30);
+        
+        // If product has variants, price should be null, otherwise generate a price
+        $price = $hasVariants ? null : fake()->randomFloat(2, 100, 900);
+        
         $salePrice = fake()->optional(0.4)->randomFloat(
             2,
-            $price * 0.5,
-            $price * 0.9
+            $price ? $price * 0.5 : 0,
+            $price ? $price * 0.9 : 0
         );
 
         return [
@@ -63,11 +68,15 @@ class ProductFactory extends Factory
                         ->toMediaCollection('product_images');
                 }
 
-                // Create variants (1 to 5 variants per product)
-                $variantCount = fake()->numberBetween(1, 5);
-                \App\Models\Variant::factory($variantCount)->create([
-                    'product_id' => $product->id,
-                ]);
+                // Only create variants for products that should have them (30% chance)
+                // We determine this based on whether the product has a price or not
+                if ($product->price === null) {
+                    // Create variants (1 to 5 variants per product)
+                    $variantCount = fake()->numberBetween(1, 5);
+                    \App\Models\Variant::factory($variantCount)->create([
+                        'product_id' => $product->id,
+                    ]);
+                }
 
             } catch (\Exception $e) {
                 Log::error("Failed to add media or variants for product ID {$product->id}: " . $e->getMessage());

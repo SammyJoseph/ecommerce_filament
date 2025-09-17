@@ -57,16 +57,29 @@ class AddVariantsToExistingProducts extends Command
                     }
                 }
 
-                // Add variants if product doesn't have any
+                // Add variants if product doesn't have any, and randomly decide if it should have variants
                 $currentVariantCount = $product->variants()->count();
 
                 if ($currentVariantCount === 0) {
-                    $variantCount = rand(1, 5);
-                    $this->info("Adding {$variantCount} variants to product: {$product->name}");
+                    // 30% chance of adding variants to a product
+                    if (rand(1, 100) <= 30) {
+                        $variantCount = rand(1, 5);
+                        $this->info("Adding {$variantCount} variants to product: {$product->name}");
 
-                    Variant::factory($variantCount)->create([
-                        'product_id' => $product->id,
-                    ]);
+                        Variant::factory($variantCount)->create([
+                            'product_id' => $product->id,
+                        ]);
+                        
+                        // Set product price to null since it now has variants
+                        $product->update(['price' => null]);
+                    } else {
+                        // Ensure product has a price if it doesn't have variants
+                        if ($product->price === null) {
+                            $price = rand(100, 900) + (rand(0, 99) / 100);
+                            $product->update(['price' => $price]);
+                        }
+                        $this->info("Product {$product->name} will not have variants");
+                    }
                 }
 
             } catch (\Exception $e) {
@@ -83,6 +96,6 @@ class AddVariantsToExistingProducts extends Command
         $this->info('✅ Successfully processed all existing products!');
         $this->info('Each product now has:');
         $this->info('- 3 gallery images');
-        $this->info('- 1-5 variants with their own images');
+        $this->info('- Some products have 1-5 variants with their own images, others have no variants');
     }
 }

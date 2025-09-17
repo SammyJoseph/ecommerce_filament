@@ -48,15 +48,28 @@ class ProductResource extends Resource
                         ->unique(Product::class, 'slug', ignoreRecord: true),
                     Forms\Components\RichEditor::make('description')
                         ->columnSpanFull(),
+                    Forms\Components\Toggle::make('has_variants')
+                        ->label('Has Variants')
+                        ->live()
+                        ->default(fn ($record) => $record && $record->variants()->exists())
+                        ->afterStateUpdated(function (Forms\Set $set, Forms\Get $get, $state) {
+                            if ($state) {
+                                $set('price', null);
+                                $set('sale_price', null);
+                            }
+                        })
+                        ->helperText('If enabled, price will be set by variants'),
                     Forms\Components\Grid::make(3)
                         ->schema([
                             Forms\Components\TextInput::make('price')
-                                ->required()
                                 ->numeric()
-                                ->prefix('S/.'),
+                                ->prefix('S/.')
+                                ->hidden(fn (Forms\Get $get) => $get('has_variants')),
+                                // ->required(fn (Forms\Get $get) => !$get('has_variants')),
                             Forms\Components\TextInput::make('sale_price')
                                 ->numeric()
-                                ->prefix('S/.'),
+                                ->prefix('S/.')
+                                ->hidden(fn (Forms\Get $get) => $get('has_variants')),
                             Forms\Components\TextInput::make('stock')
                                 ->required()
                                 ->numeric()
@@ -77,17 +90,17 @@ class ProductResource extends Resource
                     Forms\Components\Toggle::make('is_featured')
                         ->label('Featured')
                         ->default(false),
-                    SpatieMediaLibraryFileUpload::make('product_images') // 'product_image' es el nombre de la colección que usarás
+                    SpatieMediaLibraryFileUpload::make('product_images')
                         ->label('Product Images')
-                        ->collection('product_images') // DEBE coincidir con lo que esperas en el modelo
-                        ->multiple() // Permitir múltiples imágenes
-                        ->image() // Para que valide que es una imagen y muestre previsualización
-                        ->imageEditor() // Habilita un editor básico de imágenes
+                        ->collection('product_images')
+                        ->multiple()
+                        ->image()
+                        ->imageEditor()
                         ->conversion('preview')
-                        ->reorderable() // Si son múltiples
-                        // ->responsiveImages() // Genera imágenes responsivas (necesita configuración de conversiones)
+                        ->reorderable()
+                        // ->responsiveImages()
                         ->columnSpanFull(),
-                ])->columns(1)->columnSpan(1), // Ocupa 1/3 del ancho
+                ])->columns(1)->columnSpan(1),
 
         ])->columns(3);
     }
@@ -103,6 +116,7 @@ class ProductResource extends Resource
             ->label('Main Image')
             ->collection('product_images')
             ->conversion('thumb')
+            ->limit(1)
             ->columnSpanFull(),
             
             Tables\Columns\TextColumn::make('name')
@@ -132,6 +146,10 @@ class ProductResource extends Resource
             Tables\Columns\IconColumn::make('is_featured')
                 ->label('Featured')
                 ->boolean(),
+            Tables\Columns\TextColumn::make('variants_count')
+                ->label('Variants')
+                ->counts('variants')
+                ->sortable(),
         ])
         ->filters([
             Tables\Filters\SelectFilter::make('category_id')
