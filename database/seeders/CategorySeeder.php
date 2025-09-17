@@ -16,13 +16,6 @@ class CategorySeeder extends Seeder
     {
         Category::factory()
             ->count(4)
-            ->create()
-            ->each(function (Category $category) {                
-                Product::factory()
-                    ->count(8)
-                    ->create([
-                        'category_id' => $category->id
-                    ]);
-            });
+            ->create();
     }
 }

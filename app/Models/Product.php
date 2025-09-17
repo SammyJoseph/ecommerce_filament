@@ -27,6 +27,11 @@ class Product extends Model implements HasMedia
         'is_featured',
     ];
 
+    public function options(): HasMany
+    {
+        return $this->hasMany(ProductOption::class);
+    }
+
     protected $casts = [
         'price' => 'decimal:2',
         'sale_price' => 'decimal:2',

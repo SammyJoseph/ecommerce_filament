@@ -15,12 +15,17 @@ class Variant extends Model implements HasMedia
 
     protected $fillable = [
         'product_id',
-        'name',
+        'sku',
         'price',
         'sale_price',
         'stock',
         'is_visible',
     ];
+
+    public function options()
+    {
+        return $this->belongsToMany(ProductOptionValue::class, 'product_variant_options');
+    }
 
     protected $casts = [
         'price' => 'decimal:2',

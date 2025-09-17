@@ -19,18 +19,11 @@ class VariantFactory extends Factory
      */
     public function definition(): array
     {
-        $colors = ['Red', 'Blue', 'Green', 'Black', 'White', 'Yellow'];
-        $sizes = ['Small', 'Medium', 'Large', 'XL', 'XXL'];
-
-        $color = fake()->randomElement($colors);
-        $size = fake()->randomElement($sizes);
-        $name = $color . ' - ' . $size;
-
         $price = fake()->randomFloat(2, 50, 200);
 
         return [
-            'product_id' => Product::factory(), // This will create a product if not provided
-            'name' => $name,
+            'product_id' => null, // Set after product creation
+            'sku' => fake()->unique()->ean13(),
             'price' => $price,
             'sale_price' => fake()->optional(0.3)->randomFloat(2, $price * 0.5, $price * 0.9),
             'stock' => fake()->numberBetween(0, 100),

@@ -2,65 +2,107 @@
 
 namespace Database\Factories;
 
-use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductOption;
+use App\Models\ProductOptionValue;
+use App\Models\Variant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
- */
 class ProductFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Product::class;
+
     public function definition(): array
     {
-        $name = Str::title(fake()->words(fake()->numberBetween(2, 6), true));
-        $slugBase = Str::slug($name);
-        
-        // Randomly decide if product should have variants (30% chance of having variants)
-        $hasVariants = fake()->boolean(30);
-        
-        // If product has variants, price should be null, otherwise generate a price
-        $price = $hasVariants ? null : fake()->randomFloat(2, 100, 900);
-        
-        $salePrice = fake()->optional(0.4)->randomFloat(
-            2,
-            $price ? $price * 0.5 : 0,
-            $price ? $price * 0.9 : 0
-        );
+        $name = $this->faker->words(3, true);
+        $price = $this->faker->numberBetween(100, 500);
+        $salePrice = $this->faker->optional(0.7)->numberBetween(80, $price - 10);
+        $stock = $this->faker->numberBetween(10, 100);
+        $description = $this->faker->paragraph;
 
         return [
-            'category_id' => Category::query()->exists() ? Category::query()->inRandomOrder()->first()->id : null,
-            'name' => $name,
-            'slug' => $slugBase . '-' . fake()->unique()->randomNumber(6),
-            'description' => fake()->optional(0.85)->paragraphs(fake()->numberBetween(1, 4), true),
+            'name' => ucfirst($name),
+            'slug' => $this->faker->slug,
+            'description' => $description,
             'price' => $price,
             'sale_price' => $salePrice,
-            'stock' => fake()->numberBetween(0, 200),
-            'is_visible' => fake()->boolean(80),
-            'is_featured' => fake()->boolean(20),
+            'stock' => $stock,
+            'is_visible' => true,
+            'is_featured' => $this->faker->boolean(0.3),
         ];
     }
 
-    /**
-     * Adjuntar 3 imágenes de galería y crear variantes después de crear el producto
-     *
-     * @return $this
-     */
+    // Helper to decide if product has variants (60% chance)
+    public function withVariants()
+    {
+        return $this->state(function (array $attributes) {
+            // Create products with variants (e.g., clothing)
+            if ($this->faker->boolean(0.6)) {
+                $options = [
+                    ProductOption::create([
+                        'product_id' => null, // Will be set after product creation
+                        'name' => $this->faker->randomElement(['Color', 'Size']),
+                    ]),
+                ];
+
+                $values = [];
+                foreach ($options as $option) {
+                    $valueNames = $option->name === 'Color' ? ['Red', 'Blue', 'Green'] : ['S', 'M', 'L', 'XL'];
+                    foreach ($valueNames as $valueName) {
+                        $values[] = ProductOptionValue::create([
+                            'product_option_id' => $option->id,
+                            'value' => $valueName,
+                        ]);
+                    }
+                }
+
+                // Create variants with interdependent availability (Aliexpress-style: e.g., Red only in M/L)
+                $variants = [];
+                $combinations = [
+                    ['Color' => 'Red', 'Size' => 'M'], // Available
+                    ['Color' => 'Red', 'Size' => 'L'], // Available
+                    ['Color' => 'Blue', 'Size' => 'L'], // Available
+                    ['Color' => 'Blue', 'Size' => 'XL'], // Available (not S/M for Blue)
+                ];
+
+                foreach ($combinations as $combo) {
+                    $variant = Variant::create([
+                        'product_id' => null, // Will be set after
+                        'price' => $this->faker->numberBetween(100, 500),
+                        'sale_price' => $this->faker->optional(0.5)->numberBetween(80, $attributes['price'] - 10),
+                        'stock' => $this->faker->numberBetween(5, 20), // Limited stock for realism
+                    ]);
+
+                    // Link to option values (pivot)
+                    foreach ($combo as $optionName => $valueName) {
+                        $option = $options[array_search($optionName, array_column($options, 'name'))];
+                        $value = $values[array_search($valueName, array_column($values, 'value'))];
+                        $variant->options()->attach($value->id);
+                    }
+
+                    $variants[] = $variant;
+                }
+
+                return [
+                    'options' => $options,
+                    'variants' => $variants,
+                ];
+            }
+
+            return []; // No variants for simple products
+        });
+    }
+
     public function configure(): static
     {
         return $this->afterCreating(function (Product $product) {
             try {
-                // Add 3 product gallery images
+                $imageWidth = 600;
+                $imageHeight = 600;
+
+                // Create 3 images for each product
                 for ($i = 0; $i < 3; $i++) {
-                    $imageWidth = 800;
-                    $imageHeight = 600;
                     $imageUrl = 'https://picsum.photos/' . $imageWidth . '/' . $imageHeight . '?random=' . rand(1, 1000);
 
                     $product->addMediaFromUrl($imageUrl)
@@ -68,18 +110,9 @@ class ProductFactory extends Factory
                         ->toMediaCollection('product_images');
                 }
 
-                // Only create variants for products that should have them (30% chance)
-                // We determine this based on whether the product has a price or not
-                if ($product->price === null) {
-                    // Create variants (1 to 5 variants per product)
-                    $variantCount = fake()->numberBetween(1, 5);
-                    \App\Models\Variant::factory($variantCount)->create([
-                        'product_id' => $product->id,
-                    ]);
-                }
-
             } catch (\Exception $e) {
-                Log::error("Failed to add media or variants for product ID {$product->id}: " . $e->getMessage());
+                // Log error but don't stop seeding
+                Log::error("Failed to add media for product ID {$product->id}: " . $e->getMessage());
             }
         });
     }
