@@ -22,7 +22,7 @@ class CouponResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return static::getModel()::valid()->count();
     }
 
     public static function form(Form $form): Form

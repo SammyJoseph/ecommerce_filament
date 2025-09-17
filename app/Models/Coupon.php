@@ -40,4 +40,18 @@ class Coupon extends Model
         }
         return true;
     }
+
+    public function scopeValid($query) // para CouponResource
+    {
+        return $query->where('is_active', true)
+            ->where(function ($q) {
+                $q->whereNull('expires_at')
+                ->orWhere('expires_at', '>', now()->endOfDay());
+            })
+            ->where(function ($q) {
+                $q->whereNull('usage_limit')
+                ->orWhereColumn('times_used', '<', 'usage_limit');
+            });
+    }
+
 }

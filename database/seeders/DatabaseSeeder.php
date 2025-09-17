@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesPermissionsSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(CategorySeeder::class);
-        // $this->call(ProductSeeder::class); // ahroa los productos se crean en CategorySeeder
+        // $this->call(ProductSeeder::class); // ahora los productos se crean en CategorySeeder
         $this->call(CouponSeeder::class);
         $this->call(OrderSeeder::class);
     }

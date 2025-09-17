@@ -15,11 +15,11 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         Category::factory()
-            ->count(5)
+            ->count(4)
             ->create()
             ->each(function (Category $category) {                
                 Product::factory()
-                    ->count(10)
+                    ->count(8)
                     ->create([
                         'category_id' => $category->id
                     ]);
