@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->enum('type', ['text', 'color', 'size', 'select'])->default('text');
             $table->timestamps();
         });
     }

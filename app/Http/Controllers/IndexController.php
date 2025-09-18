@@ -29,6 +29,19 @@ class IndexController extends Controller
 
     public function productDetails(Product $product)
     {
-        return view('product-details', compact('product'));
+        $product->load([
+            'variants' => function($query) {
+                $query->where('is_visible', true)
+                      ->with(['media', 'options.option', 'options']);
+            },
+            'options.values.variants' => function($query) {
+                $query->where('is_visible', true);
+            }
+        ]);
+
+        // Get variant combinations for interactive selection
+        $variantCombinations = $product->getVariantCombinations();
+
+        return view('product.product-details-2', compact('product', 'variantCombinations'));
     }
 }

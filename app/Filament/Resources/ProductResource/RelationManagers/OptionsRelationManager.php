@@ -21,14 +21,29 @@ class OptionsRelationManager extends RelationManager
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('type')
+                    ->options([
+                        'text' => 'Text',
+                        'color' => 'Color',
+                        'size' => 'Size',
+                        'select' => 'Select'
+                    ])
+                    ->default('text')
+                    ->required()
+                    ->live(),
                 Forms\Components\Repeater::make('values')
                     ->relationship()
                     ->schema([
                         Forms\Components\TextInput::make('value')
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\ColorPicker::make('color_code')
+                            ->label('Color Code')
+                            ->visible(fn (Forms\Get $get) => $get('../../type') === 'color')
+                            ->required(fn (Forms\Get $get) => $get('../../type') === 'color')
+                            ->default('#000000'),
                     ])
-                    ->grid(2)
+                    ->columns(2)
                     ->defaultItems(1)
                     ->columnSpanFull(),
             ]);
@@ -40,6 +55,17 @@ class OptionsRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name'),
+                Tables\Columns\TextColumn::make('type')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'color' => 'success',
+                        'size' => 'warning',
+                        'select' => 'info',
+                        default => 'gray',
+                    }),
+                Tables\Columns\TextColumn::make('values_count')
+                    ->label('Values')
+                    ->counts('values'),
             ])
             ->filters([
                 //

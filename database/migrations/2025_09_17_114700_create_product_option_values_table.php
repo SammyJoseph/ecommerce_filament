@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_option_id')->constrained()->onDelete('cascade');
             $table->string('value');
+            $table->string('color_code', 7)->nullable(); // #FF0000 format
             $table->timestamps();
         });
     }

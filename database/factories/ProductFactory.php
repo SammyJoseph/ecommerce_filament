@@ -8,6 +8,7 @@ use App\Models\ProductOptionValue;
 use App\Models\Variant;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ProductFactory extends Factory
 {
@@ -23,7 +24,7 @@ class ProductFactory extends Factory
 
         return [
             'name' => ucfirst($name),
-            'slug' => $this->faker->slug,
+            'slug' => Str::slug($name),
             'description' => $description,
             'price' => $price,
             'sale_price' => $salePrice,
@@ -39,21 +40,41 @@ class ProductFactory extends Factory
         return $this->state(function (array $attributes) {
             // Create products with variants (e.g., clothing)
             if ($this->faker->boolean(0.6)) {
+                $optionName = $this->faker->randomElement(['Color', 'Size']);
+                $optionType = $optionName === 'Color' ? 'color' : 'size';
+
                 $options = [
                     ProductOption::create([
                         'product_id' => null, // Will be set after product creation
-                        'name' => $this->faker->randomElement(['Color', 'Size']),
+                        'name' => $optionName,
+                        'type' => $optionType,
                     ]),
                 ];
 
                 $values = [];
                 foreach ($options as $option) {
-                    $valueNames = $option->name === 'Color' ? ['Red', 'Blue', 'Green'] : ['S', 'M', 'L', 'XL'];
-                    foreach ($valueNames as $valueName) {
-                        $values[] = ProductOptionValue::create([
-                            'product_option_id' => $option->id,
-                            'value' => $valueName,
-                        ]);
+                    if ($option->type === 'color') {
+                        $colorData = [
+                            ['name' => 'Red', 'code' => '#FF0000'],
+                            ['name' => 'Blue', 'code' => '#0000FF'],
+                            ['name' => 'Green', 'code' => '#00FF00'],
+                            ['name' => 'Black', 'code' => '#000000'],
+                        ];
+                        foreach ($colorData as $color) {
+                            $values[] = ProductOptionValue::create([
+                                'product_option_id' => $option->id,
+                                'value' => $color['name'],
+                                'color_code' => $color['code'],
+                            ]);
+                        }
+                    } else {
+                        $sizeNames = ['S', 'M', 'L', 'XL'];
+                        foreach ($sizeNames as $sizeName) {
+                            $values[] = ProductOptionValue::create([
+                                'product_option_id' => $option->id,
+                                'value' => $sizeName,
+                            ]);
+                        }
                     }
                 }
 

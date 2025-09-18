@@ -14,6 +14,7 @@ class ProductOption extends Model
     protected $fillable = [
         'product_id',
         'name',
+        'type',
     ];
 
     public function product(): BelongsTo
