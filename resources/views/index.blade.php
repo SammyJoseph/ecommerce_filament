@@ -1,4 +1,4 @@
-@extends('layouts.index2')
+@extends('layouts.index')
 @section('title', 'Norda - Minimal eCommerce HTML Template')
 
 @section('main-wrapper-attrs')
@@ -20,9 +20,9 @@
 @section('container-class', 'container-fluid')
 
 @section('content')        
-    @include('_partials.index2.slider-area')
-    @include('_partials.index2.service-area')
-    @include('_partials.index2.about-us-area')
+    @include('_partials.index.slider-area')
+    @include('_partials.index.service-area')
+    @include('_partials.index.about-us-area')
     
     <div class="product-area section-padding-1 pt-115 pb-75">
         <div class="container">
@@ -96,9 +96,9 @@
         </div>
     </div>
     
-    @include('_partials.index2.banner-area')
-    @include('_partials.index2.instagram-area')
-    @include('_partials.index2.brand-logo-area')    
+    @include('_partials.index.banner-area')
+    @include('_partials.index.instagram-area')
+    @include('_partials.index.brand-logo-area')    
     
-    @include('_partials.index2.quick-view-modal')
+    @include('_partials.index.quick-view-modal')
 @endsection

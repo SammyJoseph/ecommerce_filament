@@ -357,7 +357,7 @@
 
         @yield('content')
 
-        @include('_partials.index2.subscribe-area')
+        @include('_partials.index.subscribe-area')
 
         <footer class="footer-area bg-gray pb-30">
             <div class="container">

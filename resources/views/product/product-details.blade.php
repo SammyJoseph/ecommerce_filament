@@ -168,5 +168,5 @@
         </div>
     </div>    
 
-    {{-- @include('_partials.index2.temp-product-details') --}}
+    {{-- @include('_partials.index.temp-product-details') --}}
 @endsection
