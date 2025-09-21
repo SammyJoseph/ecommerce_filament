@@ -78,21 +78,28 @@ class DatabaseSeeder extends Seeder
         $colorOption = ProductOption::create([
             'product_id' => $product->id,
             'name' => 'Color',
+            'type' => 'color',
         ]);
 
         $sizeOption = ProductOption::create([
             'product_id' => $product->id,
             'name' => 'Size',
+            'type' => 'size',
         ]);
 
         // Create option values
-        $colors = ['Red', 'Blue', 'Green'];
+        $colors = [
+            'Red' => '#dc2626',
+            'Blue' => '#2563eb',
+            'Green' => '#16a34a',
+        ];
         $sizes = ['S', 'M', 'L', 'XL'];
 
-        foreach ($colors as $color) {
+        foreach ($colors as $color => $code) {
             ProductOptionValue::create([
                 'product_option_id' => $colorOption->id,
                 'value' => $color,
+                'color_code' => $code,
             ]);
         }
 

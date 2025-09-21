@@ -112,9 +112,11 @@ class Product extends Model implements HasMedia
                 // Get variant image URLs
                 $variantImage = null;
                 $variantThumb = null;
+                $variantOriginal = null;
                 if ($variant->getFirstMedia('variant_images')) {
                     $variantImage = $variant->getFirstMediaUrl('variant_images', 'preview');
                     $variantThumb = $variant->getFirstMediaUrl('variant_images', 'thumb');
+                    $variantOriginal = $variant->getFirstMediaUrl('variant_images');
                 }
 
                 // Add to colors array if not exists
@@ -124,7 +126,8 @@ class Product extends Model implements HasMedia
                         'color_code' => $colorOptionValue->color_code ?? '#ccc',
                         'available_sizes' => [],
                         'image' => $variantImage,
-                        'thumb' => $variantThumb
+                        'thumb' => $variantThumb,
+                        'original' => $variantOriginal,
                     ];
                 }
 
@@ -145,7 +148,8 @@ class Product extends Model implements HasMedia
                     'sale_price' => $variant->sale_price,
                     'variant_id' => $variant->id,
                     'image' => $variantImage,
-                    'thumb' => $variantThumb
+                    'thumb' => $variantThumb,
+                    'original' => $variantOriginal,
                 ];
 
                 // Add size to color's available sizes

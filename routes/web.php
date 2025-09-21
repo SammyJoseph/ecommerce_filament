@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/index1', [IndexController::class, 'index'])->name('index');
 Route::get('/product/{product}', [IndexController::class, 'productDetails'])->name('product.details');
 
-Route::get('/', [IndexController::class, 'index2'])->name('index.2');
+Route::get('/', [IndexController::class, 'index'])->name('index');
 
 Route::middleware([
     'auth:sanctum',

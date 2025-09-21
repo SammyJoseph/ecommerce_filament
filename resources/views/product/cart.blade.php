@@ -1,4 +1,4 @@
-@extends('layouts.index2')
+@extends('layouts.index')
 @section('title', 'Cart | Norda - Minimal eCommerce HTML Template')
 
 @section('header-extra-classes', '') 
