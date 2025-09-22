@@ -212,6 +212,11 @@
             cursor: not-allowed;
             pointer-events: none;
         }
+
+        .pro-details-size-content ul li a.active {
+            background-color: #333;
+            color: #fff;
+        }
     </style>
 @endpush
 
@@ -254,7 +259,7 @@
                     }
 
                     // Update color availability based on selected size
-                    if (selectedSize && sizes[selectedSize]) {
+                    /* if (selectedSize && sizes[selectedSize]) {
                         const availableColors = sizes[selectedSize].available_colors;
                         $colorSwatches.each(function() {
                             const color = $(this).data('color').toString();
@@ -266,7 +271,7 @@
                                 }
                             }
                         });
-                    }
+                    } */
 
                     // Update price and add to cart button
                     let displayPrice = '';
