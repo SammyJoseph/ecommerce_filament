@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -22,11 +23,6 @@ class Variant extends Model implements HasMedia
         'is_visible',
     ];
 
-    public function options()
-    {
-        return $this->belongsToMany(ProductOptionValue::class, 'product_variant_options');
-    }
-
     protected $casts = [
         'price' => 'decimal:2',
         'sale_price' => 'decimal:2',
@@ -36,6 +32,11 @@ class Variant extends Model implements HasMedia
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function options(): BelongsToMany
+    {
+        return $this->belongsToMany(ProductOptionValue::class, 'product_variant_options', 'variant_id', 'product_option_value_id');
     }
 
     public function registerMediaConversions(?Media $media = null): void
@@ -59,6 +60,7 @@ class Variant extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('variant_images')
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
             ->singleFile();
     }
 }

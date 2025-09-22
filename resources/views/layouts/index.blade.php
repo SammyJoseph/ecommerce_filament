@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="{{  asset('assets2/css/plugins/jquery-ui.css') }}">
     <link rel="stylesheet" href="{{  asset('assets2/css/style.css') }}">
 
+    @stack('css')
+
     @vite(['resources/js/app.js', 'resources/css/app.css'])
     @livewireStyles
 </head>
@@ -407,8 +409,6 @@
         </footer>
     </div>
 
-    @stack('scripts')
-
     <script src="{{ asset('assets2/js/vendor/modernizr-3.11.7.min.js') }}"></script>
     <script src="{{ asset('assets2/js/vendor/jquery-v3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets2/js/vendor/jquery-migrate-v3.3.2.min.js') }}"></script>
@@ -426,7 +426,9 @@
     <script src="{{ asset('assets2/js/plugins/ajax-mail.js') }}"></script>
     <script src="{{ asset('assets2/js/main.js') }}"></script>
 
+    @stack('scripts')
     @livewireScripts
 </body>
 
+</html>
 </html>
