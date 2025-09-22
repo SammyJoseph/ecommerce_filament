@@ -64,7 +64,7 @@
                     <li class="single-product-cart">
                         <div class="cart-img">
                             <a href="{{ route('product.details', $product->id) }}">
-                                <img src="{{ $product->options->image ?? $product->model->getFirstMediaUrl('product_images', 'thumb') ?? asset('assets2/images/cart/cart-1.jpg') }}" alt="{{ $product->name }}">
+                                <img src="{{ $product->options->image ?? $product->model->getFirstMediaUrl('product_images', 'thumb') ?? asset('assets/images/cart/cart-1.jpg') }}" alt="{{ $product->name }}">
                             </a>
                         </div>
                         <div class="cart-title">

@@ -54,11 +54,11 @@
                             @else
                                 <div class="easyzoom-style">
                                     <div class="easyzoom easyzoom--overlay">
-                                        <a href="{{ asset('assets2/images/product-details/b-large-1.jpg') }}">
-                                            <img src="{{ asset('assets2/images/product-details/large-1.jpg') }}" alt="">
+                                        <a href="{{ asset('assets/images/product-details/b-large-1.jpg') }}">
+                                            <img src="{{ asset('assets/images/product-details/large-1.jpg') }}" alt="">
                                         </a>
                                     </div>
-                                    <a class="easyzoom-pop-up img-popup" href="{{ asset('assets2/images/product-details/b-large-1.jpg') }}"><i class="icon-size-fullscreen"></i></a>
+                                    <a class="easyzoom-pop-up img-popup" href="{{ asset('assets/images/product-details/b-large-1.jpg') }}"><i class="icon-size-fullscreen"></i></a>
                                 </div>
                             @endif
                         </div>
@@ -80,7 +80,7 @@
                                 @endforeach
                             @else
                                 <div class="product-dec-small active">
-                                    <img src="{{ asset('assets2/images/product-details/small-1.jpg') }}" alt="">
+                                    <img src="{{ asset('assets/images/product-details/small-1.jpg') }}" alt="">
                                 </div>
                             @endif
                         </div>

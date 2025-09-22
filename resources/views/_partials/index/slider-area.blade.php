@@ -15,7 +15,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="hero-slider-img-1 slider-animated-1">
-                            <img class="animated" src="{{ asset('assets2/images/slider/hm-1-slider-1.png') }}">
+                            <img class="animated" src="{{ asset('assets/images/slider/hm-1-slider-1.png') }}">
                         </div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="hero-slider-img-1 slider-animated-1">
-                            <img class="animated" src="{{ asset('assets2/images/slider/hm-1-slider-4.png') }}">
+                            <img class="animated" src="{{ asset('assets/images/slider/hm-1-slider-4.png') }}">
                         </div>
                     </div>
                 </div>

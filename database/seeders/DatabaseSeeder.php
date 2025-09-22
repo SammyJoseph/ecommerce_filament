@@ -124,11 +124,12 @@ class DatabaseSeeder extends Seeder
         $selectedCombinations = fake()->randomElements($allCombinations, $numVariants);
 
         foreach ($selectedCombinations as $combo) {
+            $price = fake()->numberBetween(70, 200);
             $variant = Variant::factory()->create([
                 'product_id' => $product->id,
                 'sku' => fake()->unique()->ean13(),
-                'price' => fake()->numberBetween(100, 500),
-                'sale_price' => fake()->optional(0.5)->numberBetween(80, 450),
+                'price' => $price,
+                'sale_price' => $price - fake()->numberBetween(10, 30),
                 'stock' => fake()->numberBetween(5, 20),
                 'is_visible' => true,
             ]);

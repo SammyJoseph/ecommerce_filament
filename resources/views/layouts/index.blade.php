@@ -8,19 +8,19 @@
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
 
-    <link rel="stylesheet" href="{{  asset('assets2/css/vendor/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{  asset('assets2/css/vendor/simple-line-icons.css') }}">
-    <link rel="stylesheet" href="{{  asset('assets2/css/vendor/elegant.css') }}">
-    <link rel="stylesheet" href="{{  asset('assets2/css/vendor/linear-icon.css') }}">
-    <link rel="stylesheet" href="{{  asset('assets2/css/plugins/nice-select.css') }}">
-    <link rel="stylesheet" href="{{  asset('assets2/css/plugins/easyzoom.css') }}">
-    <link rel="stylesheet" href="{{  asset('assets2/css/plugins/slick.css') }}">
-    <link rel="stylesheet" href="{{  asset('assets2/css/plugins/animate.css') }}">
-    <link rel="stylesheet" href="{{  asset('assets2/css/plugins/magnific-popup.css') }}">
-    <link rel="stylesheet" href="{{  asset('assets2/css/plugins/jquery-ui.css') }}">
-    <link rel="stylesheet" href="{{  asset('assets2/css/style.css') }}">
+    <link rel="stylesheet" href="{{  asset('assets/css/vendor/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{  asset('assets/css/vendor/simple-line-icons.css') }}">
+    <link rel="stylesheet" href="{{  asset('assets/css/vendor/elegant.css') }}">
+    <link rel="stylesheet" href="{{  asset('assets/css/vendor/linear-icon.css') }}">
+    <link rel="stylesheet" href="{{  asset('assets/css/plugins/nice-select.css') }}">
+    <link rel="stylesheet" href="{{  asset('assets/css/plugins/easyzoom.css') }}">
+    <link rel="stylesheet" href="{{  asset('assets/css/plugins/slick.css') }}">
+    <link rel="stylesheet" href="{{  asset('assets/css/plugins/animate.css') }}">
+    <link rel="stylesheet" href="{{  asset('assets/css/plugins/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{  asset('assets/css/plugins/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{  asset('assets/css/style.css') }}">
 
     @stack('css')
 
@@ -84,7 +84,7 @@
                         <div class="row align-items-center">
                             <div class="col-xl-2 col-lg-2">
                                 <div class="logo">
-                                    <a href="{{ route('index') }}"><img src="{{ asset('assets2/images/logo/logo.png') }}"></a>
+                                    <a href="{{ route('index') }}"><img src="{{ asset('assets/images/logo/logo.png') }}"></a>
                                 </div>
                             </div>
                             <div class="col-xl-8 col-lg-7">
@@ -134,7 +134,7 @@
                                                                 </ul>
                                                             </li>
                                                             <li>
-                                                                <a href="shop.html"><img src="{{ asset('assets2/images/banner/banner-12.png') }}"></a>
+                                                                <a href="shop.html"><img src="{{ asset('assets/images/banner/banner-12.png') }}"></a>
                                                             </li>
                                                         </ul>
                                                     </li>
@@ -201,7 +201,7 @@
                         <div class="col-5">
                             <div class="mobile-logo">
                                 <a href="index.html">
-                                    <img src="{{ asset('assets2/images/logo/logo.png') }}">
+                                    <img src="{{ asset('assets/images/logo/logo.png') }}">
                                 </a>
                             </div>
                         </div>
@@ -367,7 +367,7 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="contact-info-wrap">
                             <div class="footer-logo">
-                                <a href="#"><img src="{{ asset('assets2/images/logo/logo.png') }}"></a>
+                                <a href="#"><img src="{{ asset('assets/images/logo/logo.png') }}"></a>
                             </div>
                             <div class="single-contact-info">
                                 <span>Our Location</span>
@@ -409,22 +409,22 @@
         </footer>
     </div>
 
-    <script src="{{ asset('assets2/js/vendor/modernizr-3.11.7.min.js') }}"></script>
-    <script src="{{ asset('assets2/js/vendor/jquery-v3.6.0.min.js') }}"></script>
-    <script src="{{ asset('assets2/js/vendor/jquery-migrate-v3.3.2.min.js') }}"></script>
-    <script src="{{ asset('assets2/js/vendor/popper.min.js') }}"></script>
-    <script src="{{ asset('assets2/js/vendor/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets2/js/plugins/slick.js') }}"></script>
-    <script src="{{ asset('assets2/js/plugins/jquery.syotimer.min.js') }}"></script>
-    <script src="{{ asset('assets2/js/plugins/jquery.nice-select.min.js') }}"></script>
-    <script src="{{ asset('assets2/js/plugins/wow.js') }}"></script>
-    <script src="{{ asset('assets2/js/plugins/jquery-ui.js') }}"></script>
-    <script src="{{ asset('assets2/js/plugins/magnific-popup.js') }}"></script>
-    <script src="{{ asset('assets2/js/plugins/sticky-sidebar.js') }}"></script>
-    <script src="{{ asset('assets2/js/plugins/easyzoom.js') }}"></script>
-    <script src="{{ asset('assets2/js/plugins/scrollup.js') }}"></script>
-    <script src="{{ asset('assets2/js/plugins/ajax-mail.js') }}"></script>
-    <script src="{{ asset('assets2/js/main.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/modernizr-3.11.7.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/jquery-v3.6.0.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/jquery-migrate-v3.3.2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/js/vendor/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/slick.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/jquery.syotimer.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/jquery.nice-select.min.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/wow.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/jquery-ui.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/magnific-popup.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/sticky-sidebar.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/easyzoom.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/scrollup.js') }}"></script>
+    <script src="{{ asset('assets/js/plugins/ajax-mail.js') }}"></script>
+    <script src="{{ asset('assets/js/main.js') }}"></script>
 
     @stack('scripts')
     @livewireScripts

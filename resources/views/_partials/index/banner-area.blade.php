@@ -7,7 +7,7 @@
             <div class="col-lg-7 col-md-7">
                 <div class="banner-wrap banner-mr-1 mb-30">
                     <div class="banner-img banner-img-zoom">
-                        <a href="product-details.html"><img src="{{ asset('assets2/images/banner/banner-1.jpg') }}"></a>
+                        <a href="product-details.html"><img src="{{ asset('assets/images/banner/banner-1.jpg') }}"></a>
                     </div>
                     <div class="banner-content-1">
                         <h2>Zara Pattern Boxed <br>Underwear</h2>
@@ -21,7 +21,7 @@
             <div class="col-lg-5 col-md-5">
                 <div class="banner-wrap  banner-ml-1 mb-30">
                     <div class="banner-img banner-img-zoom">
-                        <a href="product-details.html"><img src="{{ asset('assets2/images/banner/banner-2.jpg') }}"></a>
+                        <a href="product-details.html"><img src="{{ asset('assets/images/banner/banner-2.jpg') }}"></a>
                     </div>
                     <div class="banner-content-2">
                         <h2>Basic Color Caps</h2>

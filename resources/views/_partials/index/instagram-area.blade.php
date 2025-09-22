@@ -12,7 +12,7 @@
             <div class="col">
                 <div class="instagram-item">
                     <a class="instagram-image" href="#">
-                        <img src="{{ asset('assets2/images/instagram/1.jpg') }}">
+                        <img src="{{ asset('assets/images/instagram/1.jpg') }}">
                     </a>
                     <ul class="add-action">
                         <li>
@@ -26,7 +26,7 @@
             <div class="col">
                 <div class="instagram-item">
                     <a class="instagram-image" href="#">
-                        <img src="{{ asset('assets2/images/instagram/2.jpg') }}">
+                        <img src="{{ asset('assets/images/instagram/2.jpg') }}">
                     </a>
                     <ul class="add-action">
                         <li>
@@ -40,7 +40,7 @@
             <div class="col">
                 <div class="instagram-item">
                     <a class="instagram-image" href="#">
-                        <img src="{{ asset('assets2/images/instagram/3.jpg') }}">
+                        <img src="{{ asset('assets/images/instagram/3.jpg') }}">
                     </a>
                     <ul class="add-action">
                         <li>
@@ -54,7 +54,7 @@
             <div class="col">
                 <div class="instagram-item">
                     <a class="instagram-image" href="#">
-                        <img src="{{ asset('assets2/images/instagram/4.jpg') }}">
+                        <img src="{{ asset('assets/images/instagram/4.jpg') }}">
                     </a>
                     <ul class="add-action">
                         <li>
@@ -68,7 +68,7 @@
             <div class="col">
                 <div class="instagram-item">
                     <a class="instagram-image" href="#">
-                        <img src="{{ asset('assets2/images/instagram/5.jpg') }}">
+                        <img src="{{ asset('assets/images/instagram/5.jpg') }}">
                     </a>
                     <ul class="add-action">
                         <li>
