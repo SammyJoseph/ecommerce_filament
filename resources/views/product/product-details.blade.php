@@ -145,25 +145,9 @@
                                 </div>
                             </div>
                         @endif
-                        <div class="product-details-meta">
-                            <ul>
-                                <li><span>Categories:</span> <a href="#">{{ $product->category->name }}</a></li>
-                                <li><span>Tag: </span> <a href="#">Fashion,</a> <a href="#">Mentone</a> , <a href="#">Texas</a></li>
-                            </ul>
-                        </div>
+
                         <div class="pro-details-action-wrap">
-                            @livewire('product.add-to-cart', ['product' => $product, 'classes' => ''])
-                            <div class="pro-details-action">
-                                <a title="Add to Wishlist" href="#"><i class="icon-heart"></i></a>
-                                <a title="Add to Compare" href="#"><i class="icon-refresh"></i></a>
-                                <a class="social" title="Social" href="#"><i class="icon-share"></i></a>
-                                <div class="product-dec-social">
-                                    <a class="facebook" title="Facebook" href="#"><i class="icon-social-facebook"></i></a>
-                                    <a class="twitter" title="Twitter" href="#"><i class="icon-social-twitter"></i></a>
-                                    <a class="instagram" title="Instagram" href="#"><i class="icon-social-instagram"></i></a>
-                                    <a class="pinterest" title="Pinterest" href="#"><i class="icon-social-pinterest"></i></a>
-                                </div>
-                            </div>
+                            @livewire('product.add-to-cart', ['product' => $product, 'classes' => ''])                            
                         </div>
                     </div>
                 </div>
