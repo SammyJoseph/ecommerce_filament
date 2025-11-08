@@ -123,27 +123,43 @@ class DatabaseSeeder extends Seeder
         $numVariants = fake()->numberBetween(1, 5);
         $selectedCombinations = fake()->randomElements($allCombinations, $numVariants);
 
+        // Group combinations by color for new structure
+        $colorGroups = [];
         foreach ($selectedCombinations as $combo) {
-            $price = fake()->numberBetween(70, 200);
+            $colorGroups[$combo['Color']][] = $combo['Size'];
+        }
+
+        // Create one variant per color
+        foreach ($colorGroups as $colorName => $sizes) {
+            $colorValue = ProductOptionValue::where('product_option_id', $colorOption->id)
+                ->where('value', $colorName)
+                ->first();
+
+            if (!$colorValue) continue;
+
             $variant = Variant::factory()->create([
                 'product_id' => $product->id,
+                'color_id' => $colorValue->id,
                 'sku' => fake()->unique()->ean13(),
-                'price' => $price,
-                'sale_price' => $price - fake()->numberBetween(10, 30),
-                'stock' => fake()->numberBetween(5, 20),
                 'is_visible' => true,
             ]);
 
-            // Link variant to option values
-            $colorValue = ProductOptionValue::where('product_option_id', $colorOption->id)
-                ->where('value', $combo['Color'])
-                ->first();
-            $sizeValue = ProductOptionValue::where('product_option_id', $sizeOption->id)
-                ->where('value', $combo['Size'])
-                ->first();
+            // Create variant sizes for each size in this color
+            foreach ($sizes as $sizeName) {
+                $sizeValue = ProductOptionValue::where('product_option_id', $sizeOption->id)
+                    ->where('value', $sizeName)
+                    ->first();
 
-            if ($colorValue && $sizeValue) {
-                $variant->options()->attach([$colorValue->id, $sizeValue->id]);
+                if ($sizeValue) {
+                    $price = fake()->numberBetween(70, 200);
+                    \App\Models\VariantSize::create([
+                        'variant_id' => $variant->id,
+                        'product_option_value_id' => $sizeValue->id,
+                        'price' => $price,
+                        'sale_price' => fake()->optional(0.5)->numberBetween($price * 0.7, $price * 0.9),
+                        'stock' => fake()->numberBetween(5, 20),
+                    ]);
+                }
             }
         }
     }

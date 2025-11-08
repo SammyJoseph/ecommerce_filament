@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductOption;
 use App\Models\ProductOptionValue;
 use App\Models\Variant;
+use App\Models\VariantSize;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -34,84 +35,98 @@ class ProductFactory extends Factory
         ];
     }
 
-    // Helper to decide if product has variants (60% chance)
+    /**
+     * Create a product with variants (color-based with multiple sizes)
+     */
     public function withVariants()
     {
-        return $this->state(function (array $attributes) {
-            // Create products with variants (e.g., clothing)
-            if ($this->faker->boolean(0.6)) {
-                $optionName = $this->faker->randomElement(['Color', 'Size']);
-                $optionType = $optionName === 'Color' ? 'color' : 'size';
+        return $this->afterCreating(function (Product $product) {
+            // Create Color option
+            $colorOption = ProductOption::create([
+                'product_id' => $product->id,
+                'name' => 'Color',
+                'type' => 'color',
+            ]);
 
-                $options = [
-                    ProductOption::create([
-                        'product_id' => null, // Will be set after product creation
-                        'name' => $optionName,
-                        'type' => $optionType,
-                    ]),
-                ];
+            // Create Size option
+            $sizeOption = ProductOption::create([
+                'product_id' => $product->id,
+                'name' => 'Size',
+                'type' => 'size',
+            ]);
 
-                $values = [];
-                foreach ($options as $option) {
-                    if ($option->type === 'color') {
-                        $colorData = [
-                            ['name' => 'Red', 'code' => '#FF0000'],
-                            ['name' => 'Blue', 'code' => '#0000FF'],
-                            ['name' => 'Green', 'code' => '#00FF00'],
-                            ['name' => 'Black', 'code' => '#000000'],
-                        ];
-                        foreach ($colorData as $color) {
-                            $values[] = ProductOptionValue::create([
-                                'product_option_id' => $option->id,
-                                'value' => $color['name'],
-                                'color_code' => $color['code'],
-                            ]);
-                        }
-                    } else {
-                        $sizeNames = ['S', 'M', 'L', 'XL'];
-                        foreach ($sizeNames as $sizeName) {
-                            $values[] = ProductOptionValue::create([
-                                'product_option_id' => $option->id,
-                                'value' => $sizeName,
-                            ]);
-                        }
-                    }
-                }
+            // Define available colors
+            $colorsData = [
+                ['name' => 'Red', 'code' => '#FF0000'],
+                ['name' => 'Blue', 'code' => '#0000FF'],
+                ['name' => 'Green', 'code' => '#00FF00'],
+                ['name' => 'Black', 'code' => '#000000'],
+            ];
 
-                // Create variants with interdependent availability (Aliexpress-style: e.g., Red only in M/L)
-                $variants = [];
-                $combinations = [
-                    ['Color' => 'Red', 'Size' => 'M'], // Available
-                    ['Color' => 'Red', 'Size' => 'L'], // Available
-                    ['Color' => 'Blue', 'Size' => 'L'], // Available
-                    ['Color' => 'Blue', 'Size' => 'XL'], // Available (not S/M for Blue)
-                ];
+            // Define available sizes
+            $sizesData = ['S', 'M', 'L', 'XL'];
 
-                foreach ($combinations as $combo) {
-                    $variant = Variant::create([
-                        'product_id' => null, // Will be set after
-                        'price' => $this->faker->numberBetween(100, 500),
-                        'sale_price' => $this->faker->optional(0.5)->numberBetween(80, $attributes['price'] - 10),
-                        'stock' => $this->faker->numberBetween(5, 20), // Limited stock for realism
-                    ]);
-
-                    // Link to option values (pivot)
-                    foreach ($combo as $optionName => $valueName) {
-                        $option = $options[array_search($optionName, array_column($options, 'name'))];
-                        $value = $values[array_search($valueName, array_column($values, 'value'))];
-                        $variant->options()->attach($value->id);
-                    }
-
-                    $variants[] = $variant;
-                }
-
-                return [
-                    'options' => $options,
-                    'variants' => $variants,
-                ];
+            // Create color values
+            $colorValues = [];
+            foreach ($colorsData as $color) {
+                $colorValues[] = ProductOptionValue::create([
+                    'product_option_id' => $colorOption->id,
+                    'value' => $color['name'],
+                    'color_code' => $color['code'],
+                ]);
             }
 
-            return []; // No variants for simple products
+            // Create size values
+            $sizeValues = [];
+            foreach ($sizesData as $sizeName) {
+                $sizeValues[] = ProductOptionValue::create([
+                    'product_option_id' => $sizeOption->id,
+                    'value' => $sizeName,
+                ]);
+            }
+
+            // Create variants (one per color) with multiple sizes
+            // We'll create 2-3 color variants randomly
+            $selectedColors = $this->faker->randomElements($colorValues, $this->faker->numberBetween(2, 3));
+
+            foreach ($selectedColors as $colorValue) {
+                // Create variant for this color
+                $variant = Variant::create([
+                    'product_id' => $product->id,
+                    'color_id' => $colorValue->id,
+                    'sku' => $this->faker->unique()->ean13(),
+                    'is_visible' => true,
+                ]);
+
+                // Add variant image (color-specific)
+                try {
+                    $imageWidth = 600;
+                    $imageHeight = 600;
+                    $imageUrl = 'https://picsum.photos/' . $imageWidth . '/' . $imageHeight . '?random=' . rand(1, 10000);
+
+                    $variant->addMediaFromUrl($imageUrl)
+                        ->preservingOriginal()
+                        ->toMediaCollection('variant_images');
+                } catch (\Exception $e) {
+                    Log::error("Failed to add media for variant ID {$variant->id}: " . $e->getMessage());
+                }
+
+                // Select which sizes will be available for this color (2-4 sizes)
+                $availableSizes = $this->faker->randomElements($sizeValues, $this->faker->numberBetween(2, 4));
+
+                // Create size entries for this variant
+                foreach ($availableSizes as $sizeValue) {
+                    $basePrice = $this->faker->numberBetween(100, 300);
+                    
+                    VariantSize::create([
+                        'variant_id' => $variant->id,
+                        'product_option_value_id' => $sizeValue->id,
+                        'price' => $basePrice,
+                        'sale_price' => $this->faker->optional(0.5)->numberBetween($basePrice * 0.7, $basePrice * 0.9),
+                        'stock' => $this->faker->numberBetween(5, 30),
+                    ]);
+                }
+            }
         });
     }
 

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -16,16 +17,12 @@ class Variant extends Model implements HasMedia
 
     protected $fillable = [
         'product_id',
+        'color_id',
         'sku',
-        'price',
-        'sale_price',
-        'stock',
         'is_visible',
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
-        'sale_price' => 'decimal:2',
         'is_visible' => 'boolean',
     ];
 
@@ -34,6 +31,17 @@ class Variant extends Model implements HasMedia
         return $this->belongsTo(Product::class);
     }
 
+    public function sizes(): HasMany
+    {
+        return $this->hasMany(VariantSize::class);
+    }
+
+    public function color(): BelongsTo
+    {
+        return $this->belongsTo(ProductOptionValue::class, 'color_id');
+    }
+
+    // Legacy relationship - kept for backward compatibility
     public function options(): BelongsToMany
     {
         return $this->belongsToMany(ProductOptionValue::class, 'product_variant_options', 'variant_id', 'product_option_value_id');

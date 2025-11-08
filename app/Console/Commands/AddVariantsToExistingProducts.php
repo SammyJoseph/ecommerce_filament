@@ -66,9 +66,9 @@ class AddVariantsToExistingProducts extends Command
                         $variantCount = rand(1, 5);
                         $this->info("Adding {$variantCount} variants to product: {$product->name}");
 
-                        Variant::factory($variantCount)->create([
-                            'product_id' => $product->id,
-                        ]);
+                        // This command is deprecated with the new variant structure
+                        // Variants are now created through the admin interface
+                        $this->warn("Variant creation through this command is deprecated. Use the admin interface instead.");
                         
                         // Set product price to null since it now has variants
                         $product->update(['price' => null]);

@@ -19,14 +19,10 @@ class VariantFactory extends Factory
      */
     public function definition(): array
     {
-        $price = fake()->randomFloat(2, 50, 200);
-
         return [
             'product_id' => null, // Set after product creation
+            'color_id' => null, // Set after product options creation
             'sku' => fake()->unique()->ean13(),
-            'price' => $price,
-            'sale_price' => fake()->optional(0.3)->randomFloat(2, $price * 0.5, $price * 0.9),
-            'stock' => fake()->numberBetween(0, 100),
             'is_visible' => fake()->boolean(90),
         ];
     }

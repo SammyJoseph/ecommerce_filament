@@ -76,10 +76,10 @@ class Product extends Model implements HasMedia
             'combinations' => []
         ];
 
-        // Get all visible variants with their options
+        // Get all visible variants with their color and sizes
         $variants = $this->variants()
             ->where('is_visible', true)
-            ->with(['options.option'])
+            ->with(['color', 'sizes.size'])
             ->get();
 
         if ($variants->isEmpty()) {
@@ -87,49 +87,43 @@ class Product extends Model implements HasMedia
         }
 
         foreach ($variants as $variant) {
-            $colorValue = null;
-            $sizeValue = null;
-            $colorOptionValue = null;
-            $sizeOptionValue = null;
-
-            // Find color and size options for this variant
-            if ($variant->options) {
-                foreach ($variant->options as $optionValue) {
-                    if ($optionValue->option && $optionValue->option->type === 'color') {
-                        $colorValue = $optionValue->value;
-                        $colorOptionValue = $optionValue;
-                    } elseif ($optionValue->option && $optionValue->option->type === 'size') {
-                        $sizeValue = $optionValue->value;
-                        $sizeOptionValue = $optionValue;
-                    }
-                }
+            if (!$variant->color) {
+                continue;
             }
 
-            // If we have both color and size, add to combinations
-            if ($colorValue && $sizeValue) {
+            $colorValue = $variant->color->value;
+            $colorCode = $variant->color->color_code ?? '#ccc';
+
+            // Get variant image URLs
+            $variantImage = null;
+            $variantThumb = null;
+            $variantOriginal = null;
+            if ($variant->getFirstMedia('variant_images')) {
+                $variantImage = $variant->getFirstMediaUrl('variant_images', 'preview');
+                $variantThumb = $variant->getFirstMediaUrl('variant_images', 'thumb');
+                $variantOriginal = $variant->getFirstMediaUrl('variant_images');
+            }
+
+            // Add to colors array if not exists
+            if (!isset($combinations['colors'][$colorValue])) {
+                $combinations['colors'][$colorValue] = [
+                    'value' => $colorValue,
+                    'color_code' => $colorCode,
+                    'available_sizes' => [],
+                    'image' => $variantImage,
+                    'thumb' => $variantThumb,
+                    'original' => $variantOriginal,
+                ];
+            }
+
+            // Process each size for this color variant
+            foreach ($variant->sizes as $variantSize) {
+                if (!$variantSize->size) {
+                    continue;
+                }
+
+                $sizeValue = $variantSize->size->value;
                 $combinationKey = $colorValue . '-' . $sizeValue;
-
-                // Get variant image URLs
-                $variantImage = null;
-                $variantThumb = null;
-                $variantOriginal = null;
-                if ($variant->getFirstMedia('variant_images')) {
-                    $variantImage = $variant->getFirstMediaUrl('variant_images', 'preview');
-                    $variantThumb = $variant->getFirstMediaUrl('variant_images', 'thumb');
-                    $variantOriginal = $variant->getFirstMediaUrl('variant_images');
-                }
-
-                // Add to colors array if not exists
-                if (!isset($combinations['colors'][$colorValue])) {
-                    $combinations['colors'][$colorValue] = [
-                        'value' => $colorValue,
-                        'color_code' => $colorOptionValue->color_code ?? '#ccc',
-                        'available_sizes' => [],
-                        'image' => $variantImage,
-                        'thumb' => $variantThumb,
-                        'original' => $variantOriginal,
-                    ];
-                }
 
                 // Add to sizes array if not exists
                 if (!isset($combinations['sizes'][$sizeValue])) {
@@ -143,10 +137,11 @@ class Product extends Model implements HasMedia
                 $combinations['combinations'][$combinationKey] = [
                     'color' => $colorValue,
                     'size' => $sizeValue,
-                    'stock' => $variant->stock,
-                    'price' => $variant->price,
-                    'sale_price' => $variant->sale_price,
+                    'stock' => $variantSize->stock,
+                    'price' => $variantSize->price,
+                    'sale_price' => $variantSize->sale_price,
                     'variant_id' => $variant->id,
+                    'variant_size_id' => $variantSize->id,
                     'image' => $variantImage,
                     'thumb' => $variantThumb,
                     'original' => $variantOriginal,
