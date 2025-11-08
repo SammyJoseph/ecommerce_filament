@@ -67,13 +67,8 @@ class SalesReports extends Page implements HasForms
             ->statePath('data');
     }
 
-    public function getFilteredWidgets(): array
+    protected function getHeaderWidgets(): array
     {
-        $filters = $this->form->getState();
-        $startDate = $filters['start_date'] ?? Carbon::now()->subDays(30);
-        $endDate = $filters['end_date'] ?? Carbon::now();
-        $status = $filters['status'] ?? 'completed';
-
         return [
             SalesStatsOverview::class,
             SalesOverTimeChart::class,
@@ -88,5 +83,10 @@ class SalesReports extends Page implements HasForms
         return [
             // Add any header actions if needed
         ];
+    }
+    
+    public function getColumns(): int | string | array
+    {
+        return 12;
     }
 }

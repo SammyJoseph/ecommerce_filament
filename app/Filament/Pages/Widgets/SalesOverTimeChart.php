@@ -11,7 +11,7 @@ class SalesOverTimeChart extends ChartWidget
 {
     protected static ?string $heading = 'Sales Over Time';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = 8;
 
     protected function getData(): array
     {
@@ -34,11 +34,21 @@ class SalesOverTimeChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Sales',
+                    'label' => 'Sales (S/.)',
                     'data' => $data,
-                    'backgroundColor' => 'rgb(59, 130, 246)',
+                    'backgroundColor' => 'rgba(59, 130, 246, 0.1)',
                     'borderColor' => 'rgb(59, 130, 246)',
-                    'tension' => 0.1,
+                    'borderWidth' => 3,
+                    'fill' => true,
+                    'tension' => 0.4,
+                    'pointBackgroundColor' => 'rgb(59, 130, 246)',
+                    'pointBorderColor' => '#fff',
+                    'pointBorderWidth' => 2,
+                    'pointRadius' => 4,
+                    'pointHoverRadius' => 6,
+                    'pointHoverBackgroundColor' => 'rgb(59, 130, 246)',
+                    'pointHoverBorderColor' => '#fff',
+                    'pointHoverBorderWidth' => 3,
                 ],
             ],
             'labels' => $labels,
@@ -48,5 +58,72 @@ class SalesOverTimeChart extends ChartWidget
     protected function getType(): string
     {
         return 'line';
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+            'interaction' => [
+                'mode' => 'index',
+                'intersect' => false,
+            ],
+            'plugins' => [
+                'legend' => [
+                    'display' => true,
+                    'position' => 'top',
+                    'labels' => [
+                        'usePointStyle' => true,
+                        'padding' => 15,
+                        'font' => [
+                            'size' => 12,
+                            'weight' => '500',
+                        ],
+                    ],
+                ],
+                'tooltip' => [
+                    'enabled' => true,
+                    'backgroundColor' => 'rgba(0, 0, 0, 0.8)',
+                    'padding' => 12,
+                    'titleFont' => [
+                        'size' => 14,
+                        'weight' => 'bold',
+                    ],
+                    'bodyFont' => [
+                        'size' => 13,
+                    ],
+                    'borderColor' => 'rgba(59, 130, 246, 0.5)',
+                    'borderWidth' => 1,
+                    'displayColors' => true,
+                ],
+            ],
+            'scales' => [
+                'y' => [
+                    'beginAtZero' => true,
+                    'grid' => [
+                        'display' => true,
+                        'color' => 'rgba(0, 0, 0, 0.05)',
+                        'drawBorder' => false,
+                    ],
+                    'ticks' => [
+                        'font' => [
+                            'size' => 11,
+                        ],
+                    ],
+                ],
+                'x' => [
+                    'grid' => [
+                        'display' => false,
+                        'drawBorder' => false,
+                    ],
+                    'ticks' => [
+                        'font' => [
+                            'size' => 11,
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 }

@@ -11,7 +11,7 @@ class TopSellingProductsChart extends ChartWidget
 {
     protected static ?string $heading = 'Top Selling Products';
 
-    protected int | string | array $columnSpan = 1;
+    protected int | string | array $columnSpan = 4;
 
     protected function getData(): array
     {
@@ -22,7 +22,7 @@ class TopSellingProductsChart extends ChartWidget
             )
             ->groupBy('product_id')
             ->orderByDesc('total_revenue')
-            ->limit(10)
+            ->limit(8)
             ->get();
 
         $products = Product::whereIn('id', $topProducts->pluck('product_id'))->get();
@@ -38,20 +38,22 @@ class TopSellingProductsChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Revenue',
+                    'label' => 'Revenue (S/.)',
                     'data' => $data,
                     'backgroundColor' => [
-                        'rgba(255, 99, 132, 0.8)',
-                        'rgba(54, 162, 235, 0.8)',
-                        'rgba(255, 205, 86, 0.8)',
-                        'rgba(75, 192, 192, 0.8)',
-                        'rgba(153, 102, 255, 0.8)',
-                        'rgba(255, 159, 64, 0.8)',
-                        'rgba(199, 199, 199, 0.8)',
-                        'rgba(83, 102, 255, 0.8)',
-                        'rgba(255, 99, 132, 0.8)',
-                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(59, 130, 246, 0.9)',
+                        'rgba(16, 185, 129, 0.9)',
+                        'rgba(245, 158, 11, 0.9)',
+                        'rgba(239, 68, 68, 0.9)',
+                        'rgba(139, 92, 246, 0.9)',
+                        'rgba(236, 72, 153, 0.9)',
+                        'rgba(14, 165, 233, 0.9)',
+                        'rgba(248, 113, 113, 0.9)',
                     ],
+                    'borderColor' => '#fff',
+                    'borderWidth' => 3,
+                    'hoverOffset' => 15,
+                    'hoverBorderWidth' => 4,
                 ],
             ],
             'labels' => $labels,
@@ -61,5 +63,43 @@ class TopSellingProductsChart extends ChartWidget
     protected function getType(): string
     {
         return 'doughnut';
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+            'cutout' => '65%',
+            'plugins' => [
+                'legend' => [
+                    'display' => true,
+                    'position' => 'bottom',
+                    'labels' => [
+                        'usePointStyle' => true,
+                        'padding' => 12,
+                        'font' => [
+                            'size' => 11,
+                            'weight' => '500',
+                        ],
+                    ],
+                ],
+                'tooltip' => [
+                    'enabled' => true,
+                    'backgroundColor' => 'rgba(0, 0, 0, 0.8)',
+                    'padding' => 12,
+                    'titleFont' => [
+                        'size' => 13,
+                        'weight' => 'bold',
+                    ],
+                    'bodyFont' => [
+                        'size' => 12,
+                    ],
+                    'borderColor' => 'rgba(255, 255, 255, 0.3)',
+                    'borderWidth' => 1,
+                    'displayColors' => true,
+                ],
+            ],
+        ];
     }
 }
