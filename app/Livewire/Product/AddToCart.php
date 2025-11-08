@@ -3,6 +3,7 @@
 namespace App\Livewire\Product;
 
 use App\Models\Product;
+use App\Models\VariantSize;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -12,7 +13,10 @@ class AddToCart extends Component
     public ?Product $product = null;
     public $quantity = 1;
     public $classes;
-    public $selectedVariant = null;
+    public $selectedColorId = null;
+    public $selectedSizeId = null;
+    public $variantCombinations = [];
+    public $availableSizes = [];
 
     public function mount(?Product $product = null, int $quantity = 1, string $classes = '')
     {
@@ -20,9 +24,62 @@ class AddToCart extends Component
         $this->quantity = $quantity;
         $this->classes = $classes;
 
-        // If product has variants, select the first visible one
-        if ($this->product && $this->product->variants->count() > 0) {
-            $this->selectedVariant = $this->product->variants->where('is_visible', true)->first();
+        // Get variant combinations for products with variants
+        if ($this->product && $this->product->has_variants) {
+            $this->variantCombinations = $this->product->getVariantCombinations();
+            
+            // Auto-select first color if available
+            if (!empty($this->variantCombinations['colors'])) {
+                $firstColor = array_key_first($this->variantCombinations['colors']);
+                $this->selectColor($firstColor);
+            }
+        }
+    }
+
+    public function selectColor($colorValue)
+    {
+        // Find the color ID from the combinations
+        if (isset($this->variantCombinations['colors'][$colorValue])) {
+            $colorData = $this->variantCombinations['colors'][$colorValue];
+            
+            // Find variant with this color
+            $variant = $this->product->variants()
+                ->whereHas('color', function($query) use ($colorValue) {
+                    $query->where('value', $colorValue);
+                })
+                ->first();
+
+            if ($variant) {
+                $this->selectedColorId = $variant->color_id;
+                $this->availableSizes = $colorData['available_sizes'] ?? [];
+                
+                // Reset size selection when color changes
+                $this->selectedSizeId = null;
+            }
+        }
+    }
+
+    public function selectSize($sizeValue)
+    {
+        // Find size ID from available sizes
+        $sizeOption = $this->product->options()->where('type', 'size')->first();
+        if ($sizeOption) {
+            $sizeOptionValue = $sizeOption->values()->where('value', $sizeValue)->first();
+            if ($sizeOptionValue) {
+                $this->selectedSizeId = $sizeOptionValue->id;
+            }
+        }
+    }
+
+    public function incrementQuantity()
+    {
+        $this->quantity++;
+    }
+
+    public function decrementQuantity()
+    {
+        if ($this->quantity > 1) {
+            $this->quantity--;
         }
     }
 
@@ -38,42 +95,102 @@ class AddToCart extends Component
             return;
         }
 
-        $itemId = $this->selectedVariant ? $this->selectedVariant->id : $this->product->id;
-        $itemName = $this->selectedVariant ? $this->product->name . ' - ' . $this->selectedVariant->name : $this->product->name;
-        $itemPrice = $this->selectedVariant ? ($this->selectedVariant->price ?? $this->product->price) : $this->product->price;
-        $itemImage = $this->selectedVariant
-            ? $this->selectedVariant->getFirstMediaUrl('variant_images', 'preview')
-            : $this->product->getFirstMediaUrl('product_images', 'preview');
+        // For products with variants
+        if ($this->product->has_variants) {
+            if (!$this->selectedColorId || !$this->selectedSizeId) {
+                session()->flash('error', 'Por favor selecciona color y talla.');
+                return;
+            }
 
-        try {
-            Cart::instance('shopping')->add([
-                'id' => $itemId,
-                'name' => $itemName,
-                'qty' => $this->quantity,
-                'price' => $itemPrice,
-                'options' => [
-                    'image' => $itemImage,
-                    'slug' => $this->product->slug,
-                    'variant_id' => $this->selectedVariant?->id,
+            // Find the variant by color
+            $variant = $this->product->variants()->where('color_id', $this->selectedColorId)->first();
+            
+            if (!$variant) {
+                session()->flash('error', 'Variante no encontrada.');
+                return;
+            }
+
+            // Find the specific size for this variant
+            $variantSize = $variant->sizes()
+                ->where('product_option_value_id', $this->selectedSizeId)
+                ->first();
+
+            if (!$variantSize) {
+                session()->flash('error', 'Talla no disponible para este color.');
+                return;
+            }
+
+            if ($variantSize->stock < $this->quantity) {
+                session()->flash('error', 'Stock insuficiente.');
+                return;
+            }
+
+            // Get color and size names for display
+            $colorName = $variant->color ? $variant->color->value : '';
+            $sizeName = $variantSize->size ? $variantSize->size->value : '';
+
+            $itemId = 'variant-' . $variant->id . '-size-' . $variantSize->id;
+            $itemName = $this->product->name . ' - ' . $colorName . ' / ' . $sizeName;
+            $itemPrice = $variantSize->sale_price ?? $variantSize->price;
+            $itemImage = $variant->getFirstMediaUrl('variant_images', 'preview') 
+                ?: $this->product->getFirstMediaUrl('product_images', 'preview');
+
+            try {
+                Cart::instance('shopping')->add([
+                    'id' => $itemId,
+                    'name' => $itemName,
+                    'qty' => $this->quantity,
+                    'price' => $itemPrice,
+                    'options' => [
+                        'image' => $itemImage,
+                        'slug' => $this->product->slug,
+                        'variant_id' => $variant->id,
+                        'variant_size_id' => $variantSize->id,
+                        'product_id' => $this->product->id,
+                        'color' => $colorName,
+                        'size' => $sizeName,
+                    ],
+                ]);
+
+                $this->dispatch('cart-updated');
+                $this->dispatch('open-side-cart');
+                session()->flash('success', 'Producto agregado al carrito.');
+            } catch (\Exception $e) {
+                Log::error('Error al agregar producto al carrito', [
                     'product_id' => $this->product->id,
-                ],
-            ]);
+                    'variant_id' => $variant->id,
+                    'variant_size_id' => $variantSize->id,
+                    'error' => $e->getMessage()
+                ]);
+                session()->flash('error', 'Error al agregar el producto al carrito.');
+            }
+        } else {
+            // For products without variants
+            $itemImage = $this->product->getFirstMediaUrl('product_images', 'preview');
 
-            $this->dispatch('cart-updated');
-            $this->dispatch('open-side-cart');
-            session()->flash('success', 'Producto agregado al carrito.');
-        } catch (\Exception $e) {
-            Log::error('Error al agregar producto al carrito', [
-                'product_id' => $this->product->id,
-                'variant_id' => $this->selectedVariant?->id,
-                'error' => $e->getMessage()
-            ]);
-            session()->flash('error', 'Error al agregar el producto al carrito.');
+            try {
+                Cart::instance('shopping')->add([
+                    'id' => $this->product->id,
+                    'name' => $this->product->name,
+                    'qty' => $this->quantity,
+                    'price' => $this->product->sale_price ?? $this->product->price,
+                    'options' => [
+                        'image' => $itemImage,
+                        'slug' => $this->product->slug,
+                        'product_id' => $this->product->id,
+                    ],
+                ]);
+
+                $this->dispatch('cart-updated');
+                $this->dispatch('open-side-cart');
+                session()->flash('success', 'Producto agregado al carrito.');
+            } catch (\Exception $e) {
+                Log::error('Error al agregar producto al carrito', [
+                    'product_id' => $this->product->id,
+                    'error' => $e->getMessage()
+                ]);
+                session()->flash('error', 'Error al agregar el producto al carrito.');
+            }
         }
-    }
-
-    public function selectVariant($variantId)
-    {
-        $this->selectedVariant = $this->product->variants->find($variantId);
     }
 }

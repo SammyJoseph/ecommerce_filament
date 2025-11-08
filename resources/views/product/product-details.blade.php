@@ -145,12 +145,6 @@
                                 </div>
                             </div>
                         @endif
-                        <div class="pro-details-quality">
-                            <span>Quantity:</span>
-                            <div class="cart-plus-minus">
-                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1">
-                            </div>
-                        </div>
                         <div class="product-details-meta">
                             <ul>
                                 <li><span>Categories:</span> <a href="#">{{ $product->category->name }}</a></li>
@@ -158,9 +152,7 @@
                             </ul>
                         </div>
                         <div class="pro-details-action-wrap">
-                            <div class="pro-details-add-to-cart">
-                                <a title="Add to Cart" href="#">Add To Cart </a>
-                            </div>
+                            @livewire('product.add-to-cart', ['product' => $product, 'classes' => ''])
                             <div class="pro-details-action">
                                 <a title="Add to Wishlist" href="#"><i class="icon-heart"></i></a>
                                 <a title="Add to Compare" href="#"><i class="icon-refresh"></i></a>
@@ -395,9 +387,18 @@
                     e.preventDefault();
                     if ($(this).parent().hasClass('disabled')) return;
 
-                    selectedColor = $(this).data('color').toString();
+                    // Get the clicked color
+                    const clickedColor = $(this).data('color').toString();
+                    
+                    // Always reset size selection when clicking a color (even if same color)
+                    selectedSize = null;
+                    $sizeSwatches.removeClass('active');
+                    
+                    // Update selected color
+                    selectedColor = clickedColor;
                     $colorSwatches.removeClass('active');
                     $(this).addClass('active');
+                    
                     updateImage();
                     updateUI();
                 });
