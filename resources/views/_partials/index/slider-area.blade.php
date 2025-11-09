@@ -9,7 +9,8 @@
                             <h1 class="animated">Leather Simple <br>Backpacks</h1>
                             <p class="animated">Discover our collection with leather simple backpacks. Less is more never out trend.</p>
                             <div class="btn-style-1">
-                                <a class="animated btn-1-padding-1" href="product-details.html">Explore Now</a>
+                                <a onclick="event.preventDefault(); document.getElementById('featured-products').scrollIntoView({ behavior: 'smooth' })"
+                                    class="animated btn-1-padding-1" href="#">Explore Now</a>
                             </div>
                         </div>
                     </div>
@@ -30,7 +31,8 @@
                             <h1 class="animated">Leather Simple <br>Backpacks</h1>
                             <p class="animated">Discover our collection with leather simple backpacks. Less is more never out trend.</p>
                             <div class="btn-style-1">
-                                <a class="animated btn-1-padding-1" href="product-details.html">Explore Now</a>
+                                <a onclick="event.preventDefault(); document.getElementById('featured-products').scrollIntoView({ behavior: 'smooth' })"
+                                    class="animated btn-1-padding-1" href="#">Explore Now</a>
                             </div>
                         </div>
                     </div>

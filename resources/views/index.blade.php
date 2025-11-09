@@ -24,7 +24,7 @@
     @include('_partials.index.service-area')
     @include('_partials.index.about-us-area')
     
-    <div class="product-area section-padding-1 pt-115 pb-75">
+    <div id="featured-products" class="product-area section-padding-1 pt-115 pb-75">
         <div class="container">
             <div class="section-title-tab-wrap mb-45">
                 <div class="section-title">
