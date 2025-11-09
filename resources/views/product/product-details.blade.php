@@ -186,7 +186,8 @@
         </div>
     </div>
 
-    {{-- @include('_partials.index.temp-product-details') --}}
+    @include('_partials.index.product-description')
+    @include('_partials.index.related-products')
 @endsection
 
 @push('css')
@@ -403,16 +404,8 @@
                     updateUI();
                 });
 
-                // Auto-select first color on load for price, but no image change
-                if ($colorSwatches.length > 0) {
-                    const firstColor = $colorSwatches.first();
-                    selectedColor = firstColor.data('color').toString();
-                    firstColor.addClass('active');
-                    updateUI(); // Update price, but skip images
-                }
-
-                // Initial state for button
-                $addToCartBtn.addClass('disabled');
+                // Initial state - no color selected by default
+                updateUI(); // Initialize UI with no selections
             });
         </script>
     @endpush

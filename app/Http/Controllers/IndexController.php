@@ -33,6 +33,14 @@ class IndexController extends Controller
         // Get variant combinations for interactive selection
         $variantCombinations = $product->getVariantCombinations();
 
-        return view('product.product-details', compact('product', 'variantCombinations'));
+        // Get related products from the same category
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('is_visible', true)
+            ->inRandomOrder()
+            ->limit(4)
+            ->get();
+
+        return view('product.product-details', compact('product', 'variantCombinations', 'relatedProducts'));
     }
 }
