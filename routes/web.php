@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\Product\CartController;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -27,3 +28,6 @@ Route::get('/raw-cart', function () {
     $cart = Cart::content();
     return response()->json($cart);
 });
+
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/process_payment', [CheckoutController::class, 'process']);
