@@ -50,9 +50,9 @@
                                         <img src="{{ $product->getFirstMediaUrl('product_images', 'preview') }}" alt="{{ $product->name }}">
                                     </a>
                                     <div class="product-action-wrap">
-                                    <div class="product-action-left">
-                                        @livewire('product.add-to-cart', ['product' => $product, 'classes' => 'tw-flex tw-items-center'])
-                                    </div>
+                                        <div class="product-action-left">
+                                            @livewire('product.add-to-cart', ['product' => $product, 'classes' => 'tw-flex tw-items-center'])
+                                        </div>
                                         <div class="product-action-right tooltip-style">
                                             <button
                                                 x-on:click="updateProductData({{ json_encode([
