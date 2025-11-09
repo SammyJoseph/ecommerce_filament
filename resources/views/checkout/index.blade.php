@@ -72,12 +72,12 @@
                     onSubmit: ({ selectedPaymentMethod, formData }) => {
                         // callback llamado al hacer clic en el botón de envío de datos
                         return new Promise((resolve, reject) => {
-                            fetch("/process_payment", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(formData),
+                            fetch("/checkout/process_payment", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(formData),
                             })
                             .then((response) => response.json())
                             .then((response) => {

@@ -54,7 +54,7 @@
                     <a href="#">Continue Shopping</a>
                 </div>
                 <div class="cart-clear">
-                    <button>Update Cart</button>
+                    <button class="tw-mr-6">Update Cart</button>
                     <button wire:click="clearCart" type="button">
                         <span>Clear Cart</span>
                         <div wire:loading wire:target="clearCart" class="tw-inline-block tw-ml-1">

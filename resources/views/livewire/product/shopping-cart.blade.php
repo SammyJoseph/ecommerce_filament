@@ -81,7 +81,7 @@
                         </ul>
                     </div>
                     <h4 class="grand-totall-title">Grand Total <span>${{ number_format($cartGrandTotal, 2) }}</span></h4>
-                    <a href="#">Proceed to Checkout</a>
+                    <a href="{{ route('checkout.index') }}">Proceed to Checkout</a>
                 </div>
             </div>
         </div>

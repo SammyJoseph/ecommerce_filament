@@ -146,8 +146,39 @@
                             </div>
                         @endif
 
+                        {{-- Quantity Controls --}}
+                        <div class="pro-details-quality tw-mb-4" x-data="{ quantity: 1 }" id="product-quantity-container">
+                            <span>Quantity:</span>
+                            <div class="cart-plus-minus">
+                                <div class="dec qtybutton" @click="quantity = Math.max(1, quantity - 1)">-</div>
+                                <input class="cart-plus-minus-box" type="text" :value="quantity" readonly id="product-quantity-input">
+                                <div class="inc qtybutton" @click="quantity++">+</div>
+                            </div>
+                        </div>
+
+                        {{-- Category & Tag --}}
+                        <div class="product-details-meta">
+                            <ul>
+                                <li><span>Categories:</span> <a href="#">{{ $product->category->name }}</a></li>
+                                <li><span>Tag: </span> <a href="#">Fashion,</a> <a href="#">Mentone</a> , <a href="#">Texas</a></li>
+                            </ul>
+                        </div>
+
                         <div class="pro-details-action-wrap">
-                            @livewire('product.add-to-cart', ['product' => $product, 'classes' => ''])                            
+                            @livewire('product.add-to-cart', ['product' => $product, 'classes' => ''])                        
+
+                            {{-- Share buttons --}}
+                            <div class="pro-details-action" bis_skin_checked="1">
+                                <a title="Add to Wishlist" href="#"><i class="icon-heart"></i></a>
+                                <a title="Add to Compare" href="#"><i class="icon-refresh"></i></a>
+                                <a class="social" title="Social" href="#"><i class="icon-share"></i></a>
+                                <div class="product-dec-social" bis_skin_checked="1">
+                                    <a class="facebook" title="Facebook" href="#"><i class="icon-social-facebook"></i></a>
+                                    <a class="twitter" title="Twitter" href="#"><i class="icon-social-twitter"></i></a>
+                                    <a class="instagram" title="Instagram" href="#"><i class="icon-social-instagram"></i></a>
+                                    <a class="pinterest" title="Pinterest" href="#"><i class="icon-social-pinterest"></i></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -233,21 +264,6 @@
                             }
                         });
                     }
-
-                    // Update color availability based on selected size
-                    /* if (selectedSize && sizes[selectedSize]) {
-                        const availableColors = sizes[selectedSize].available_colors;
-                        $colorSwatches.each(function() {
-                            const color = $(this).data('color').toString();
-                            if (!availableColors.map(c => c.toString()).includes(color)) {
-                                $(this).parent().addClass('disabled');
-                                if (selectedColor === color) {
-                                    selectedColor = null;
-                                    $colorSwatches.removeClass('active');
-                                }
-                            }
-                        });
-                    } */
 
                     // Update price and add to cart button
                     let displayPrice = '';

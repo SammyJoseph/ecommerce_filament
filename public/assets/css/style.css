@@ -15841,7 +15841,7 @@ h3.cart-page-title {
 .cart-shiping-update-wrapper .cart-clear > button {
   border: medium none;
   cursor: pointer;
-  margin-right: 27px;
+  /* margin-right: 27px; */
   -webkit-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;
 }

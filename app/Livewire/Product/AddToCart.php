@@ -18,10 +18,9 @@ class AddToCart extends Component
     public $variantCombinations = [];
     public $availableSizes = [];
 
-    public function mount(?Product $product = null, int $quantity = 1, string $classes = '')
+    public function mount(?Product $product = null, string $classes = '')
     {
         $this->product = $product;
-        $this->quantity = $quantity;
         $this->classes = $classes;
 
         // Get variant combinations for products with variants
@@ -71,29 +70,20 @@ class AddToCart extends Component
         }
     }
 
-    public function incrementQuantity()
-    {
-        $this->quantity++;
-    }
-
-    public function decrementQuantity()
-    {
-        if ($this->quantity > 1) {
-            $this->quantity--;
-        }
-    }
-
     public function render()
     {
         return view('livewire.product.add-to-cart');
     }
 
-    public function addToCart()
+    public function addToCart($quantity = 1)
     {
         if (!$this->product) {
             session()->flash('error', 'Producto no encontrado.');
             return;
         }
+
+        // Set quantity from parameter
+        $this->quantity = max(1, (int) $quantity);
 
         // For products with variants
         if ($this->product->has_variants) {
