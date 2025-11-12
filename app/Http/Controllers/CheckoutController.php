@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\OrderService;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use MercadoPago\Client\Payment\PaymentClient;
 use MercadoPago\MercadoPagoConfig;
 
@@ -12,26 +13,44 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        return view('checkout.index');
+        Cart::instance('shopping');
+
+        if (Cart::count() == 0) {
+            return redirect()->route('cart.index');
+        }
+
+        $subtotal = (float) str_replace(',', '', Cart::subtotal());
+        $discount = 0;
+        if (session()->has('coupon')) {
+            $coupon = session('coupon');
+            
+            if ($coupon['type'] === 'fixed') {
+                $discount = $coupon['value'];
+            } elseif ($coupon['type'] === 'percentage') {
+                $discount = ($subtotal * $coupon['value']) / 100;
+            }
+        }
+
+        $cartTotal = max(0, $subtotal - $discount);
+
+        return view('checkout.index', compact('cartTotal'));
     }
 
     public function process(Request $request)
     {
-        Log::info('Checkout process started', ['request' => $request->all()]);
-
         try {
             $data = $request->validate([
                 'token'                         => 'required|string',
                 'issuer_id'                     => 'nullable|string',
                 'payment_method_id'             => 'required|string',
-            'transaction_amount'                => 'required|numeric',
+                'transaction_amount'            => 'required|numeric',
                 'installments'                  => 'nullable|integer',
                 'payer.email'                   => 'required|email',
                 'payer.identification.type'     => 'nullable|string',
                 'payer.identification.number'   => 'nullable|string',
             ]);
 
-            Log::info('Data validated', ['data' => $data]);
+            Log::info('MercadoPago checkout data validated', ['data' => $data]);
 
             MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
 
@@ -58,6 +77,8 @@ class CheckoutController extends Controller
                 'transaction_amount' => $payment->transaction_amount,
                 'payer_email' => $payment->payer->email,
             ]);
+
+            if ($payment->status === 'approved') OrderService::createOrderFromCart();            
 
             return response()->json([
                 'status' => 'success',
