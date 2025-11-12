@@ -54,6 +54,8 @@
                         debitCard: "all",
                         ticket: "all",
                         bankTransfer: "all",
+                        onboarding_credits: "all",
+                        wallet_purchase: "all",
                         atm: "all",
                         maxInstallments: 1
                     },

@@ -21,25 +21,22 @@ class CheckoutController extends Controller
 
         try {
             $data = $request->validate([
-                'token' => 'required|string',
-                'issuer_id' => 'nullable|string',
-                'payment_method_id' => 'required|string',
-                'transaction_amount' => 'required|numeric',
-                'installments' => 'nullable|integer',
-                'payer.email' => 'required|email',
-                'payer.identification.type' => 'nullable|string',
-                'payer.identification.number' => 'nullable|string',
+                'token'                         => 'required|string',
+                'issuer_id'                     => 'nullable|string',
+                'payment_method_id'             => 'required|string',
+            'transaction_amount'                => 'required|numeric',
+                'installments'                  => 'nullable|integer',
+                'payer.email'                   => 'required|email',
+                'payer.identification.type'     => 'nullable|string',
+                'payer.identification.number'   => 'nullable|string',
             ]);
 
             Log::info('Data validated', ['data' => $data]);
 
-            // Inicializar SDK con Access Token desde config
             MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
-            Log::info('MercadoPago SDK initialized');
 
             $client = new PaymentClient();
 
-            Log::info('About to create payment');
             $payment = $client->create([
                 'token' => $data['token'],
                 'issuer_id' => $data['issuer_id'] ?? null,
