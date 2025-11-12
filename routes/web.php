@@ -31,3 +31,4 @@ Route::get('/raw-cart', function () {
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/process_payment', [CheckoutController::class, 'process']);
+Route::get('/thank-you', [CheckoutController::class, 'thanks'])->name('thank-you');

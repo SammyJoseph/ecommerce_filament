@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div>
+    <div class="tw-max-w-lg tw-mx-auto">
         <div id="paymentBrick_container"></div>
     </div>
 @endsection
@@ -25,7 +25,7 @@
 @push('scripts')
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script>
-        const mp = new MercadoPago('YOUR_PUBLIC_KEY', {
+        const mp = new MercadoPago('{{ config('services.mercadopago.public_key') }}', {
             locale: 'es-PE'
         });
         const bricksBuilder = mp.bricks();
@@ -37,7 +37,6 @@
                     }
                     */
                     amount: 5000,
-                    preferenceId: "<PREFERENCE_ID>",
                     payer: {
                         firstName: "",
                         lastName: "",
@@ -55,9 +54,6 @@
                         debitCard: "all",
                         ticket: "all",
                         bankTransfer: "all",
-                        onboarding_credits: "all",
-                        wallet_purchase: "all",
-                        : "all",
                         atm: "all",
                         maxInstallments: 1
                     },
@@ -76,13 +72,20 @@
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
+                                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
                                 },
                                 body: JSON.stringify(formData),
                             })
                             .then((response) => response.json())
-                            .then((response) => {
-                                // recibir el resultado del pago
-                                resolve();
+                            .then((result) => {
+                                if (result.status === 'success') {
+                                    resolve();
+                                    setTimeout(() => {
+                                        window.location.href = '{{ route("thank-you") }}';
+                                    }, 1000);
+                                } else {
+                                    reject(result.message || 'Error en el pago');
+                                }
                             })
                             .catch((error) => {
                                 // manejar la respuesta de error al intentar crear el pago

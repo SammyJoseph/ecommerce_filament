@@ -17,54 +17,65 @@ class CheckoutController extends Controller
 
     public function process(Request $request)
     {
-        $data = $request->validate([
-            'token' => 'required|string',
-            'issuer_id' => 'nullable|string',
-            'paymentMethodId' => 'required|string',
-            'transactionAmount' => 'required|numeric',
-            'installments' => 'nullable|integer',
-            'email' => 'required|email',
-            'identificationType' => 'nullable|string',
-            'number' => 'nullable|string',
-        ]);
-
-        // Inicializar SDK con Access Token desde config
-        MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
-
-        $client = new PaymentClient();
-
-        // Opciones de request con cabecera de idempotencia
-        $requestOptions = new \MPRequestOptions();
-        $requestOptions->setCustomHeaders([
-            'X-Idempotency-Key: ' . Str::uuid()->toString()
-        ]);
+        Log::info('Checkout process started', ['request' => $request->all()]);
 
         try {
+            $data = $request->validate([
+                'token' => 'required|string',
+                'issuer_id' => 'nullable|string',
+                'payment_method_id' => 'required|string',
+                'transaction_amount' => 'required|numeric',
+                'installments' => 'nullable|integer',
+                'payer.email' => 'required|email',
+                'payer.identification.type' => 'nullable|string',
+                'payer.identification.number' => 'nullable|string',
+            ]);
+
+            Log::info('Data validated', ['data' => $data]);
+
+            // Inicializar SDK con Access Token desde config
+            MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
+            Log::info('MercadoPago SDK initialized');
+
+            $client = new PaymentClient();
+
+            Log::info('About to create payment');
             $payment = $client->create([
                 'token' => $data['token'],
                 'issuer_id' => $data['issuer_id'] ?? null,
-                'payment_method_id' => $data['paymentMethodId'],
-                'transaction_amount' => (float) $data['transactionAmount'],
+                'payment_method_id' => $data['payment_method_id'],
+                'transaction_amount' => (float) $data['transaction_amount'],
                 'installments' => $data['installments'] ?? 1,
                 'payer' => [
-                    'email' => $data['email'],
+                    'email' => $data['payer']['email'],
                     'identification' => [
-                        'type' => $data['identificationType'] ?? null,
-                        'number' => $data['number'] ?? null,
+                        'type' => $data['payer']['identification']['type'] ?? null,
+                        'number' => $data['payer']['identification']['number'] ?? null,
                     ],
                 ],
-            ], $requestOptions);
+            ]);
+
+            Log::info('MercadoPago payment created', [
+                'payment_id' => $payment->id,
+                'status' => $payment->status,
+                'transaction_amount' => $payment->transaction_amount,
+                'payer_email' => $payment->payer->email,
+            ]);
 
             return response()->json([
                 'status' => 'success',
                 'payment' => $payment
             ], 200);
         } catch (\Throwable $e) {
-            Log::error('MercadoPago payment error: '.$e->getMessage(), ['payload' => $data]);
+            Log::error('MercadoPago payment error: '.$e->getMessage(), ['payload' => $request->all()]);
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function thanks(){
+        return view('checkout.thanks');
     }
 }
