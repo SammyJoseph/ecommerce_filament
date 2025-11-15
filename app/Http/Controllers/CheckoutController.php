@@ -2,98 +2,79 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\OrderService;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use MercadoPago\Client\Payment\PaymentClient;
+use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\MercadoPagoConfig;
+use MercadoPago\Exceptions\MPApiException;
 
 class CheckoutController extends Controller
 {
     public function index()
     {
-        Cart::instance('shopping');
+        if (Cart::instance('shopping')->count() == 0) return redirect()->route('cart.index');
 
-        if (Cart::count() == 0) {
-            return redirect()->route('cart.index');
-        }
-
-        $subtotal = (float) str_replace(',', '', Cart::subtotal());
-        $discount = 0;
-        if (session()->has('coupon')) {
-            $coupon = session('coupon');
-            
-            if ($coupon['type'] === 'fixed') {
-                $discount = $coupon['value'];
-            } elseif ($coupon['type'] === 'percentage') {
-                $discount = ($subtotal * $coupon['value']) / 100;
-            }
-        }
-
-        $cartTotal = max(0, $subtotal - $discount);
-
-        return view('checkout.index', compact('cartTotal'));
+        $preference = $this->createPreference();
+        
+        return view('checkout.index', [
+            'preferenceId' => $preference->id
+        ]);
     }
 
     public function process(Request $request)
     {
+        
+    }
+
+    public function thanks()
+    {
+        return view('checkout.thanks');
+    }
+
+    private function createPreference()
+    {
         try {
-            $data = $request->validate([
-                'token'                         => 'required|string',
-                'issuer_id'                     => 'nullable|string',
-                'payment_method_id'             => 'required|string',
-                'transaction_amount'            => 'required|numeric',
-                'installments'                  => 'nullable|integer',
-                'payer.email'                   => 'required|email',
-                'payer.identification.type'     => 'nullable|string',
-                'payer.identification.number'   => 'nullable|string',
-            ]);
-
-            Log::info('MercadoPago checkout data validated', ['data' => $data]);
-
             MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
+            $client = new PreferenceClient();            
 
-            $client = new PaymentClient();
-
-            $payment = $client->create([
-                'token' => $data['token'],
-                'issuer_id' => $data['issuer_id'] ?? null,
-                'payment_method_id' => $data['payment_method_id'],
-                'transaction_amount' => (float) $data['transaction_amount'],
-                'installments' => $data['installments'] ?? 1,
-                'payer' => [
-                    'email' => $data['payer']['email'],
-                    'identification' => [
-                        'type' => $data['payer']['identification']['type'] ?? null,
-                        'number' => $data['payer']['identification']['number'] ?? null,
-                    ],
+            $preferenceData = [
+                "items" => $this->getCartItems(),
+                "back_urls" => [
+                    "success" => url('/payment/success'),
+                    "failure" => url('/payment/failure'),
+                    "pending" => url('/payment/pending'),
                 ],
-            ]);
+                // "auto_return" => "approved",
+            ];
 
-            Log::info('MercadoPago payment created', [
-                'payment_id' => $payment->id,
-                'status' => $payment->status,
-                'transaction_amount' => $payment->transaction_amount,
-                'payer_email' => $payment->payer->email,
-            ]);
+            $preference = $client->create($preferenceData);
 
-            if ($payment->status === 'approved') OrderService::createOrderFromCart();            
+            return $preference;
 
-            return response()->json([
-                'status' => 'success',
-                'payment' => $payment
-            ], 200);
-        } catch (\Throwable $e) {
-            Log::error('MercadoPago payment error: '.$e->getMessage(), ['payload' => $request->all()]);
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
+        } catch (MPApiException $e) {
+            Log::error('Error al crear preferencia de MercadoPago: ' . $e->getMessage());
+            Log::error('Response details: ' . $e->getMessage());
+            throw $e;
+        } catch (\Exception $e) {
+            Log::error('Error general al crear preferencia: ' . $e->getMessage());
+            throw $e;
         }
     }
 
-    public function thanks(){
-        return view('checkout.thanks');
+    private function getCartItems()
+    {
+        Cart::instance('shopping');
+        $cart = Cart::content();
+
+        $items = [];
+        foreach ($cart as $item) {
+            $items[] = [
+                "title" => $item->name,
+                "quantity" => $item->qty,
+                "unit_price" => $item->price,
+            ];
+        }
+        return $items;
     }
 }

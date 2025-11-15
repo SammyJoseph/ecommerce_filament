@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\Payment\MPController;
 use App\Http\Controllers\Product\CartController;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
@@ -31,4 +32,8 @@ Route::get('/raw-cart', function () {
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/process_payment', [CheckoutController::class, 'process']);
-Route::get('/thank-you', [CheckoutController::class, 'thanks'])->name('thank-you');
+Route::get('/thank-you', [CheckoutController::class, 'thanks'])->name('checkout.thanks');
+
+Route::get('/payment/success', [MPController::class, 'success'])->name('payment.success');
+Route::get('/payment/failure', [MPController::class, 'failure'])->name('payment.failure');
+Route::get('/payment/pending', [MPController::class, 'pending'])->name('payment.pending');
