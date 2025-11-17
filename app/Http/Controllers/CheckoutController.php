@@ -20,17 +20,7 @@ class CheckoutController extends Controller
         return view('checkout.index', [
             'preferenceId' => $preference->id
         ]);
-    }
-
-    public function process(Request $request)
-    {
-        
-    }
-
-    public function thanks()
-    {
-        return view('checkout.thanks');
-    }
+    }    
 
     private function createPreference()
     {
@@ -39,13 +29,16 @@ class CheckoutController extends Controller
             $client = new PreferenceClient();            
 
             $preferenceData = [
-                "items" => $this->getCartItems(),
+                "items" => $this->getCartItems(), 
+                "payer" => ["email" => "test_user@example.com", "name" => "Test", "surname" => "User"],
+                "payment_methods" => ["installments" => 12],
                 "back_urls" => [
-                    "success" => url('/payment/success'),
-                    "failure" => url('/payment/failure'),
-                    "pending" => url('/payment/pending'),
+                    "success" => "https://boutique.artisam.dev/payment/success",
+                    "failure" => "https://boutique.artisam.dev/payment/failure",
+                    "pending" => "https://boutique.artisam.dev/payment/pending"
                 ],
-                // "auto_return" => "approved",
+                "auto_return" => "approved",
+                "notification_url" => route('mp.webhook')
             ];
 
             $preference = $client->create($preferenceData);
@@ -72,9 +65,14 @@ class CheckoutController extends Controller
             $items[] = [
                 "title" => $item->name,
                 "quantity" => $item->qty,
-                "unit_price" => $item->price,
+                "unit_price" => (float) $item->price,
             ];
         }
         return $items;
+    }
+
+    public function thanks()
+    {
+        return view('checkout.thanks');
     }
 }

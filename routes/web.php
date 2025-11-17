@@ -37,3 +37,5 @@ Route::get('/thank-you', [CheckoutController::class, 'thanks'])->name('checkout.
 Route::get('/payment/success', [MPController::class, 'success'])->name('payment.success');
 Route::get('/payment/failure', [MPController::class, 'failure'])->name('payment.failure');
 Route::get('/payment/pending', [MPController::class, 'pending'])->name('payment.pending');
+
+Route::post('/mp/webhook', [MPController::class, 'webhook'])->name('mp.webhook');
