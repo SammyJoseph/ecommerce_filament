@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use MercadoPago\Client\Payment\PaymentClient;
@@ -10,67 +11,123 @@ use MercadoPago\MercadoPagoConfig;
 
 class MPController extends Controller
 {
+    protected $orderService;
+
+    public function __construct(OrderService $orderService)
+    {
+        $this->orderService = $orderService;
+    }
+
     public function success(Request $request)
     {
-        $paymentId = $request->get('payment_id');
-        $externalReference = $request->get('external_reference'); // Tu ORDER-ID
         
-        // Verificar el pago con la API de MercadoPago
-        $payment = $this->getPaymentInfo($paymentId);
-        
-        if ($payment && $payment->status === 'approved') {
-            // Actualizar tu orden en la base de datos
-            $this->updateOrderStatus($externalReference, 'paid');
-            
-            return view('payment.success', [
-                'payment' => $payment,
-                'orderId' => $externalReference
-            ]);
-        }
-        
-        return redirect()->route('payment.failure');
     }
     
     public function failure(Request $request)
     {
-        $paymentId = $request->get('payment_id');
-        $externalReference = $request->get('external_reference');
         
-        // Opcional: registrar el intento fallido
-        $this->updateOrderStatus($externalReference, 'failed');
-        
-        return view('payment.failure', [
-            'message' => 'El pago no pudo ser procesado. Intenta nuevamente.'
-        ]);
     }
     
     public function pending(Request $request)
     {
-        $paymentId = $request->get('payment_id');
-        $externalReference = $request->get('external_reference');
         
-        $this->updateOrderStatus($externalReference, 'pending');
-        
-        return view('payment.pending', [
-            'message' => 'Tu pago está siendo procesado. Te notificaremos cuando se confirme.'
-        ]);
     }
 
-    private function getPaymentInfo($paymentId)
+    public function webhook(Request $request)
     {
-        try {
+        $data = $request->all();
+        Log::info('MP Webhook received', ['full_payload' => $data]);
+
+        if (isset($data['type']) && $data['type'] === 'payment') {
             MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
             $client = new PaymentClient();
-            return $client->get($paymentId);
-        } catch (\Exception $e) {
-            Log::error('Error getting payment info: ' . $e->getMessage());
-            return null;
+            $payment = $client->get($data['data']['id']);
+
+            if ($payment->status === 'approved') {
+                Log::info('MP payment approved webhook received for payment ID: ' . $data['data']['id']);
+                
+                // Convert payment object to array and process order
+                $paymentData = $this->paymentToArray($payment);
+                $order = $this->orderService->createOrderFromPayment($paymentData);
+                
+                if ($order) {
+                    Log::info('Order created successfully from webhook', [
+                        'order_id' => $order->id,
+                        'payment_id' => $data['data']['id']
+                    ]);
+                } else {
+                    Log::error('Failed to create order from webhook payment', [
+                        'payment_id' => $data['data']['id']
+                    ]);
+                }
+            }
         }
+
+        return response()->json(['status' => 'success']);
     }
 
-    private function updateOrderStatus($externalReference, $status)
+    /**
+     * Convert payment object to array format for OrderService
+     *
+     * @param mixed $payment
+     * @return array
+     */
+    private function paymentToArray($payment): array
     {
-        // Actualiza tu orden en la base de datos
-        // Order::where('reference', $externalReference)->update(['status' => $status]);
+        return [
+            'id' => $payment->id ?? null,
+            'status' => $payment->status ?? null,
+            'transaction_amount' => $payment->transaction_amount ?? 0,
+            'payer' => [
+                'email' => $payment->payer->email ?? null,
+                'name' => $payment->payer->first_name ?? null,
+                'surname' => $payment->payer->last_name ?? null,
+            ],
+            'additional_info' => [
+                'items' => $this->getItemsFromPayment($payment),
+            ],
+        ];
+    }
+
+    /**
+     * Extract items from payment additional info
+     * Matches the structure from CheckoutController
+     *
+     * @param mixed $payment
+     * @return array
+     */
+    private function getItemsFromPayment($payment): array
+    {
+        $items = [];
+        
+        // Try to get items from additional_info->items
+        if (isset($payment->additional_info->items) && is_array($payment->additional_info->items)) {
+            foreach ($payment->additional_info->items as $item) {
+                $items[] = [
+                    "id" => $item->id ?? null,
+                    "title" => $item->title ?? 'Unknown Product',
+                    "quantity" => $item->quantity ?? 1,
+                    "unit_price" => (float) ($item->unit_price ?? 0),
+                    "color" => $item->color ?? null,
+                    "size" => $item->size ?? null,
+                ];
+            }
+        }
+        
+        // Fallback: try to get from order->items if available
+        elseif (isset($payment->order->items) && is_array($payment->order->items)) {
+            foreach ($payment->order->items as $item) {
+                $items[] = [
+                    "id" => $item->id ?? null,
+                    "title" => $item->title ?? 'Unknown Product',
+                    "quantity" => $item->quantity ?? 1,
+                    "unit_price" => (float) ($item->unit_price ?? 0),
+                    "color" => $item->color ?? null,
+                    "size" => $item->size ?? null,
+                ];
+            }
+        }
+        
+        return $items;
     }
 }

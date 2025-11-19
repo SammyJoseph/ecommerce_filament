@@ -38,7 +38,7 @@ class CheckoutController extends Controller
                     "pending" => "https://boutique.artisam.dev/payment/pending"
                 ],
                 "auto_return" => "approved",
-                "notification_url" => route('mp.webhook')
+                "notification_url" => "https://sagacious-attestable-coy.ngrok-free.dev/mp/webhook",
             ];
 
             $preference = $client->create($preferenceData);
@@ -63,9 +63,12 @@ class CheckoutController extends Controller
         $items = [];
         foreach ($cart as $item) {
             $items[] = [
+                "id" => $options->product_id ?? $item->id,
                 "title" => $item->name,
                 "quantity" => $item->qty,
                 "unit_price" => (float) $item->price,
+                "color" => $item->options->color ?? null,
+                "size" => $item->options->size ?? null,
             ];
         }
         return $items;
