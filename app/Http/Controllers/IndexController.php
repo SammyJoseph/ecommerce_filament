@@ -12,7 +12,9 @@ class IndexController extends Controller
     public function index()
     {
         $categories = Category::with(['products' => function($query) {
-            $query->take(10);
+            $query->take(10)->with(['variants' => function($q) {
+                $q->where('is_visible', true)->with(['color', 'sizes.size', 'media']);
+            }]);
         }])->take(5)->get();
 
         return view('index', compact('categories'));

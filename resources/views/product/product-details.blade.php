@@ -114,7 +114,7 @@
                                 <div class="pro-details-color-content">
                                     <ul>
                                         @foreach ($variantCombinations['colors'] as $color)
-                                            <li><a href="#" data-color="{{ $color['value'] }}" title="{{ $color['value'] }}" style="background-color: {{ $color['color_code'] }};"></a></li>
+                                            <li><a href="#" data-color="{{ $color['value'] }}" title="{{ $color['value'] }}" @style(['background-color: ' . $color['color_code']])></a></li>
                                         @endforeach
                                     </ul>
                                 </div>

@@ -426,6 +426,21 @@
     <script src="{{ asset('assets/js/plugins/ajax-mail.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
+    <script>
+        // Sync jQuery state when Livewire opens/closes the cart
+        document.addEventListener('livewire:initialized', () => {
+            Livewire.on('open-side-cart', () => {
+                $('.sidebar-cart-active').addClass('inside');
+                $('.main-wrapper').addClass('overlay-active');
+            });
+
+            Livewire.on('close-side-cart', () => {
+                $('.sidebar-cart-active').removeClass('inside');
+                $('.main-wrapper').removeClass('overlay-active');
+            });
+        });
+    </script>
+
     @stack('scripts')
     @livewireScripts
 </body>
