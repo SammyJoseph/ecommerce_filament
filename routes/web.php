@@ -20,6 +20,9 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/my-account', [IndexController::class, 'myAccount'])->name('user.my-account');
+    Route::get('/my-account/order/{order}', [IndexController::class, 'orderDetails'])->name('user.order.details');
 });
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
