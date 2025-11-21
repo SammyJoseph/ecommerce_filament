@@ -1,48 +1,77 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+@extends('layouts.index')
+@section('title', 'Login | Norda - Minimal eCommerce HTML Template')
 
-        <x-validation-errors class="mb-4" />
+@section('header-extra-classes', '')
+@section('container-class', 'container')
 
-        @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ $value }}
+@section('content')
+    <div class="breadcrumb-area bg-gray">
+        <div class="container">
+            <div class="breadcrumb-content text-center">
+                <ul>
+                    <li>
+                        <a href="{{ route('index') }}">Home</a>
+                    </li>
+                    <li class="active">Login - Register</li>
+                </ul>
             </div>
-        @endsession
+        </div>
+    </div>
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <div>
-                <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+    <div class="login-register-area pt-115 pb-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 ms-auto me-auto">
+                    <div class="login-register-wrapper">
+                        <div class="login-register-tab-list nav">
+                            <a class="active" data-bs-toggle="tab" href="#lg1">
+                                <h4> login </h4>
+                            </a>
+                            <a data-bs-toggle="tab" href="#lg2">
+                                <h4> register </h4>
+                            </a>
+                        </div>
+                        <div class="tab-content">
+                            <div id="lg1" class="tab-pane active">
+                                <div class="login-form-container">
+                                    <div class="login-register-form">
+                                        <form action="{{ route('login') }}" method="post">
+                                            @csrf
+                                            <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required autofocus>
+                                            <input type="password" name="password" placeholder="Password" required autocomplete="current-password">
+                                            <div class="button-box">
+                                                <div class="login-toggle-btn">
+                                                    <input type="checkbox" name="remember" id="remember">
+                                                    <label for="remember">Remember me</label>
+                                                    @if (Route::has('password.request'))
+                                                        <a href="{{ route('password.request') }}">Forgot Password?</a>
+                                                    @endif
+                                                </div>
+                                                <button type="submit">Login</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="lg2" class="tab-pane">
+                                <div class="login-form-container">
+                                    <div class="login-register-form">
+                                        <form action="{{ route('register') }}" method="post">
+                                            @csrf
+                                            <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+                                            <input type="password" name="password" placeholder="New Password" required>
+                                            <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+                                            <div class="button-box">
+                                                <button type="submit">Register</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="mt-4">
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
-            </div>
-
-            <div class="block mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ms-4">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout>
+        </div>
+    </div>
+@endsection

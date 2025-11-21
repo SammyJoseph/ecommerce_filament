@@ -30,7 +30,7 @@
                                 <div class="myaccount-tab-menu nav" role="tablist">
                                     <a href="#dashboad" class="{{ !isset($order) ? 'active' : '' }}" data-bs-toggle="tab"><i class="fa fa-dashboard"></i>
                                         Dashboard</a>
-                                    <a href="#orders" data-bs-toggle="tab"><i class="fa fa-cart-arrow-down"></i> Orders</a>
+                                    <a href="{{ isset($order) ? route('user.my-account').'#orders' : '#orders' }}" class="{{ isset($order) ? 'active' : '' }}" @if(!isset($order)) data-bs-toggle="tab" @endif><i class="fa fa-cart-arrow-down"></i> Orders</a>
                                     <a href="#download" data-bs-toggle="tab"><i class="fa fa-cloud-download"></i> Download</a>
                                     <a href="#payment-method" data-bs-toggle="tab"><i class="fa fa-credit-card"></i> Payment
                                         Method</a>
@@ -254,3 +254,13 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function(){
+            if (window.location.hash === '#orders') {
+                $('a[href="#orders"]').tab('show');
+            }
+        });
+    </script>
+@endpush

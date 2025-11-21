@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -49,11 +50,11 @@ class IndexController extends Controller
     public function myAccount()
     {
         $user = auth()->user();
-        $orders = \App\Models\Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        $orders = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         return view('user.my-account', compact('user', 'orders'));
     }
 
-    public function orderDetails(\App\Models\Order $order)
+    public function orderDetails(Order $order)
     {
         $user = auth()->user();
 
@@ -62,7 +63,7 @@ class IndexController extends Controller
         }
 
         $order->load('orderItems.product');
-        $orders = \App\Models\Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        $orders = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
 
         return view('user.my-account', compact('user', 'orders', 'order'));
     }
