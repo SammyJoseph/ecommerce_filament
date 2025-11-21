@@ -47,45 +47,64 @@
                             </div>
                             <p x-html="product.description" class="tw-line-clamp-2"></p>
                             <div class="pro-details-price">
-                                <template x-if="product.sale_price && product.sale_price > 0">
+                                <template x-if="currentSalePrice && currentSalePrice > 0">
                                     <div>
-                                        <span class="new-price" x-text="'S/.' + product.sale_price"></span>
-                                        <span class="old-price" x-text="'S/.' + product.price"></span>
+                                        <span class="new-price" x-text="'S/.' + currentSalePrice"></span>
+                                        <span class="old-price" x-text="'S/.' + currentPrice"></span>
                                     </div>
                                 </template>
-                                <template x-if="!product.sale_price || product.sale_price <= 0">
-                                    <span class="new-price" x-text="'S/.' + product.price"></span>
+                                <template x-if="!currentSalePrice || currentSalePrice <= 0">
+                                    <span class="new-price" x-text="'S/.' + currentPrice"></span>
                                 </template>
                             </div>
-                            <div class="pro-details-color-wrap">
-                                <span>Color:</span>
-                                <div class="pro-details-color-content">
-                                    <ul>
-                                        <li><a class="dolly" href="#">dolly</a></li>
-                                        <li><a class="white" href="#">white</a></li>
-                                        <li><a class="azalea" href="#">azalea</a></li>
-                                        <li><a class="peach-orange" href="#">Orange</a></li>
-                                        <li><a class="mona-lisa active" href="#">lisa</a></li>
-                                        <li><a class="cupid" href="#">cupid</a></li>
-                                    </ul>
+                            <template x-if="product.has_variants && product.variant_combinations">
+                                <div class="pro-details-color-wrap">
+                                    <span>Color:</span>
+                                    <div class="pro-details-color-content">
+                                        <ul>
+                                            <template x-for="(colorData, colorName) in product.variant_combinations.colors" :key="colorName">
+                                                <li>
+                                                    <a href="#" 
+                                                       :class="{ 'active': selectedColor === colorName }"
+                                                       :style="'background-color: ' + colorData.color_code"
+                                                       :title="colorName"
+                                                       @click.prevent="selectColor(colorName)">
+                                                    </a>
+                                                </li>
+                                            </template>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="pro-details-size">
-                                <span>Talla:</span>
-                                <div class="pro-details-size-content">
-                                    <ul>
-                                        <li><a href="#">XS</a></li>
-                                        <li><a href="#">S</a></li>
-                                        <li><a href="#">M</a></li>
-                                        <li><a href="#">L</a></li>
-                                        <li><a href="#">XL</a></li>
-                                    </ul>
+                            </template>
+                            
+                            <template x-if="product.has_variants">
+                                <div class="pro-details-size">
+                                    <span>Talla:</span>
+                                    <div class="pro-details-size-content">
+                                        <ul>
+                                            <template x-for="size in availableSizes" :key="size">
+                                                <li>
+                                                    <a href="#" 
+                                                       :class="{ 'active': selectedSize === size }"
+                                                       @click.prevent="selectSize(size)"
+                                                       x-text="size">
+                                                    </a>
+                                                </li>
+                                            </template>
+                                            <template x-if="!selectedColor">
+                                                <li><span>Selecciona un color primero</span></li>
+                                            </template>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
+                            </template>
+
                             <div class="pro-details-quality">
                                 <span>Cantidad:</span>
                                 <div class="cart-plus-minus">
-                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1">
+                                    <div class="dec qtybutton" @click="quantity = Math.max(1, quantity - 1)">-</div>
+                                    <input class="cart-plus-minus-box" type="text" x-model="quantity" readonly id="quick-view-quantity">
+                                    <div class="inc qtybutton" @click="quantity++">+</div>
                                 </div>
                             </div>
                             <div class="product-details-meta">
@@ -95,22 +114,16 @@
                                 </ul>
                             </div>
                             <div class="pro-details-action-wrap">
-                                <div class="pro-details-add-to-cart">
-                                    <a title="Add to Cart" href="#">Añadir al carrito </a>
-                                </div>
-                                <div class="pro-details-action">
-                                    <a title="Añadir a la lista de deseos" href="#"><i class="icon-heart"></i></a>
-                                    <a title="Añadir para comparar" href="#"><i class="icon-refresh"></i></a>
-                                    <a class="social" title="Social" href="#"><i class="icon-share"></i></a>
-                                    <div class="product-dec-social">
-                                        <a class="facebook" title="Facebook" href="#"><i class="icon-social-facebook"></i></a>
-                                        <a class="twitter" title="Twitter" href="#"><i class="icon-social-twitter"></i></a>
-                                        <a class="instagram" title="Instagram" href="#"><i class="icon-social-instagram"></i></a>
-                                        <a class="pinterest" title="Pinterest" href="#"><i class="icon-social-pinterest"></i></a>
-                                    </div>
-                                </div>
+                                @livewire('product.quick-view-add-to-cart')
                             </div>
-                        </div>
+                            </div>
+</div>
+<style>
+    .pro-details-size-content ul li a.active {
+        background-color: #333;
+        color: #fff;
+    }
+</style>
                     </div>
                 </div>
             </div>

@@ -12,6 +12,47 @@
                 this.activeImage = product.images[0];
                 this.activeThumbIndex = 0;
             }
+            // Reset variant selection
+            this.selectedColor = null;
+            this.selectedSize = null;
+            this.quantity = 1;
+            this.currentPrice = product.price;
+            this.currentSalePrice = product.sale_price;
+        },
+        selectedColor: null,
+        selectedSize: null,
+        quantity: 1,
+        availableSizes: [],
+        currentPrice: 0,
+        currentSalePrice: 0,
+        selectColor(color) {
+            this.selectedColor = color;
+            this.selectedSize = null;
+            
+            // Reset to base product price until size is selected
+            this.currentPrice = this.product.price;
+            this.currentSalePrice = this.product.sale_price;
+
+            if (this.product.variant_combinations && this.product.variant_combinations.colors[color]) {
+                this.availableSizes = this.product.variant_combinations.colors[color].available_sizes;
+                // Update image if color has one
+                if (this.product.variant_combinations.colors[color].image) {
+                    this.activeImage = this.product.variant_combinations.colors[color].image;
+                }
+            } else {
+                this.availableSizes = [];
+            }
+        },
+        selectSize(size) {
+            this.selectedSize = size;
+            if (this.selectedColor && this.product.variant_combinations) {
+                const key = this.selectedColor + '-' + size;
+                const combination = this.product.variant_combinations.combinations[key];
+                if (combination) {
+                    this.currentPrice = combination.price;
+                    this.currentSalePrice = combination.sale_price;
+                }
+            }
         }
     }"
 @endsection
@@ -62,6 +103,10 @@
                                                     'price' => $product->price,
                                                     'sale_price' => $product->sale_price,
                                                     'description' => $product->description,
+                                                    'id' => $product->id,
+                                                    'slug' => $product->slug,
+                                                    'has_variants' => $product->has_variants,
+                                                    'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                                 ]) }})"
                                                 data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                 <i class="icon-size-fullscreen icons"></i><span>Vista Rápida</span>

@@ -56,6 +56,7 @@ class SideCart extends Component
         $this->dispatch('body-overlay', active: true);
     }
 
+    #[On('close-side-cart')]
     public function closeCart()
     {
         $this->isOpen = false;
@@ -71,5 +72,6 @@ class SideCart extends Component
     public function removeFromCart($rowId)
     {
         Cart::instance('shopping')->remove($rowId);
+        $this->dispatch('cart-updated');
     }
 }
