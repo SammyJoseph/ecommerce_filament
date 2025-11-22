@@ -15,24 +15,41 @@ class CheckoutController extends Controller
     {
         if (Cart::instance('shopping')->count() == 0) return redirect()->route('cart.index');
 
-        $preference = $this->createPreference();
+        $subtotal = (float) str_replace(',', '', Cart::subtotal());
+        $shipping = session('shipping_cost', 0);
+        $discount = 0;
+
+        if (session()->has('coupon')) {
+            $coupon = session('coupon');
+            if ($coupon['type'] === 'fixed') {
+                $discount = $coupon['value'];
+            } elseif ($coupon['type'] === 'percentage') {
+                $discount = ($subtotal * $coupon['value']) / 100;
+            }
+        }
+
+        $total = max(0, $subtotal - $discount + $shipping);
+
+        $preference = $this->createPreference($shipping);
         
         return view('checkout.index', [
             'preferenceId' => $preference->id,
             'cartItems' => Cart::content(),
-            'subtotal' => Cart::subtotal(),
-            'total' => Cart::total()
+            'subtotal' => $subtotal,
+            'shipping' => $shipping,
+            'discount' => $discount,
+            'total' => $total
         ]);
     }    
 
-    private function createPreference()
+    private function createPreference($shipping)
     {
         try {
             MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
             $client = new PreferenceClient();            
 
             $preferenceData = [
-                "items" => $this->getCartItems(), 
+                "items" => $this->getCartItems($shipping), 
                 "payer" => ["email" => "test_user@example.com", "name" => "Test", "surname" => "User"],
                 "payment_methods" => ["installments" => 12],
                 "back_urls" => [
@@ -58,7 +75,7 @@ class CheckoutController extends Controller
         }
     }
 
-    private function getCartItems()
+    private function getCartItems($shipping)
     {
         Cart::instance('shopping');
         $cart = Cart::content();
@@ -74,6 +91,16 @@ class CheckoutController extends Controller
                 "size" => $item->options->size ?? null,
             ];
         }
+
+        if ($shipping > 0) {
+            $items[] = [
+                "id" => "shipping",
+                "title" => "Costo de envío",
+                "quantity" => 1,
+                "unit_price" => (float) $shipping,
+            ];
+        }
+
         return $items;
     }
 

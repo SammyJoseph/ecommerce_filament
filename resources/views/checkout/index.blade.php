@@ -82,18 +82,26 @@
                                     </div>
                                     <div class="your-order-info order-subtotal">
                                         <ul>
-                                            <li>Subtotal <span>{{ $subtotal }} </span></li>
+                                            <li>Subtotal <span>${{ number_format($subtotal, 2) }} </span></li>
                                         </ul>
                                     </div>
+                                    @if($discount > 0)
+                                    <div class="your-order-info order-subtotal">
+                                        <ul>
+                                            <li>Discount <span>-${{ number_format($discount, 2) }} </span></li>
+                                        </ul>
+                                    </div>
+                                    @endif
                                     <div class="your-order-info order-shipping">
                                         <ul>
-                                            <li>Shipping <p>Enter your full address </p>
+                                            <li>Shipping 
+                                                <span>${{ number_format($shipping, 2) }}</span>
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="your-order-info order-total">
                                         <ul>
-                                            <li>Total <span>{{ $total }} </span></li>
+                                            <li>Total <span>${{ number_format($total, 2) }} </span></li>
                                         </ul>
                                     </div>
                                 </div>

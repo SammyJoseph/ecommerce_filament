@@ -59,6 +59,7 @@
                 </tbody>
             </table>
         </div>
+        {{-- Botones de acción --}}
         <div class="row">
             <div class="col-lg-12">
                 <div class="cart-shiping-update-wrapper">
@@ -89,7 +90,7 @@
                     </div>
                     <div class="tax-wrapper">
                         <p>Enter your destination to get a shipping estimate.</p>
-                        <div class="tax-select-wrapper">
+                        <div class="tax-select-wrapper" wire:ignore>
                             <div class="tax-select">
                                 <label>
                                     * Departamento
@@ -151,11 +152,24 @@
                         <button wire:click="removeCoupon" class="tw-ml-2">x</button>
                         <span class="tw-float-end">-{{ number_format($cartDiscount, 2) }}</span></p>
                     @endif
-                    <div class="total-shipping">
-                        <h5>Total shipping</h5>
-                        <ul>
-                            <li><input type="checkbox"> Standard <span>$20.00</span></li>
-                            <li><input type="checkbox"> Express <span>$30.00</span></li>
+                    <div class="total-shipping tw-flex tw-justify-between tw-items-center">
+                        <p class="tw-mb-0">Shipping Cost</p>
+                        <ul class="!tw-pt-0">
+                            <li wire:loading.remove>
+                                @if($shippingCost > 0)
+                                    <span>${{ number_format($shippingCost, 2) }}</span>
+                                @else
+                                    <span>0.00</span>
+                                @endif
+                            </li>
+                            <li wire:loading class="tw-w-full">
+                                <div class="tw-flex tw-justify-end">
+                                    <svg class="tw-animate-spin tw-h-4 tw-w-4 tw-text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="tw-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="tw-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                     <h4 class="grand-totall-title">Grand Total 
@@ -184,6 +198,11 @@
             let provincias = {};
             let distritos = {};
 
+            // Initial values from Livewire
+            const initialDept = @json($selectedDepartment);
+            const initialProv = @json($selectedProvince);
+            const initialDist = @json($selectedDistrict);
+
             // URLs for JSON data
             const deptUrl = 'https://raw.githubusercontent.com/joseluisq/ubigeos-peru/master/json/departamentos.json';
             const provUrl = 'https://raw.githubusercontent.com/joseluisq/ubigeos-peru/master/json/provincias.json';
@@ -200,6 +219,21 @@
                 distritos = distData;
 
                 populateDepartamentos();
+                
+                // Restore selections if they exist
+                if (initialDept) {
+                    deptSelect.value = initialDept;
+                    populateProvincias(initialDept);
+                    
+                    if (initialProv) {
+                        provSelect.value = initialProv;
+                        populateDistritos(initialProv);
+                        
+                        if (initialDist) {
+                            distSelect.value = initialDist;
+                        }
+                    }
+                }
             }).catch(err => console.error('Error loading Ubigeo data:', err));
 
             function populateDepartamentos() {
@@ -211,9 +245,7 @@
                 });
             }
 
-            deptSelect.addEventListener('change', function() {
-                const deptId = this.value;
-                
+            function populateProvincias(deptId) {
                 // Reset and disable child selects
                 provSelect.innerHTML = '<option value="">Seleccione Provincia</option>';
                 distSelect.innerHTML = '<option value="">Seleccione Distrito</option>';
@@ -229,11 +261,9 @@
                     });
                     provSelect.disabled = false;
                 }
-            });
+            }
 
-            provSelect.addEventListener('change', function() {
-                const provId = this.value;
-                
+            function populateDistritos(provId) {
                 // Reset and disable child select
                 distSelect.innerHTML = '<option value="">Seleccione Distrito</option>';
                 distSelect.disabled = true;
@@ -247,6 +277,23 @@
                     });
                     distSelect.disabled = false;
                 }
+            }
+
+            deptSelect.addEventListener('change', function() {
+                const deptId = this.value;
+                @this.set('selectedDepartment', deptId);
+                populateProvincias(deptId);
+            });
+
+            provSelect.addEventListener('change', function() {
+                const provId = this.value;
+                @this.set('selectedProvince', provId);
+                populateDistritos(provId);
+            });
+            
+            distSelect.addEventListener('change', function() {
+                const distId = this.value;
+                @this.set('selectedDistrict', distId);
             });
         });
     </script>
