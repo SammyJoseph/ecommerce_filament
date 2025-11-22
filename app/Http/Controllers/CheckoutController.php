@@ -31,16 +31,16 @@ class CheckoutController extends Controller
         $total = max(0, $subtotal - $discount + $shipping);
 
         $preference = $this->createPreference($shipping);
-        
         return view('checkout.index', [
             'preferenceId' => $preference->id,
             'cartItems' => Cart::content(),
             'subtotal' => $subtotal,
             'shipping' => $shipping,
             'discount' => $discount,
-            'total' => $total
+            'total' => $total,
+            'user' => auth()->user()
         ]);
-    }    
+    }
 
     private function createPreference($shipping)
     {

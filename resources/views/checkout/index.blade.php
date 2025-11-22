@@ -19,7 +19,37 @@
     </div>
     <div class="checkout-main-area pt-50 pb-120">
         <div class="container">
-            <div class="checkout-wrap pt-30">
+            <div class="checkout-wrap pt-30" x-data="{
+                paymentMethod: 'mercadopago',
+                billing: {
+                    firstName: '{{ $user ? $user->name : '' }}',
+                    lastName: '{{ $user ? $user->last_name : '' }}',
+                    email: '{{ $user->email ?? '' }}',
+                    phone: '{{ $user->phone_number ?? '' }}',
+                    address: '{{ $user->defaultAddress->address ?? '' }}',
+                    reference: '{{ $user->defaultAddress->reference ?? '' }}',
+                    notes: ''
+                },
+                touched: {},
+                get isValid() {
+                    return this.billing.firstName && 
+                           this.billing.lastName && 
+                           this.billing.email && 
+                           this.billing.phone && 
+                           this.billing.address;
+                },
+                validateAndProceed(event) {
+                    if (!this.isValid) {
+                        if (event) event.preventDefault();
+                        this.touched.firstName = true;
+                        this.touched.lastName = true;
+                        this.touched.email = true;
+                        this.touched.phone = true;
+                        this.touched.address = true;
+                        alert('Por favor complete todos los campos obligatorios antes de continuar.');
+                    }
+                }
+            }">
                 <div class="row">
                     <div class="col-lg-7">
                         <div class="billing-info-wrap mr-50">
@@ -28,43 +58,43 @@
                                 <div class="col-lg-6 col-md-6">
                                     <div class="billing-info mb-20">
                                         <label>First Name <abbr class="required" title="required">*</abbr></label>
-                                        <input type="text">
+                                        <input type="text" x-model="billing.firstName" :class="{'border-danger': touched.firstName && !billing.firstName}">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6">
                                     <div class="billing-info mb-20">
                                         <label>Last Name <abbr class="required" title="required">*</abbr></label>
-                                        <input type="text">
+                                        <input type="text" x-model="billing.lastName" :class="{'border-danger': touched.lastName && !billing.lastName}">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6">
                                     <div class="billing-info mb-20">
                                         <label>Email Address <abbr class="required" title="required">*</abbr></label>
-                                        <input type="text">
+                                        <input type="text" x-model="billing.email" :class="{'border-danger': touched.email && !billing.email}">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6">
                                     <div class="billing-info mb-20">
                                         <label>Phone <abbr class="required" title="required">*</abbr></label>
-                                        <input type="text">
+                                        <input type="text" x-model="billing.phone" :class="{'border-danger': touched.phone && !billing.phone}">
                                     </div>
                                 </div> 
                                 <div class="col-lg-12">
                                     <div class="billing-info mb-20">
                                         <label>Street Address <abbr class="required" title="required">*</abbr></label>
-                                        <input class="billing-address" placeholder="House number and street name" type="text">
-                                        <input placeholder="Reference" type="text">
+                                        <input class="billing-address" placeholder="House number and street name" type="text" x-model="billing.address" :class="{'border-danger': touched.address && !billing.address}">
+                                        <input placeholder="Reference" type="text" x-model="billing.reference">
                                     </div>
                                 </div>                                                                                               
                             </div>
                             <div class="additional-info-wrap">
                                 <label>Order notes</label>
-                                <textarea placeholder="Notes about your order, e.g. special notes for delivery. " name="message"></textarea>
+                                <textarea placeholder="Notes about your order, e.g. special notes for delivery. " name="message" x-model="billing.notes"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-5">
-                        <div class="your-order-area" x-data="{ paymentMethod: 'mercadopago' }">
+                        <div class="your-order-area">
                             <h3>Your order</h3>
                             <div class="your-order-wrap gray-bg-4">
                                 <div class="your-order-info-wrap">
@@ -137,15 +167,16 @@
                             </div>
                             <div class="Place-order mt-25">
                                 <div x-show="paymentMethod === 'bank_transfer'">
-                                    <a href="#" class="btn-hover">Place Order</a>
+                                    <a href="#" class="btn-hover" @click="validateAndProceed($event)">Place Order</a>
                                 </div>
                                 
-                                <div x-show="paymentMethod === 'mercadopago'" style="display: none;" class="tw-max-w-lg tw-mx-auto">
+                                <div x-show="paymentMethod === 'mercadopago'" style="display: none;" class="tw-max-w-lg tw-mx-auto tw-relative">
+                                    <div x-show="!isValid" @click="validateAndProceed($event)" class="tw-absolute tw-inset-0 tw-z-50 tw-cursor-not-allowed" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50;"></div>
                                     <div id="wallet_container"></div>
                                 </div>
 
                                 <div x-show="paymentMethod === 'paypal'" style="display: none;">
-                                    <a href="#" class="btn-hover">Pay with PayPal</a>
+                                    <a href="#" class="btn-hover" @click="validateAndProceed($event)">Pay with PayPal</a>
                                 </div>
                             </div>
                         </div>
