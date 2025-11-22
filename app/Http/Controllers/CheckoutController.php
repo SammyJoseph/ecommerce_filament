@@ -18,7 +18,10 @@ class CheckoutController extends Controller
         $preference = $this->createPreference();
         
         return view('checkout.index', [
-            'preferenceId' => $preference->id
+            'preferenceId' => $preference->id,
+            'cartItems' => Cart::content(),
+            'subtotal' => Cart::subtotal(),
+            'total' => Cart::total()
         ]);
     }    
 

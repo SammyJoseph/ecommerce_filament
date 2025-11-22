@@ -17,8 +17,8 @@
             </div>
         </div>
     </div>
-    <div class="cart-main-area pt-115 pb-120">
-        <div class="container">
+    <div class="cart-main-area pt-50 pb-120">
+        <div class="container pt-30">
             <h3 class="cart-page-title">Your cart items</h3>
             @livewire('product.shopping-cart')
         </div>
