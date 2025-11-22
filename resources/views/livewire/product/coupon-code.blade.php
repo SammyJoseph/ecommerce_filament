@@ -9,7 +9,7 @@
             </button>
         </div>
     @else
-        <input wire:model.defer="couponCode" class="tw-mb-7" type="text" placeholder="Ingresa tu cupón">
+        <input wire:model.defer="couponCode" class="tw-mb-7 tw-bg-white focus:tw-bg-white" type="text" placeholder="Ingresa tu cupón">
         <button wire:click="applyCoupon" class="cart-btn-2" type="submit">Apply Coupon</button>
     @endif
 
