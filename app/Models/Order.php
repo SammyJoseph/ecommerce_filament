@@ -10,9 +10,16 @@ class Order extends Model
 {
     protected $fillable = [
         'user_id',
+        'number',
         'total_amount',
         'status',
-        'shipping_address',
+        'currency',
+        'shipping_street',
+        'shipping_city',
+        'shipping_state',
+        'shipping_zip',
+        'shipping_country',
+        'notes',
     ];
 
     protected $casts = [

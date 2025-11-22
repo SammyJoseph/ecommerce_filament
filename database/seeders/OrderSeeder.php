@@ -41,16 +41,18 @@ class OrderSeeder extends Seeder
                 ];
             }
 
-            // Create random date in 2025
+            // Create random date in 2025 up to yesterday
             $startOfYear = \Carbon\Carbon::create(2025, 1, 1);
-            $endOfYear = \Carbon\Carbon::create(2025, 12, 31);
+            $yesterday = \Carbon\Carbon::yesterday()->endOfDay();
             $randomDate = \Carbon\Carbon::createFromTimestamp(
-                rand($startOfYear->timestamp, $endOfYear->timestamp)
+                rand($startOfYear->timestamp, $yesterday->timestamp)
             );
 
             // 80% completed, 15% pending, 5% cancelled for realistic distribution
             $statusWeights = [
-                'completed' => 80,
+                'delivered' => 50,
+                'shipped' => 20,
+                'processing' => 10,
                 'pending' => 15,
                 'cancelled' => 5,
             ];
@@ -58,9 +60,16 @@ class OrderSeeder extends Seeder
 
             $order = Order::create([
                 'user_id' => $user->id,
+                'number' => 'OR-' . str_pad($i + 1, 6, '0', STR_PAD_LEFT),
                 'total_amount' => $total,
                 'status' => $status,
-                'shipping_address' => 'Sample Address ' . ($i + 1),
+                'currency' => 'usd',
+                'shipping_street' => 'Sample Street ' . ($i + 1),
+                'shipping_city' => 'Sample City',
+                'shipping_state' => 'Sample State',
+                'shipping_zip' => '12345',
+                'shipping_country' => 'Sample Country',
+                'notes' => 'Auto-generated order',
                 'created_at' => $randomDate,
                 'updated_at' => $randomDate,
             ]);
