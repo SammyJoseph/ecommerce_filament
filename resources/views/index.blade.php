@@ -84,6 +84,20 @@
                 <div id="product-{{ $category->id }}" class="tab-pane {{ $loop->first ? 'active' : '' }}">
                     <div class="row">
                         @foreach ($category->products->take(8) as $product)
+                            @php
+                                $productData = json_encode([
+                                    'name' => $product->name,
+                                    'images' => $product->getMedia('product_images')->map(fn($media) => $media->getUrl('preview'))->all(),
+                                    'thumb_images' => $product->getMedia('product_images')->map(fn($media) => $media->getUrl('thumb'))->all(),
+                                    'price' => $product->price,
+                                    'sale_price' => $product->sale_price,
+                                    'description' => $product->description,
+                                    'id' => $product->id,
+                                    'slug' => $product->slug,
+                                    'has_variants' => $product->has_variants,
+                                    'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
+                                ]);
+                            @endphp
                         <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12">
                             <div class="single-product-wrap mb-35">
                                 <div class="product-img product-img-zoom mb-20">
@@ -92,22 +106,19 @@
                                     </a>
                                     <div class="product-action-wrap">
                                         <div class="product-action-left">
-                                            @livewire('product.add-to-cart', ['product' => $product, 'classes' => 'tw-flex tw-items-center'])
+                                            @if($product->has_variants)
+                                                <button title="Add to Cart" class="tw-flex tw-items-center tw-gap-2"
+                                                    x-on:click="updateProductData({{ $productData }})"
+                                                    data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                    <i class="icon-basket-loaded"></i><span>Add to cart</span>
+                                                </button>
+                                            @else
+                                                @livewire('product.add-to-cart', ['product' => $product, 'classes' => 'tw-flex tw-items-center'])
+                                            @endif
                                         </div>
                                         <div class="product-action-right tooltip-style">
                                             <button
-                                                x-on:click="updateProductData({{ json_encode([
-                                                    'name' => $product->name,
-                                                    'images' => $product->getMedia('product_images')->map(fn($media) => $media->getUrl('preview'))->all(),
-                                                    'thumb_images' => $product->getMedia('product_images')->map(fn($media) => $media->getUrl('thumb'))->all(),
-                                                    'price' => $product->price,
-                                                    'sale_price' => $product->sale_price,
-                                                    'description' => $product->description,
-                                                    'id' => $product->id,
-                                                    'slug' => $product->slug,
-                                                    'has_variants' => $product->has_variants,
-                                                    'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
-                                                ]) }})"
+                                                x-on:click="updateProductData({{ $productData }})"
                                                 data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                 <i class="icon-size-fullscreen icons"></i><span>Vista Rápida</span>
                                             </button>
