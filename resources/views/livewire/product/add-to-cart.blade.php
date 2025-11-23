@@ -13,7 +13,7 @@
             class="{{ $classes }} tw-relative tw-inline-flex tw-items-center tw-justify-center tw-gap-2 tw-transition-all tw-duration-200"
             id="livewire-add-to-cart-btn"
         >
-            <i class="icon-basket-loaded tw--mt-2" wire:loading.remove wire:target="addToCart"></i>
+            <i class="icon-basket-loaded !-tw-top-px" wire:loading.remove wire:target="addToCart"></i>
             <div wire:loading wire:target="addToCart" class="tw-inline-block tw-mr-2.5 tw--mt-0.5">
                 <svg class="tw-animate-spin tw-h-5 tw-w-5 tw-text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="tw-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

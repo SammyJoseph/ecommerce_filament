@@ -62,6 +62,7 @@ class OrderSeeder extends Seeder
                 'user_id' => $user->id,
                 'number' => 'OR-' . str_pad($i + 1, 6, '0', STR_PAD_LEFT),
                 'total_amount' => $total,
+                'shipping_amount' => fake()->randomFloat(2, 10, 20),
                 'status' => $status,
                 'currency' => 'usd',
                 'shipping_street' => 'Sample Street ' . ($i + 1),

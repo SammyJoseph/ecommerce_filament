@@ -71,6 +71,7 @@
                                                             <th>Date</th>
                                                             <th>Status</th>
                                                             <th>Total</th>
+                                                            <th>Shipping</th>
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
@@ -81,6 +82,7 @@
                                                                 <td>{{ $listOrder->created_at->format('M d, Y') }}</td>
                                                                 <td><span class="{{ $listOrder->status == 'completed' ? 'text-success' : ($listOrder->status == 'cancelled' ? 'text-danger' : 'text-secondary') }}">{{ $listOrder->status }}</span></td>
                                                                 <td>${{ $listOrder->total_amount }}</td>
+                                                                <td>${{ $listOrder->shipping_amount }}</td>
                                                                 <td><a href="{{ route('user.order.details', $listOrder) }}" class="check-btn sqr-btn ">View</a></td>
                                                             </tr>
                                                         @empty

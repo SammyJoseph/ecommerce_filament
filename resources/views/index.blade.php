@@ -110,7 +110,7 @@
                                                 <button title="Add to Cart" class="tw-flex tw-items-center tw-gap-2"
                                                     x-on:click="updateProductData({{ $productData }})"
                                                     data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                    <i class="icon-basket-loaded"></i><span>Add to cart</span>
+                                                    <i class="icon-basket-loaded !-tw-top-px"></i><span>Add to cart</span>
                                                 </button>
                                             @else
                                                 @livewire('product.add-to-cart', ['product' => $product, 'classes' => 'tw-flex tw-items-center'])
