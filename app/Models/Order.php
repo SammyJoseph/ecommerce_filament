@@ -12,6 +12,7 @@ class Order extends Model
         'user_id',
         'number',
         'total_amount',
+        'shipping_amount',
         'status',
         'currency',
         'shipping_street',

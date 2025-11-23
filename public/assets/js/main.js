@@ -893,11 +893,11 @@
     --------------------------*/
     var checked = $('.sin-payment input:checked')
     if (checked) {
-        $(checked).siblings('.payment-box').slideDown(900);
+        $(checked).closest('.sin-payment').find('.payment-box').slideDown(900);
     };
     $('.sin-payment input').on('change', function () {
         $('.payment-box').slideUp(900);
-        $(this).siblings('.payment-box').slideToggle(900);
+        $(this).closest('.sin-payment').find('.payment-box').slideToggle(900);
     });
 
 

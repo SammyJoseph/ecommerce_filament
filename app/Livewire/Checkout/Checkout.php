@@ -8,6 +8,7 @@ use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\MercadoPagoConfig;
 use App\Models\Order; 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class Checkout extends Component
 {
@@ -48,69 +49,71 @@ class Checkout extends Component
         $this->validate();
 
         if ($this->paymentMethod === 'mercadopago') {
-            $this->processMercadoPago();
+            DB::beginTransaction();
+            try {
+                $order = $this->createOrder();
+                $redirect = $this->processMercadoPago($order->id);
+                
+                DB::commit();
+                return $redirect;
+            } catch (\Exception $e) {
+                DB::rollBack();
+                Log::error('MP Error: ' . $e->getMessage());
+                session()->flash('error', 'Error al procesar: ' . $e->getMessage());
+            }
         } 
     }
 
-    public function processMercadoPago()
+    public function processMercadoPago($orderId)
     {
-        try {
-            $order = new Order();
-            
-            $order->user_id = auth()->id() ?? 1; 
-            
-            $order->number = 'ORD-' . strtoupper(uniqid());
+        MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
+        $client = new PreferenceClient();
 
-            $order->total_amount = $this->calculateTotal() - $this->shipping;
-            $order->shipping_amount = $this->shipping;
-            
-            $order->status = 'pending';
-            $order->currency = 'PEN'; 
-
-            $order->shipping_street = $this->address;
-            
-            $contactInfo = "Cliente: {$this->firstName} {$this->lastName} | Tel: {$this->phone}";
-            $order->notes = $contactInfo . " | Notas: " . $this->notes;
-
-            $order->save();
-
-            MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
-            $client = new PreferenceClient();
-
-            $preference = $client->create([
-                "items" => $this->getCartItems(),
-                "payer" => [
-                    "name" => $this->firstName,
-                    "surname" => $this->lastName,
-                    "email" => $this->email,
-                    "phone" => [
-                        "area_code" => "51",
-                        "number" => $this->phone
-                    ],
-                    "address" => [
-                        "street_name" => $this->address
-                    ]
+        $preference = $client->create([
+            "items" => $this->getCartItems(),
+            "payer" => [
+                "name" => $this->firstName,
+                "surname" => $this->lastName,
+                "email" => $this->email,
+                "phone" => [
+                    "area_code" => "51",
+                    "number" => $this->phone
                 ],
-                "external_reference" => (string) $order->id, 
-                "back_urls" => [
-                    "success" => "https://boutique.artisam.dev/payment/success",
-                    "failure" => "https://boutique.artisam.dev/payment/failure",
-                    "pending" => "https://boutique.artisam.dev/payment/pending"
-                ],
-                "auto_return" => "approved",
-                "notification_url" => "https://sagacious-attestable-coy.ngrok-free.dev/mp/webhook",
-                "shipments" => [
-                    "cost" => $this->shipping,
-                    "mode" => "not_specified",
-                ],
-            ]);
+                "address" => [
+                    "street_name" => $this->address
+                ]
+            ],
+            "external_reference" => (string) $orderId, 
+            "back_urls" => [
+                "success" => "https://boutique.artisam.dev/payment/success",
+                "failure" => "https://boutique.artisam.dev/payment/failure",
+                "pending" => "https://boutique.artisam.dev/payment/pending"
+            ],
+            "auto_return" => "approved",
+            "notification_url" => "https://sagacious-attestable-coy.ngrok-free.dev/mp/webhook",
+            "shipments" => [
+                "cost" => $this->shipping,
+                "mode" => "not_specified",
+            ],
+        ]);
 
-            return redirect()->away($preference->init_point);
+        return redirect()->away($preference->init_point);
+    }
 
-        } catch (\Exception $e) {
-            Log::error('MP Error: ' . $e->getMessage());
-            session()->flash('error', 'Error al procesar: ' . $e->getMessage());
-        }
+    private function createOrder()
+    {
+        $contactInfo = "Cliente: {$this->firstName} {$this->lastName} | Tel: {$this->phone}";
+
+        return Order::create([
+            'user_id' => auth()->id() ?? 1,
+            'number' => 'ORD-' . strtoupper(uniqid()),
+            'total_amount' => $this->calculateTotal() - $this->shipping,
+            'shipping_amount' => $this->shipping,
+            'status' => 'pending',
+            'currency' => 'PEN',
+            'shipping_street' => $this->address,
+            'notes' => $contactInfo . " | Notas: " . $this->notes,
+        ]);
     }
 
     public function getSubtotalProperty() { 
