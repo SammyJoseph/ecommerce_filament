@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('number', 32)->unique()->nullable();
             $table->decimal('total_amount', 10, 2)->nullable();
+            $table->decimal('shipping_amount', 10, 2)->default(0);
             $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending');
             $table->string('currency')->default('usd');
             $table->string('shipping_street')->nullable();

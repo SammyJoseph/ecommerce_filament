@@ -19388,10 +19388,10 @@ h3.cart-page-title {
   text-decoration: underline;
 }
 
-.your-order-area .your-order-wrap .payment-method .sin-payment .payment-box {
+/* .your-order-area .your-order-wrap .payment-method .sin-payment .payment-box {
   margin: 6px 0 0;
   display: none;
-}
+} */
 
 .your-order-area .your-order-wrap .payment-method .sin-payment .payment-box p {
   font-size: 14px;
@@ -19408,7 +19408,8 @@ h3.cart-page-title {
   }
 }
 
-.your-order-area .Place-order a {
+.your-order-area .Place-order a,
+.your-order-area .Place-order button {
   background-color: #ff2f2f;
   display: block;
   cursor: pointer;
@@ -19422,7 +19423,8 @@ h3.cart-page-title {
   text-align: center;
 }
 
-.your-order-area .Place-order a:hover {
+.your-order-area .Place-order a:hover,
+.your-order-area .Place-order button:hover {
   background-color: #333;
 }
 

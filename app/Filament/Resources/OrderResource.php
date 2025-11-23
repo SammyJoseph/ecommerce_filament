@@ -205,6 +205,8 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('total_amount')
                     ->money('S/.')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('shipping_amount')
+                    ->money('S/.'),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {

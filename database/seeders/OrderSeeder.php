@@ -23,7 +23,7 @@ class OrderSeeder extends Seeder
         }
 
         // Create 50 orders distributed throughout 2025
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $user = $users->random();
             $selectedProducts = $products->random(rand(1, 3));
 

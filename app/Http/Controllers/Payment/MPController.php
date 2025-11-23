@@ -76,8 +76,10 @@ class MPController extends Controller
     {
         return [
             'id' => $payment->id ?? null,
+            'external_reference' => $payment->external_reference ?? null,
             'status' => $payment->status ?? null,
             'transaction_amount' => $payment->transaction_amount ?? 0,
+            'shipping_amount' => $payment->shipping_amount ?? 0,
             'payer' => [
                 'email' => $payment->payer->email ?? null,
                 'name' => $payment->payer->first_name ?? null,
