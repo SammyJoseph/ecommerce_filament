@@ -72,16 +72,20 @@ class UserResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('last_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('phone_number')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('roles.name')
                     ->label('Role')
                     ->sortable()
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
+                /* Tables\Columns\TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable(),
-                /* Tables\Columns\TextColumn::make('two_factor_confirmed_at')
+                Tables\Columns\TextColumn::make('two_factor_confirmed_at')
                     ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('current_team_id')

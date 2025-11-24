@@ -27,7 +27,7 @@ class LatestOrdersTable extends BaseWidget
                     ->date('M d, Y')
                     ->sortable(),
                 
-                Tables\Columns\TextColumn::make('order_number')
+                Tables\Columns\TextColumn::make('number')
                     ->label('Number')
                     ->searchable()
                     ->sortable()

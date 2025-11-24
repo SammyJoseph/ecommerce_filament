@@ -8,6 +8,7 @@ use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\MercadoPagoConfig;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
@@ -105,8 +106,10 @@ class Checkout extends Component
     {
         $contactInfo = "Cliente: {$this->firstName} {$this->lastName} | Tel: {$this->phone}";
 
+        $userId = $this->resolveUserId();
+
         $order = Order::create([
-            'user_id' => auth()->id() ?? 1,
+            'user_id' => $userId,
             'number' => 'ORD-' . strtoupper(uniqid()),
             'total_amount' => $this->calculateTotal() - $this->shipping,
             'shipping_amount' => $this->shipping,
@@ -126,6 +129,31 @@ class Checkout extends Component
         }
 
         return $order;
+    }
+
+    private function resolveUserId()
+    {
+        if (auth()->check()) {
+            return auth()->id();
+        }
+
+        $user = User::where('email', $this->email)->first();
+
+        if ($user) {
+            return $user->id;
+        }
+
+        $user = User::create([
+            'name' => $this->firstName,
+            'last_name' => $this->lastName,
+            'email' => $this->email,
+            'phone_number' => $this->phone,
+            'password' => bcrypt(uniqid()),
+        ]);
+
+        auth()->login($user);
+
+        return $user->id;
     }
 
     public function getSubtotalProperty() { 
