@@ -28,7 +28,7 @@ class UserAddresses extends Component
         'district' => 'required|string|max:255',
         'address' => 'required|string|max:255',
         'reference' => 'nullable|string|max:255',
-        'address_type' => 'nullable|string|max:255',
+        'address_type' => 'required|in:home,work,other',
         'is_default' => 'boolean',
     ];
 
@@ -135,7 +135,7 @@ class UserAddresses extends Component
         $this->district = '';
         $this->address = '';
         $this->reference = '';
-        $this->address_type = '';
+        $this->address_type = 'home';
         $this->is_default = false;
         $this->address_id = null;
     }

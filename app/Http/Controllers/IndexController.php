@@ -45,26 +45,5 @@ class IndexController extends Controller
             ->get();
 
         return view('product.product-details', compact('product', 'variantCombinations', 'relatedProducts'));
-    }
-
-    public function myAccount()
-    {
-        $user = auth()->user();
-        $orders = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(10);
-        return view('user.my-account', compact('user', 'orders'));
-    }
-
-    public function orderDetails(Order $order)
-    {
-        $user = auth()->user();
-
-        if ($order->user_id !== $user->id) {
-            abort(403);
-        }
-
-        $order->load('orderItems.product');
-        $orders = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(10);
-
-        return view('user.my-account', compact('user', 'orders', 'order'));
-    }
+    }    
 }

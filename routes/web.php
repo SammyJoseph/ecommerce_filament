@@ -4,10 +4,10 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\Payment\MPController;
 use App\Http\Controllers\Product\CartController;
+use App\Http\Controllers\UserController;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/index1', [IndexController::class, 'index'])->name('index');
 Route::get('/product/{product}', [IndexController::class, 'productDetails'])->name('product.details');
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
@@ -21,8 +21,13 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/my-account', [IndexController::class, 'myAccount'])->name('user.my-account');
-    Route::get('/my-account/order/{order}', [IndexController::class, 'orderDetails'])->name('user.order.details');
+    Route::get('/my-account', [UserController::class, 'myAccount'])->name('user.my-account');
+    Route::get('/my-account/orders', [UserController::class, 'orders'])->name('user.orders');
+    Route::get('/my-account/order/{order}', [UserController::class, 'orderDetails'])->name('user.order.details');
+    Route::get('/my-account/address', [UserController::class, 'address'])->name('user.address');
+    Route::get('/my-account/details', [UserController::class, 'accountDetails'])->name('user.details');
+    Route::get('/my-account/download', [UserController::class, 'download'])->name('user.download');
+    Route::get('/my-account/payment-method', [UserController::class, 'paymentMethod'])->name('user.payment-method');
 });
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
