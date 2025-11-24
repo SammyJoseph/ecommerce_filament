@@ -82,7 +82,7 @@
                                                         @forelse ($orders as $listOrder)
                                                             <tr>
                                                                 <td><a href="{{ route('user.order.details', $listOrder) }}">{{ $listOrder->number }}</a></td>
-                                                                <td>{{ $listOrder->created_at->format('M d, Y') }}</td>
+                                                                <td>{{ $listOrder->created_at->format('M d, Y') }} <span class="tw-opacity-70">{{ $listOrder->created_at->format('g:i A') }}</span></td>
                                                                 <td>
                                                                     @php
                                                                         $status = $listOrder->status;
@@ -159,7 +159,7 @@
                                                             </tr>
                                                             <tr class="tw-bg-gray-50">
                                                                 <td colspan="3" class="text-right"><strong>Total</strong></td>
-                                                                <td><strong>${{ $order->total_amount }}</strong></td>
+                                                                <td><strong>${{ $order->total_amount + $order->shipping_amount }}</strong></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -233,20 +233,7 @@
                                         </div>
                                     </div>
                                     <!-- Single Tab Content End -->
-                                    <!-- Single Tab Content Start -->
-                                    <div class="tab-pane fade" id="address-edit" role="tabpanel">
-                                        <div class="myaccount-content">
-                                            <h3>Billing Address</h3>
-                                            <address>
-                                                <p><strong>Alex Tuntuni</strong></p>
-                                                <p>1355 Market St, Suite 900 <br>
-                                            San Francisco, CA 94103</p>
-                                                <p>Mobile: (123) 456-7890</p>
-                                            </address>
-                                            <a href="#" class="check-btn sqr-btn "><i class="fa fa-edit"></i> Edit Address</a>
-                                        </div>
-                                    </div>
-                                    <!-- Single Tab Content End -->
+                                    @include('user._partials.address')
                                     <!-- Single Tab Content Start -->
                                     <div class="tab-pane fade" id="account-info" role="tabpanel">
                                         <div class="myaccount-content">
