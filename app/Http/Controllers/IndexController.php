@@ -9,7 +9,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
-{
+{    
     public function index()
     {
         $categories = Category::with(['products' => function($query) {
@@ -50,7 +50,7 @@ class IndexController extends Controller
     public function myAccount()
     {
         $user = auth()->user();
-        $orders = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        $orders = Order::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(10);
         return view('user.my-account', compact('user', 'orders'));
     }
 

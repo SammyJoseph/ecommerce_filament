@@ -19,65 +19,39 @@ class OrderService
             DB::beginTransaction();
 
             $externalReference = $paymentData['external_reference'] ?? null;
-            $order = null;
-
-            if ($externalReference) {
-                $order = Order::find($externalReference);
+            
+            if (!$externalReference) {
+                Log::error('OrderService: No external_reference found in payment data', ['paymentData' => $paymentData]);
+                return null;
             }
 
-            if ($order) {
-                $order->status = 'processing';
-                $order->shipping_amount = $paymentData['shipping_amount'] ?? 0;
-                $order->total_amount = $this->calculateTotalAmount($paymentData);
-                $order->save();
+            $order = Order::find($externalReference);
 
-                if (!$order->user_id) {
-                   $userId = $this->getUserIdFromPayment($paymentData);
-                   $order->user_id = $userId;
-                   $order->save();
-                }
-
-                DB::commit();
-                return $order;
+            if (!$order) {
+                Log::error('OrderService: Order not found for external_reference', ['external_reference' => $externalReference]);
+                return null;
             }
 
-            $userId = Auth::id() ?? $this->getUserIdFromPayment($paymentData);
+            Log::info('OrderService: Order found', ['order_id' => $order->id]);
+
+            $order->status = 'processing';
+            $order->shipping_amount = $paymentData['shipping_amount'] ?? 0;
+            $order->total_amount = $this->calculateTotalAmount($paymentData);
             
-            $order = Order::create([
-                'user_id' => $userId,
-                'number' => 'ORD-' . ($paymentData['id'] ?? uniqid()),
-                'total_amount' => $this->calculateTotalAmount($paymentData),
-                'shipping_amount' => $paymentData['shipping_amount'] ?? 0,
-                'status' => 'processing',
-                'shipping_street' => 'Dirección desde MP',
-                'notes' => 'Orden creada automáticamente desde Webhook (Fallback)',
-            ]);
+            if (!$order->user_id) {
+                $userId = $this->getUserIdFromPayment($paymentData);
+                $order->user_id = $userId;
+            }
             
-            $this->createOrderItems($order, $paymentData);
-            
+            $order->save();
+
             DB::commit();
-            
             return $order;
-            
+
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error processing order from webhook: ' . $e->getMessage());
             return null;
-        }
-    }
-    
-    private function createOrderItems(Order $order, array $paymentData): void
-    {
-        if (!isset($paymentData['additional_info']['items'])) return;
-        
-        $items = $paymentData['additional_info']['items'];
-        foreach ($items as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item['id'] ?? null,
-                'quantity' => $item['quantity'] ?? 0,
-                'price' => $item['unit_price'] ?? 0,
-            ]);
         }
     }
 

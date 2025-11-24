@@ -28,9 +28,11 @@
                         <div class="row">
                             <div class="col-lg-3 col-md-4">
                                 <div class="myaccount-tab-menu nav" role="tablist">
-                                    <a href="#dashboad" class="{{ !isset($order) ? 'active' : '' }}" data-bs-toggle="tab"><i class="fa fa-dashboard"></i>
-                                        Dashboard</a>
-                                    <a href="{{ isset($order) ? route('user.my-account').'#orders' : '#orders' }}" class="{{ isset($order) ? 'active' : '' }}" @if(!isset($order)) data-bs-toggle="tab" @endif><i class="fa fa-cart-arrow-down"></i> Orders</a>
+                                    <a href="#dashboad" class="{{ !isset($order) && !request()->has('page') ? 'active' : '' }}" data-bs-toggle="tab">
+                                        <i class="fa fa-dashboard"></i>
+                                        Dashboard
+                                    </a>
+                                    <a href="{{ isset($order) ? route('user.my-account').'#orders' : '#orders' }}" class="{{ isset($order) || request()->has('page') ? 'active' : '' }}" @if(!isset($order)) data-bs-toggle="tab" @endif><i class="fa fa-cart-arrow-down"></i> Orders</a>
                                     <a href="#download" data-bs-toggle="tab"><i class="fa fa-cloud-download"></i> Download</a>
                                     <a href="#payment-method" data-bs-toggle="tab"><i class="fa fa-credit-card"></i> Payment
                                         Method</a>
@@ -44,7 +46,7 @@
                             <div class="col-lg-9 col-md-8">
                                 <div class="tab-content" id="myaccountContent">
                                     <!-- Single Tab Content Start -->
-                                    <div class="tab-pane fade {{ !isset($order) ? 'show active' : '' }}" id="dashboad" role="tabpanel">
+                                    <div class="tab-pane fade {{ !isset($order) && !request()->has('page') ? 'show active' : '' }}" id="dashboad" role="tabpanel">
                                         <div class="myaccount-content">
                                             <h3>Dashboard</h3>
                                             <div class="welcome">
@@ -60,7 +62,7 @@
                                     </div>
                                     <!-- Single Tab Content End -->
                                     <!-- Single Tab Content Start -->
-                                    <div class="tab-pane fade" id="orders" role="tabpanel">
+                                    <div class="tab-pane fade {{ request()->has('page') ? 'show active' : '' }}" id="orders" role="tabpanel">
                                         <div class="myaccount-content">
                                             <h3>Orders</h3>
                                             <div class="myaccount-table table-responsive text-center">
@@ -70,20 +72,44 @@
                                                             <th>Order</th>
                                                             <th>Date</th>
                                                             <th>Status</th>
-                                                            <th>Total</th>
+                                                            <th>Price</th>
                                                             <th>Shipping</th>
+                                                            <th>Total</th>
                                                             <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @forelse ($orders as $listOrder)
                                                             <tr>
-                                                                <td>{{ $listOrder->id }}</td>
+                                                                <td><a href="{{ route('user.order.details', $listOrder) }}">{{ $listOrder->number }}</a></td>
                                                                 <td>{{ $listOrder->created_at->format('M d, Y') }}</td>
-                                                                <td><span class="{{ $listOrder->status == 'completed' ? 'text-success' : ($listOrder->status == 'cancelled' ? 'text-danger' : 'text-secondary') }}">{{ $listOrder->status }}</span></td>
+                                                                <td>
+                                                                    @php
+                                                                        $status = $listOrder->status;
+                                                                        $config = match($status) {
+                                                                            'pending' => ['class' => 'text-info', 'icon' => 'heroicon-m-sparkles'],
+                                                                            'processing' => ['class' => 'text-warning', 'icon' => 'heroicon-m-arrow-path'],
+                                                                            'shipped' => ['class' => 'text-success', 'icon' => 'heroicon-m-truck'],
+                                                                            'delivered' => ['class' => 'text-success', 'icon' => 'heroicon-m-check-badge'],
+                                                                            'cancelled' => ['class' => 'text-danger', 'icon' => 'heroicon-m-x-circle'],
+                                                                            default => ['class' => 'text-secondary', 'icon' => null],
+                                                                        };
+                                                                    @endphp
+                                                                    <span class="{{ $config['class'] }}" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                                                                        @if($config['icon'])
+                                                                            @svg($config['icon'], ['style' => 'width: 18px; height: 18px;'])
+                                                                        @endif
+                                                                        {{ ucfirst($status) }}
+                                                                    </span>
+                                                                </td>
                                                                 <td>${{ $listOrder->total_amount }}</td>
                                                                 <td>${{ $listOrder->shipping_amount }}</td>
-                                                                <td><a href="{{ route('user.order.details', $listOrder) }}" class="check-btn sqr-btn ">View</a></td>
+                                                                <td>${{ number_format($listOrder->total_amount + $listOrder->shipping_amount, 2) }}</td>
+                                                                <td>
+                                                                    <a href="{{ route('user.order.details', $listOrder) }}" class="check-btn sqr-btn tw-text-zinc-800">
+                                                                        <svg class="tw-w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Z"/></svg>
+                                                                    </a>
+                                                                </td>
                                                             </tr>
                                                         @empty
                                                             <tr>
@@ -92,6 +118,9 @@
                                                         @endforelse
                                                     </tbody>
                                                 </table>
+                                            </div>
+                                            <div class="mt-4">
+                                                {{ $orders->links() }}
                                             </div>
                                         </div>
                                     </div>
@@ -121,6 +150,14 @@
                                                                 </tr>
                                                             @endforeach
                                                             <tr>
+                                                                <td colspan="3" class="text-right">Subtotal</td>
+                                                                <td>${{ number_format($order->total_amount, 2) }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="3" class="text-right">Shipping</td>
+                                                                <td>${{ number_format($order->shipping_amount, 2) }}</td>
+                                                            </tr>
+                                                            <tr class="tw-bg-gray-50">
                                                                 <td colspan="3" class="text-right"><strong>Total</strong></td>
                                                                 <td><strong>${{ $order->total_amount }}</strong></td>
                                                             </tr>
@@ -128,7 +165,26 @@
                                                     </table>
                                                 </div>
                                                 <div class="mt-3">
-                                                    <p><strong>Status:</strong> <span class="{{ $order->status == 'completed' ? 'text-success' : ($order->status == 'cancelled' ? 'text-danger' : 'text-secondary') }}">{{ $order->status }}</span></p>
+                                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                                        <strong>Status:</strong>
+                                                        @php
+                                                            $status = $order->status;
+                                                            $config = match($status) {
+                                                                'pending' => ['class' => 'text-info', 'icon' => 'heroicon-m-sparkles'],
+                                                                'processing' => ['class' => 'text-warning', 'icon' => 'heroicon-m-arrow-path'],
+                                                                'shipped' => ['class' => 'text-success', 'icon' => 'heroicon-m-truck'],
+                                                                'delivered' => ['class' => 'text-success', 'icon' => 'heroicon-m-check-badge'],
+                                                                'cancelled' => ['class' => 'text-danger', 'icon' => 'heroicon-m-x-circle'],
+                                                                default => ['class' => 'text-secondary', 'icon' => null],
+                                                            };
+                                                        @endphp
+                                                        <span class="{{ $config['class'] }}" style="display: flex; align-items: center; gap: 5px;">
+                                                            @if($config['icon'])
+                                                                @svg($config['icon'], ['style' => 'width: 18px; height: 18px;'])
+                                                            @endif
+                                                            {{ ucfirst($status) }}
+                                                        </span>
+                                                    </div>
                                                     <p><strong>Date:</strong> {{ $order->created_at->format('M d, Y h:i A') }}</p>
                                                     <p><strong>Shipping Address:</strong> {{ $order->shipping_address }}</p>
                                                 </div>

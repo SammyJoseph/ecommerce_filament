@@ -6,7 +6,8 @@ use Livewire\Component;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\MercadoPagoConfig;
-use App\Models\Order; 
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
@@ -104,7 +105,7 @@ class Checkout extends Component
     {
         $contactInfo = "Cliente: {$this->firstName} {$this->lastName} | Tel: {$this->phone}";
 
-        return Order::create([
+        $order = Order::create([
             'user_id' => auth()->id() ?? 1,
             'number' => 'ORD-' . strtoupper(uniqid()),
             'total_amount' => $this->calculateTotal() - $this->shipping,
@@ -114,6 +115,17 @@ class Checkout extends Component
             'shipping_street' => $this->address,
             'notes' => $contactInfo . " | Notas: " . $this->notes,
         ]);
+
+        foreach (Cart::instance('shopping')->content() as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item->options->product_id ?? $item->id,
+                'quantity' => $item->qty,
+                'price' => (float) $item->price,
+            ]);
+        }
+
+        return $order;
     }
 
     public function getSubtotalProperty() { 
@@ -139,7 +151,14 @@ class Checkout extends Component
 
     private function getCartItems() {
         $items = [];
-        foreach (Cart::instance('shopping')->content() as $item) {
+        $cartContent = Cart::instance('shopping')->content();
+        
+        Log::info('Checkout: Processing cart items', [
+            'count' => $cartContent->count(),
+            'content_dump' => $cartContent->toArray()
+        ]);
+
+        foreach ($cartContent as $item) {
             $items[] = [
                 "id" => $item->options->product_id ?? $item->id,
                 "title" => $item->name,
