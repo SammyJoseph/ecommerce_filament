@@ -14,13 +14,22 @@ class UserAddresses extends Component
 
     // Form fields
     public $address_id;
-    public $department;
-    public $province;
-    public $district;
+    public $department = '';
+    public $province = '';
+    public $district = '';
     public $address;
     public $reference;
-    public $address_type;
+    public $address_type = 'home';
     public $is_default = false;
+
+    // Ubigeo Data
+    public $departments = [];
+    public $provinces = [];
+    public $districts = [];
+    
+    public $selectedDeptId = '';
+    public $selectedProvId = '';
+    public $selectedDistId = '';
 
     protected $rules = [
         'department' => 'required|string|max:255',
@@ -32,10 +41,68 @@ class UserAddresses extends Component
         'is_default' => 'boolean',
     ];
 
+    public function mount()
+    {
+        $this->loadDepartments();
+    }
+
     public function render()
     {
         $this->addresses = Auth::user()->addresses;
         return view('livewire.user-addresses');
+    }
+
+    protected function loadDepartments()
+    {
+        $path = storage_path('app/ubigeo/departamentos.json');
+        if (file_exists($path)) {
+            $this->departments = json_decode(file_get_contents($path), true);
+        }
+    }
+
+    public function updatedSelectedDeptId($value)
+    {
+        $dept = collect($this->departments)->firstWhere('id_ubigeo', $value);
+        $this->department = $dept['nombre_ubigeo'] ?? '';
+        
+        $this->selectedProvId = '';
+        $this->selectedDistId = '';
+        $this->province = '';
+        $this->district = '';
+        $this->provinces = [];
+        $this->districts = [];
+
+        if ($value) {
+            $path = storage_path('app/ubigeo/provincias.json');
+            if (file_exists($path)) {
+                $allProvinces = json_decode(file_get_contents($path), true);
+                $this->provinces = $allProvinces[$value] ?? [];
+            }
+        }
+    }
+
+    public function updatedSelectedProvId($value)
+    {
+        $prov = collect($this->provinces)->firstWhere('id_ubigeo', $value);
+        $this->province = $prov['nombre_ubigeo'] ?? '';
+        
+        $this->selectedDistId = '';
+        $this->district = '';
+        $this->districts = [];
+
+        if ($value) {
+            $path = storage_path('app/ubigeo/distritos.json');
+            if (file_exists($path)) {
+                $allDistricts = json_decode(file_get_contents($path), true);
+                $this->districts = $allDistricts[$value] ?? [];
+            }
+        }
+    }
+
+    public function updatedSelectedDistId($value)
+    {
+        $dist = collect($this->districts)->firstWhere('id_ubigeo', $value);
+        $this->district = $dist['nombre_ubigeo'] ?? '';
     }
 
     public function create()
@@ -61,8 +128,46 @@ class UserAddresses extends Component
         $this->address_type = $address->address_type;
         $this->is_default = (bool) $address->is_default;
 
+        // Reverse lookup for dropdowns
+        $this->reverseLookupUbigeo();
+
         $this->isEditing = true;
         $this->isCreating = false;
+    }
+
+    protected function reverseLookupUbigeo()
+    {
+        // 1. Find Department ID
+        $dept = collect($this->departments)->firstWhere('nombre_ubigeo', $this->department);
+        if ($dept) {
+            $this->selectedDeptId = $dept['id_ubigeo'];
+            
+            // Load Provinces
+            $pathProv = storage_path('app/ubigeo/provincias.json');
+            if (file_exists($pathProv)) {
+                $allProvinces = json_decode(file_get_contents($pathProv), true);
+                $this->provinces = $allProvinces[$this->selectedDeptId] ?? [];
+                
+                // 2. Find Province ID
+                $prov = collect($this->provinces)->firstWhere('nombre_ubigeo', $this->province);
+                if ($prov) {
+                    $this->selectedProvId = $prov['id_ubigeo'];
+                    
+                    // Load Districts
+                    $pathDist = storage_path('app/ubigeo/distritos.json');
+                    if (file_exists($pathDist)) {
+                        $allDistricts = json_decode(file_get_contents($pathDist), true);
+                        $this->districts = $allDistricts[$this->selectedProvId] ?? [];
+                        
+                        // 3. Find District ID
+                        $dist = collect($this->districts)->firstWhere('nombre_ubigeo', $this->district);
+                        if ($dist) {
+                            $this->selectedDistId = $dist['id_ubigeo'];
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public function store()
@@ -138,5 +243,11 @@ class UserAddresses extends Component
         $this->address_type = 'home';
         $this->is_default = false;
         $this->address_id = null;
+        
+        $this->selectedDeptId = '';
+        $this->selectedProvId = '';
+        $this->selectedDistId = '';
+        $this->provinces = [];
+        $this->districts = [];
     }
 }
