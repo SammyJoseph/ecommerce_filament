@@ -18,12 +18,8 @@ return new class extends Migration
             $table->decimal('total_amount', 10, 2)->nullable();
             $table->decimal('shipping_amount', 10, 2)->default(0);
             $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending');
-            $table->string('currency')->default('usd');
-            $table->string('shipping_street')->nullable();
-            $table->string('shipping_city')->nullable();
-            $table->string('shipping_state')->nullable();
-            $table->string('shipping_zip')->nullable();
-            $table->string('shipping_country')->nullable();
+            $table->string('currency')->default('pen');
+            $table->foreignId('shipping_address_id')->nullable()->constrained('user_addresses')->onDelete('set null');
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

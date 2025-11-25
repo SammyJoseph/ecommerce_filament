@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\UserAddress;
 
 class OrderSeeder extends Seeder
 {
@@ -25,6 +26,13 @@ class OrderSeeder extends Seeder
         // Create 50 orders distributed throughout 2025
         for ($i = 0; $i < 20; $i++) {
             $user = $users->random();
+
+            $shippingAddress = UserAddress::create([
+                'user_id' => $user->id,
+                'address' => fake()->streetAddress,
+                'reference' => fake()->secondaryAddress,
+            ]);
+
             $selectedProducts = $products->random(rand(1, 3));
 
             $total = 0;
@@ -64,12 +72,8 @@ class OrderSeeder extends Seeder
                 'total_amount' => $total,
                 'shipping_amount' => fake()->randomFloat(2, 10, 20),
                 'status' => $status,
-                'currency' => 'usd',
-                'shipping_street' => 'Sample Street ' . ($i + 1),
-                'shipping_city' => 'Sample City',
-                'shipping_state' => 'Sample State',
-                'shipping_zip' => '12345',
-                'shipping_country' => 'Sample Country',
+                'currency' => 'pen',
+                'shipping_address_id' => $shippingAddress->id,
                 'notes' => 'Auto-generated order',
                 'created_at' => $randomDate,
                 'updated_at' => $randomDate,

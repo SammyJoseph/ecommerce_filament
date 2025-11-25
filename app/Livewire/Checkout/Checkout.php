@@ -9,6 +9,7 @@ use MercadoPago\MercadoPagoConfig;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
+use App\Models\UserAddress;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +22,8 @@ class Checkout extends Component
     public $address;
     public $reference;
     public $notes;
-    
+    public $shippingAddresses = [];
+    public $selectedShippingAddressId = '';
     public $paymentMethod = 'mercadopago';
 
     protected $rules = [
@@ -38,11 +40,13 @@ class Checkout extends Component
         if (auth()->check()) {
             $user = auth()->user();
             $this->firstName = $user->name;
-            $this->lastName = $user->last_name ?? ''; 
+            $this->lastName = $user->last_name ?? '';
             $this->email = $user->email;
             $this->phone = $user->phone_number ?? '';
             $this->address = $user->defaultAddress->address ?? '';
             $this->reference = $user->defaultAddress->reference ?? '';
+            $this->shippingAddresses = $user->addresses;
+            $this->selectedShippingAddressId = $user->defaultAddress?->id ?? '';
         }
     }
 
@@ -107,6 +111,7 @@ class Checkout extends Component
         $contactInfo = "Cliente: {$this->firstName} {$this->lastName} | Tel: {$this->phone}";
 
         $userId = $this->resolveUserId();
+        $shippingAddressId = $this->resolveAddressId();
 
         $order = Order::create([
             'user_id' => $userId,
@@ -115,7 +120,7 @@ class Checkout extends Component
             'shipping_amount' => $this->shipping,
             'status' => 'pending',
             'currency' => 'PEN',
-            'shipping_street' => $this->address,
+            'shipping_address_id' => $shippingAddressId,
             'notes' => $contactInfo . " | Notas: " . $this->notes,
         ]);
 
@@ -156,7 +161,40 @@ class Checkout extends Component
         return $user->id;
     }
 
-    public function getSubtotalProperty() { 
+    private function resolveAddressId()
+    {
+        if (auth()->check() && $this->selectedShippingAddressId) {
+            $shippingAddress = UserAddress::where('id', $this->selectedShippingAddressId)
+                ->where('user_id', $userId)
+                ->firstOrFail();
+            return $shippingAddress->id;
+        } else {
+            $shippingAddress = UserAddress::create([
+                'user_id' => $userId,
+                'address' => $this->address,
+                'reference' => $this->reference ?? '',
+            ]);
+            return $shippingAddress->id;
+        }
+    }
+
+    public function updatedSelectedShippingAddressId($value)
+    {
+        if ($value) {
+            $address = UserAddress::where('id', $value)
+                ->where('user_id', auth()->id())
+                ->first();
+            if ($address) {
+                $this->address = $address->address;
+                $this->reference = $address->reference ?? '';
+            } else {
+                $this->address = '';
+                $this->reference = '';
+            }
+        }
+    }
+
+    public function getSubtotalProperty() {
         return (float) str_replace(',', '', Cart::instance('shopping')->subtotal()); 
     }
     

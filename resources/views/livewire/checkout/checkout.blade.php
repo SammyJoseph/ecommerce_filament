@@ -35,7 +35,20 @@
                             <input type="text" wire:model="phone" class="@error('phone') border-danger @enderror">
                             @error('phone') <span class="text-danger text-small">{{ $message }}</span> @enderror
                         </div>
-                    </div> 
+                    </div>
+                    @if(auth()->check())
+                    <div class="col-lg-12 mb-3">
+                        <label class="form-label">Select existing address (optional)</label>
+                        <select wire:model.live="selectedShippingAddressId" class="form-select">
+                            <option value="">Enter new address below</option>
+                            @foreach($shippingAddresses as $addr)
+                            <option value="{{ $addr->id }}">
+                                {{ $addr->department }}, {{ $addr->province }}, {{ $addr->district }} - {{ $addr->address }} @if($addr->reference)({{ $addr->reference }})@endif
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endif
                     <div class="col-lg-12">
                         <div class="billing-info mb-20">
                             <label>Street Address <abbr class="required" title="required">*</abbr></label>
