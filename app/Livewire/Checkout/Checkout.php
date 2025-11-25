@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use App\Models\User;
 use App\Models\UserAddress;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class Checkout extends Component
@@ -25,6 +26,22 @@ class Checkout extends Component
     public $shippingAddresses = [];
     public $selectedShippingAddressId = '';
     public $paymentMethod = 'mercadopago';
+    public $isEditingAddress = false;
+
+    // Address fields
+    public $department = '';
+    public $province = '';
+    public $district = '';
+    public $address_type = 'home';
+    
+    // Ubigeo Data
+    public $departments = [];
+    public $provinces = [];
+    public $districts = [];
+    
+    public $selectedDeptId = '';
+    public $selectedProvId = '';
+    public $selectedDistId = '';
 
     protected $rules = [
         'firstName'     => 'required|min:2',
@@ -35,8 +52,61 @@ class Checkout extends Component
         'paymentMethod' => 'required'
     ];
 
+    public function editAddress()
+    {
+        $this->isEditingAddress = true;
+        
+        $address = UserAddress::where('id', $this->selectedShippingAddressId)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        if ($address) {
+            $this->department = $address->department;
+            $this->province = $address->province;
+            $this->district = $address->district;
+            $this->address_type = $address->address_type;
+            
+            $this->reverseLookupUbigeo();
+        }
+    }
+
+    public function cancelEditAddress()
+    {
+        $this->isEditingAddress = false;
+        $this->updatedSelectedShippingAddressId($this->selectedShippingAddressId);
+    }
+
+    public function saveAddress()
+    {
+        $this->validate([
+            'address' => 'required',
+            'reference' => 'nullable',
+            'department' => 'required',
+            'province' => 'required',
+            'district' => 'required',
+            'address_type' => 'required|in:home,work,other',
+        ]);
+
+        $address = UserAddress::where('id', $this->selectedShippingAddressId)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $address->update([
+            'address' => $this->address,
+            'reference' => $this->reference,
+            'department' => $this->department,
+            'province' => $this->province,
+            'district' => $this->district,
+            'address_type' => $this->address_type,
+        ]);
+
+        $this->isEditingAddress = false;
+        $this->shippingAddresses = auth()->user()->addresses;
+    }
+
     public function mount()
     {
+        $this->loadDepartments();
         if (auth()->check()) {
             $user = auth()->user();
             $this->firstName = $user->name;
@@ -53,6 +123,18 @@ class Checkout extends Component
     public function placeOrder()
     {
         $this->validate();
+
+        if (empty($this->selectedShippingAddressId)) {
+            $this->validate([
+                'department' => 'required',
+                'province' => 'required',
+                'district' => 'required',
+            ], [
+                'department.required' => 'El departamento es requerido.',
+                'province.required' => 'La provincia es requerida.',
+                'district.required' => 'El distrito es requerido.',
+            ]);
+        }
 
         if ($this->paymentMethod === 'mercadopago') {
             DB::beginTransaction();
@@ -111,7 +193,7 @@ class Checkout extends Component
         $contactInfo = "Cliente: {$this->firstName} {$this->lastName} | Tel: {$this->phone}";
 
         $userId = $this->resolveUserId();
-        $shippingAddressId = $this->resolveAddressId();
+        $shippingAddressId = $this->resolveAddressId($userId);
 
         $order = Order::create([
             'user_id' => $userId,
@@ -145,6 +227,7 @@ class Checkout extends Component
         $user = User::where('email', $this->email)->first();
 
         if ($user) {
+            auth()->login($user);
             return $user->id;
         }
 
@@ -161,7 +244,7 @@ class Checkout extends Component
         return $user->id;
     }
 
-    private function resolveAddressId()
+    private function resolveAddressId($userId)
     {
         if (auth()->check() && $this->selectedShippingAddressId) {
             $shippingAddress = UserAddress::where('id', $this->selectedShippingAddressId)
@@ -171,8 +254,13 @@ class Checkout extends Component
         } else {
             $shippingAddress = UserAddress::create([
                 'user_id' => $userId,
+                'department' => $this->department,
+                'province' => $this->province,
+                'district' => $this->district,
                 'address' => $this->address,
                 'reference' => $this->reference ?? '',
+                'address_type' => $this->address_type,
+                'is_default' => true,
             ]);
             return $shippingAddress->id;
         }
@@ -180,6 +268,7 @@ class Checkout extends Component
 
     public function updatedSelectedShippingAddressId($value)
     {
+        $this->isEditingAddress = false;
         if ($value) {
             $address = UserAddress::where('id', $value)
                 ->where('user_id', auth()->id())
@@ -187,10 +276,10 @@ class Checkout extends Component
             if ($address) {
                 $this->address = $address->address;
                 $this->reference = $address->reference ?? '';
-            } else {
-                $this->address = '';
-                $this->reference = '';
             }
+        } else {
+            $this->address = '';
+            $this->reference = '';
         }
     }
 
@@ -213,6 +302,94 @@ class Checkout extends Component
 
     public function calculateTotal() {
         return max(0, $this->subtotal - $this->discount + $this->shipping);
+    }
+
+    protected function loadDepartments()
+    {
+        $path = storage_path('app/ubigeo/departamentos.json');
+        if (file_exists($path)) {
+            $this->departments = json_decode(file_get_contents($path), true);
+        }
+    }
+
+    public function updatedSelectedDeptId($value)
+    {
+        $dept = collect($this->departments)->firstWhere('id_ubigeo', $value);
+        $this->department = $dept['nombre_ubigeo'] ?? '';
+        
+        $this->selectedProvId = '';
+        $this->selectedDistId = '';
+        $this->province = '';
+        $this->district = '';
+        $this->provinces = [];
+        $this->districts = [];
+
+        if ($value) {
+            $path = storage_path('app/ubigeo/provincias.json');
+            if (file_exists($path)) {
+                $allProvinces = json_decode(file_get_contents($path), true);
+                $this->provinces = $allProvinces[$value] ?? [];
+            }
+        }
+    }
+
+    public function updatedSelectedProvId($value)
+    {
+        $prov = collect($this->provinces)->firstWhere('id_ubigeo', $value);
+        $this->province = $prov['nombre_ubigeo'] ?? '';
+        
+        $this->selectedDistId = '';
+        $this->district = '';
+        $this->districts = [];
+
+        if ($value) {
+            $path = storage_path('app/ubigeo/distritos.json');
+            if (file_exists($path)) {
+                $allDistricts = json_decode(file_get_contents($path), true);
+                $this->districts = $allDistricts[$value] ?? [];
+            }
+        }
+    }
+
+    public function updatedSelectedDistId($value)
+    {
+        $dist = collect($this->districts)->firstWhere('id_ubigeo', $value);
+        $this->district = $dist['nombre_ubigeo'] ?? '';
+    }
+
+    protected function reverseLookupUbigeo()
+    {
+        // 1. Find Department ID
+        $dept = collect($this->departments)->firstWhere('nombre_ubigeo', $this->department);
+        if ($dept) {
+            $this->selectedDeptId = $dept['id_ubigeo'];
+            
+            // Load Provinces
+            $pathProv = storage_path('app/ubigeo/provincias.json');
+            if (file_exists($pathProv)) {
+                $allProvinces = json_decode(file_get_contents($pathProv), true);
+                $this->provinces = $allProvinces[$this->selectedDeptId] ?? [];
+                
+                // 2. Find Province ID
+                $prov = collect($this->provinces)->firstWhere('nombre_ubigeo', $this->province);
+                if ($prov) {
+                    $this->selectedProvId = $prov['id_ubigeo'];
+                    
+                    // Load Districts
+                    $pathDist = storage_path('app/ubigeo/distritos.json');
+                    if (file_exists($pathDist)) {
+                        $allDistricts = json_decode(file_get_contents($pathDist), true);
+                        $this->districts = $allDistricts[$this->selectedProvId] ?? [];
+                        
+                        // 3. Find District ID
+                        $dist = collect($this->districts)->firstWhere('nombre_ubigeo', $this->district);
+                        if ($dist) {
+                            $this->selectedDistId = $dist['id_ubigeo'];
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private function getCartItems() {

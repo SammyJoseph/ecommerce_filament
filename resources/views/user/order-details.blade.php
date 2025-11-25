@@ -58,7 +58,8 @@
             </span>
         </div>
         <p><strong>Date:</strong> {{ $order->created_at->format('M d, Y h:i A') }}</p>
-        <p><strong>Shipping Address:</strong> {{ $order->shipping_address }}</p>
+        <p class="tw-mb-1"><strong>Shipping Address:</strong> {{ $order->shippingAddress->address }}</p>
+        <p>{{ $order->shippingAddress->department }}, {{ $order->shippingAddress->province }}, {{ $order->shippingAddress->district }}</p>
         
         <div class="mt-4">
             <a href="{{ route('user.orders') }}" class="check-btn sqr-btn">Back to Orders</a>

@@ -23,15 +23,34 @@ class OrderSeeder extends Seeder
             return;
         }
 
-        // Create 50 orders distributed throughout 2025
+        foreach ($users as $user) {
+            $currentCount = UserAddress::where('user_id', $user->id)->count();
+            $limit = 5;
+            
+            if ($currentCount >= $limit) {
+                continue;
+            }
+
+            $remaining = $limit - $currentCount;
+            $toCreate = rand(1, $remaining);
+
+            for ($j = 0; $j < $toCreate; $j++) {
+                UserAddress::create([
+                    'user_id'   => $user->id,
+                    'department'=> fake()->state,
+                    'province'  => fake()->city,
+                    'district'  => fake()->citySuffix,
+                    'address'   => fake()->streetAddress,
+                    'reference' => fake()->secondaryAddress,
+                ]);
+            }
+        }
+
+        // Create 20 orders distributed throughout 2025
         for ($i = 0; $i < 20; $i++) {
             $user = $users->random();
 
-            $shippingAddress = UserAddress::create([
-                'user_id' => $user->id,
-                'address' => fake()->streetAddress,
-                'reference' => fake()->secondaryAddress,
-            ]);
+            $shippingAddress = $user->addresses()->inRandomOrder()->first();
 
             $selectedProducts = $products->random(rand(1, 3));
 
