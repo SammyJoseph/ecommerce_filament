@@ -17,11 +17,13 @@ class AddToCart extends Component
     public $selectedSizeId = null;
     public $variantCombinations = [];
     public $availableSizes = [];
+    public $showIcon = true;
 
-    public function mount(?Product $product = null, string $classes = '')
+    public function mount(?Product $product = null, string $classes = '', bool $showIcon = true)
     {
         $this->product = $product;
         $this->classes = $classes;
+        $this->showIcon = $showIcon;
 
         // Get variant combinations for products with variants
         if ($this->product && $this->product->has_variants) {

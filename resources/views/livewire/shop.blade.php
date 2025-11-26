@@ -1,4 +1,56 @@
-<div class="shop-area pt-120 pb-120">
+<div class="shop-area pt-120 pb-120" x-data="{
+        product: {},
+        activeImage: '',
+        activeThumbIndex: 0,
+        updateProductData(product) {
+            this.product = { ...product };
+            if (product.images && product.images.length > 0) {
+                this.activeImage = product.images[0];
+                this.activeThumbIndex = 0;
+            }
+            // Reset variant selection
+            this.selectedColor = null;
+            this.selectedSize = null;
+            this.quantity = 1;
+            this.currentPrice = product.price;
+            this.currentSalePrice = product.sale_price;
+        },
+        selectedColor: null,
+        selectedSize: null,
+        quantity: 1,
+        availableSizes: [],
+        currentPrice: 0,
+        currentSalePrice: 0,
+        selectColor(color) {
+            this.selectedColor = color;
+            this.selectedSize = null;
+            
+            // Reset to base product price until size is selected
+            this.currentPrice = this.product.price;
+            this.currentSalePrice = this.product.sale_price;
+
+            if (this.product.variant_combinations && this.product.variant_combinations.colors[color]) {
+                this.availableSizes = this.product.variant_combinations.colors[color].available_sizes;
+                // Update image if color has one
+                if (this.product.variant_combinations.colors[color].image) {
+                    this.activeImage = this.product.variant_combinations.colors[color].image;
+                }
+            } else {
+                this.availableSizes = [];
+            }
+        },
+        selectSize(size) {
+            this.selectedSize = size;
+            if (this.selectedColor && this.product.variant_combinations) {
+                const key = this.selectedColor + '-' + size;
+                const combination = this.product.variant_combinations.combinations[key];
+                if (combination) {
+                    this.currentPrice = combination.price;
+                    this.currentSalePrice = combination.sale_price;
+                }
+            }
+        }
+    }">
     <div class="container">
         <div class="row flex-row-reverse">
             <div class="col-lg-9">
@@ -38,6 +90,20 @@
                         <div id="shop-1" class="tab-pane active">
                             <div class="row">
                                 @foreach ($products as $product)
+                                @php
+                                    $productData = json_encode([
+                                        'name' => $product->name,
+                                        'images' => $product->getMedia('product_images')->map(fn($media) => $media->getUrl('preview'))->all(),
+                                        'thumb_images' => $product->getMedia('product_images')->map(fn($media) => $media->getUrl('thumb'))->all(),
+                                        'price' => $product->price,
+                                        'sale_price' => $product->sale_price,
+                                        'description' => $product->description,
+                                        'id' => $product->id,
+                                        'slug' => $product->slug,
+                                        'has_variants' => $product->has_variants,
+                                        'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
+                                    ]);
+                                @endphp
                                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
                                     <div class="single-product-wrap mb-35">
                                         <div class="product-img product-img-zoom mb-15">
@@ -49,8 +115,7 @@
                                             @endif
                                             <div class="product-action-2 tooltip-style-2">
                                                 <button title="Wishlist"><i class="icon-heart"></i></button>
-                                                <button title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="icon-size-fullscreen icons"></i></button>
-                                                <button title="Compare"><i class="icon-refresh"></i></button>
+                                                <button title="Quick View" x-on:click="updateProductData({{ $productData }})" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="icon-size-fullscreen icons"></i></button>
                                             </div>
                                         </div>
                                         <div class="product-content-wrap-2 text-center">
@@ -95,7 +160,15 @@
                                                 @endif
                                             </div>
                                             <div class="pro-add-to-cart">
-                                                <button title="Add to Cart">Add To Cart</button>
+                                                @if($product->has_variants)
+                                                    <button title="Add to Cart"
+                                                        x-on:click="updateProductData({{ $productData }})"
+                                                        data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                        Add To Cart
+                                                    </button>
+                                                @else
+                                                    @livewire('product.add-to-cart', ['product' => $product, 'showIcon' => false])
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -105,6 +178,20 @@
                         </div>
                         <div id="shop-2" class="tab-pane">
                             @foreach ($products as $product)
+                            @php
+                                $productData = json_encode([
+                                    'name' => $product->name,
+                                    'images' => $product->getMedia('product_images')->map(fn($media) => $media->getUrl('preview'))->all(),
+                                    'thumb_images' => $product->getMedia('product_images')->map(fn($media) => $media->getUrl('thumb'))->all(),
+                                    'price' => $product->price,
+                                    'sale_price' => $product->sale_price,
+                                    'description' => $product->description,
+                                    'id' => $product->id,
+                                    'slug' => $product->slug,
+                                    'has_variants' => $product->has_variants,
+                                    'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
+                                ]);
+                            @endphp
                             <div class="shop-list-wrap mb-30">
                                 <div class="row">
                                     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
@@ -113,7 +200,7 @@
                                                 <img src="{{ $product->getFirstMediaUrl('product_images', 'preview') }}" alt="{{ $product->name }}">
                                             </a>
                                             <div class="product-list-quickview">
-                                                <button title="Quick View" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="icon-size-fullscreen icons"></i></button>
+                                                <button title="Quick View" x-on:click="updateProductData({{ $productData }})" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="icon-size-fullscreen icons"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -142,7 +229,6 @@
                                             <div class="product-list-action">
                                                 <button title="Add To Cart"><i class="icon-basket-loaded"></i></button>
                                                 <button title="Wishlist"><i class="icon-heart"></i></button>
-                                                <button title="Compare"><i class="icon-refresh"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -242,6 +328,7 @@
             </div>
         </div>
     </div>
+    @include('_partials.index.quick-view-modal')
 </div>
 
 @script

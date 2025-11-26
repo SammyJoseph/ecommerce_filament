@@ -122,7 +122,6 @@
                                                 data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                 <i class="icon-size-fullscreen icons"></i><span>Vista Rápida</span>
                                             </button>
-                                            <button class="font-inc"><i class="icon-refresh"></i><span>Compare</span></button>
                                         </div>
                                     </div>
                                 </div>
