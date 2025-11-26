@@ -73,41 +73,7 @@
                                             <li><a href="index-10.html">Home version 10</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="shop.html">SHOP </a>
-                                        <ul class="mega-menu-style mega-menu-mrg-1">
-                                            <li>
-                                                <ul>
-                                                    <li>
-                                                        <a class="dropdown-title" href="#">Shop Layout</a>
-                                                        <ul>
-                                                            <li><a href="shop.html">standard style</a></li>
-                                                            <li><a href="shop-list.html">shop list style</a></li>
-                                                            <li><a href="shop-fullwide.html">shop fullwide</a></li>
-                                                            <li><a href="shop-no-sidebar.html">grid no sidebar</a></li>
-                                                            <li><a href="shop-list-no-sidebar.html">list no sidebar</a></li>
-                                                            <li><a href="shop-right-sidebar.html">shop right sidebar</a></li>
-                                                            <li><a href="store-location.html">store location</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-title" href="#">Products Layout</a>
-                                                        <ul>
-                                                            <li><a href="product-details.html">tab style 1</a></li>
-                                                            <li><a href="product-details-2.html">tab style 2</a></li>
-                                                            <li><a href="product-details-sticky.html">sticky style</a></li>
-                                                            <li><a href="product-details-gallery.html">gallery style </a></li>
-                                                            <li><a href="product-details-affiliate.html">affiliate style</a></li>
-                                                            <li><a href="product-details-group.html">group style</a></li>
-                                                            <li><a href="product-details-fixed-img.html">fixed image style </a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <a href="shop.html"><img src="{{ asset('assets/images/banner/banner-12.png') }}"></a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                    <li><a href="{{ route('shop.index') }}">SHOP </a></li>
                                     <li><a href="#">PAGES </a>
                                         <ul class="sub-menu-style">
                                             <li><a href="about-us.html">about us </a></li>

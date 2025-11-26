@@ -18,12 +18,20 @@ class Shop extends Component
     public $min_price = 0;
     public $max_price;
     public $price_range_max;
+    public $per_page = 12;
+    public $sort_by = '';
+    public $on_sale = false;
+    public $is_new = false;
 
     protected $queryString = [
         'search' => ['except' => ''],
         'category_slug' => ['except' => ''],
         'min_price' => ['except' => 0],
         'max_price' => ['except' => null],
+        'per_page' => ['except' => 12],
+        'sort_by' => ['except' => ''],
+        'on_sale' => ['except' => false],
+        'is_new' => ['except' => false],
     ];
 
     public function mount()
@@ -43,11 +51,46 @@ class Shop extends Component
         $this->resetPage();
     }
 
+    public function updatedPerPage()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSortBy()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedOnSale()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedIsNew()
+    {
+        $this->resetPage();
+    }
+
+    public function clearSearch()
+    {
+        $this->search = '';
+        $this->resetPage();
+    }
+
     public function render()
     {
         $categories = Category::withCount('products')->get();
 
-        $products = Product::query()
+        $on_sale_count = Product::query()->where('is_visible', true)
+            ->where('sale_price', '>', 0)
+            ->whereColumn('sale_price', '<', 'price')
+            ->count();
+
+        $is_new_count = Product::query()->where('is_visible', true)
+            ->where('created_at', '>=', now()->subDays(30))
+            ->count();
+
+        $products = Product::query()->where('is_visible', true)
             ->when($this->search, function (Builder $query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
@@ -55,6 +98,13 @@ class Shop extends Component
                 $query->whereHas('category', function (Builder $query) {
                     $query->where('slug', $this->category_slug);
                 });
+            })
+            ->when($this->on_sale, function (Builder $query) {
+                $query->where('sale_price', '>', 0)
+                      ->whereColumn('sale_price', '<', 'price');
+            })
+            ->when($this->is_new, function (Builder $query) {
+                $query->where('created_at', '>=', now()->subDays(30));
             })
             ->where(function (Builder $query) {
                 $query->where(function (Builder $q) {
@@ -69,8 +119,18 @@ class Shop extends Component
                     })->whereBetween('price', [$this->min_price, $this->max_price]);
                 });
             })
-            ->paginate(12);
+            ->when($this->sort_by, function (Builder $query) {
+                switch ($this->sort_by) {
+                    case 'price_low':
+                        $query->orderByRaw('CASE WHEN sale_price > 0 AND sale_price < price THEN sale_price ELSE price END ASC');
+                        break;
+                    case 'price_high':
+                        $query->orderByRaw('CASE WHEN sale_price > 0 AND sale_price < price THEN sale_price ELSE price END DESC');
+                        break;
+                }
+            })
+            ->paginate($this->per_page);
 
-        return view('livewire.shop', compact('products', 'categories'));
+        return view('livewire.shop', compact('products', 'categories', 'on_sale_count', 'is_new_count'));
     }
 }
