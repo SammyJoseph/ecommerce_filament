@@ -1,4 +1,4 @@
-<div class="shop-area pt-120 pb-120" x-data="{
+<div class="shop-area pt-100 pb-120" x-data="{
         product: {},
         activeImage: '',
         activeThumbIndex: 0,
@@ -266,8 +266,11 @@
                             <ul>
                                 @foreach($categories as $category)
                                     <li>
-                                        <a href="#" wire:click.prevent="filterByCategory('{{ $category->slug }}')" class="{{ $category_slug == $category->slug ? '!tw-text-red-500' : '' }}">
+                                        <a href="#" wire:click.prevent="filterByCategory('{{ $category->slug }}')" class="{{ $category_slug == $category->slug ? '!tw-text-red-500 !tw-flex tw-justify-between tw-items-center' : '' }}">
                                             {{ $category->name }}
+                                            @if($category_slug == $category->slug)
+                                                <i class="icon-close"></i>
+                                            @endif
                                         </a>
                                     </li>
                                 @endforeach
