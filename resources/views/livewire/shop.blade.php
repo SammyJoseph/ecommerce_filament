@@ -104,7 +104,7 @@
                                         'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                     ]);
                                 @endphp
-                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12">
+                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12" wire:key="product-grid-{{ $product->id }}">
                                     <div class="single-product-wrap mb-35">
                                         <div class="product-img product-img-zoom mb-15">
                                             <a href="product-details.html">
@@ -167,7 +167,7 @@
                                                         Add To Cart
                                                     </button>
                                                 @else
-                                                    @livewire('product.add-to-cart', ['product' => $product, 'showIcon' => false])
+                                                    @livewire('product.add-to-cart', ['product' => $product, 'showIcon' => false], key('cart-' . $product->id))
                                                 @endif
                                             </div>
                                         </div>
@@ -179,6 +179,7 @@
                         <div id="shop-2" class="tab-pane">
                             @foreach ($products as $product)
                             @php
+                                $loopKey = 'product-list-' . $product->id;
                                 $productData = json_encode([
                                     'name' => $product->name,
                                     'images' => $product->getMedia('product_images')->map(fn($media) => $media->getUrl('preview'))->all(),
@@ -192,7 +193,7 @@
                                     'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                 ]);
                             @endphp
-                            <div class="shop-list-wrap mb-30">
+                            <div class="shop-list-wrap mb-30" wire:key="{{ $loopKey }}">
                                 <div class="row">
                                     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
                                         <div class="product-list-img">
@@ -237,14 +238,7 @@
                             @endforeach
                         </div>
                     </div>
-                    <div class="pro-pagination-style text-center mt-10">
-                        <ul>
-                            <li><a class="prev" href="#"><i class="icon-arrow-left"></i></a></li>
-                            <li><a class="active" href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a class="next" href="#"><i class="icon-arrow-right"></i></a></li>
-                        </ul>
-                    </div>
+                    {{ $products->links('livewire.shop-pagination') }}
                 </div>
             </div>
             <div class="col-lg-3">
