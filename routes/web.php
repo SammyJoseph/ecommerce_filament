@@ -31,12 +31,13 @@ Route::middleware([
 });
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-
 Route::get('/raw-cart', function () {
     Cart::instance('shopping');
     $cart = Cart::content();
     return response()->json($cart);
 });
+
+Route::get('/shop', [IndexController::class, 'shop'])->name('shop.index');
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/process_payment', [CheckoutController::class, 'process']);

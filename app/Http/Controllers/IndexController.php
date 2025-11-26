@@ -46,4 +46,9 @@ class IndexController extends Controller
 
         return view('product.product-details', compact('product', 'variantCombinations', 'relatedProducts'));
     }    
+
+    public function shop()
+    {
+        return view('shop');
+    }
 }

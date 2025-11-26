@@ -17373,7 +17373,8 @@ textarea:focus {
   font-weight: 500;
 }
 
-.sidebar-widget .price-filter #slider-range {
+.sidebar-widget .price-filter #slider-range,
+.sidebar-widget .price-filter #shop-slider-range {
   background: #dbdbdb none repeat scroll 0 0;
   border: medium none;
   border-radius: 0px;
@@ -17383,12 +17384,14 @@ textarea:focus {
   margin-top: 5px;
 }
 
-.sidebar-widget .price-filter #slider-range span {
+.sidebar-widget .price-filter #slider-range span,
+.sidebar-widget .price-filter #shop-slider-range span {
   -webkit-transition: all 0s ease 0s;
   transition: all 0s ease 0s;
 }
 
-.sidebar-widget .price-filter #slider-range .ui-slider-range {
+.sidebar-widget .price-filter #slider-range .ui-slider-range,
+.sidebar-widget .price-filter #shop-slider-range .ui-slider-range {
   position: absolute;
   display: block;
   border: 0;
@@ -17398,7 +17401,8 @@ textarea:focus {
   transition: all 0s ease 0s;
 }
 
-.sidebar-widget .price-filter #slider-range .ui-slider-handle {
+.sidebar-widget .price-filter #slider-range .ui-slider-handle,
+.sidebar-widget .price-filter #shop-slider-range .ui-slider-handle {
   background: #fff none repeat scroll 0 0;
   border: medium none;
   border-radius: 50%;
