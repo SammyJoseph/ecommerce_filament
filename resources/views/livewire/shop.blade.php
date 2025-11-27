@@ -1,4 +1,5 @@
-<div class="shop-area pt-100 pb-120" x-data="{
+<div class="shop-area pt-100 pb-120"
+    x-data="{
         product: {},
         activeImage: '',
         activeThumbIndex: 0,

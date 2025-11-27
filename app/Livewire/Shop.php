@@ -10,18 +10,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 
 use App\Models\Wishlist;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 
 class Shop extends Component
 {
     use WithPagination;
-
-    public function toggleWishlist($productId)
-    {
-        
-        
-        $this->loadWishlist();
-    }
 
     public $search = '';
     public $category_slug = '';
@@ -52,9 +46,46 @@ class Shop extends Component
         $this->loadWishlist();
     }
 
-    public function loadWishlist()
+    public function toggleWishlist($productId)
     {
+        $product = Product::findOrFail($productId);
         
+        // Verificar si el producto ya está en el wishlist
+        $cartItem = Cart::instance('wishlist')->content()->firstWhere('id', $productId);
+        
+        if ($cartItem) {
+            // Si existe, removerlo
+            Cart::instance('wishlist')->remove($cartItem->rowId);
+        } else {
+            // Si no existe, agregarlo
+            Cart::instance('wishlist')->add([
+                'id'    => $product->id,
+                'name'  => $product->name,
+                'qty'   => 1,
+                'price' => $product->price,
+            ]);
+        }
+
+        $this->storeCart();
+        $this->loadWishlist();
+    }
+
+    private function loadWishlist()
+    {
+        // Si el usuario está autenticado, restaurar su wishlist
+        if (Auth::check()) {
+            Cart::instance('wishlist')->restore(Auth::id());
+        }
+        
+        // Cargar los IDs de productos en el wishlist
+        $this->wishlistProductIds = Cart::instance('wishlist')->content()->pluck('id')->toArray();
+    }
+
+    private function storeCart()
+    {
+        if (Auth::check()) {
+            Cart::instance('wishlist')->store(Auth::id());
+        }
     }
 
     public function filterByCategory($slug)

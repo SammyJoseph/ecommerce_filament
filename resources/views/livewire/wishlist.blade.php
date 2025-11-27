@@ -36,7 +36,7 @@
                                         <td class="product-wishlist-cart">
                                             <div class="tw-flex tw-gap-2 tw-justify-center">
                                                 @livewire('product.add-to-cart', ['product' => $item->product, 'showIcon' => false], key('cart-' . $item->product->id))
-                                                <button type="button" wire:click="removeFromWishlist({{ $item->id }})" class="tw-text-red-500 hover:tw-text-red-700">
+                                                <button type="button" wire:click="removeFromWishlist({{ $item->product->id }})" class="tw-text-red-500 hover:tw-text-red-700">
                                                     <i class="icon-trash"></i>
                                                 </button>
                                             </div>

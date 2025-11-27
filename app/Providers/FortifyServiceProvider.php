@@ -50,6 +50,7 @@ class FortifyServiceProvider extends ServiceProvider
             if ($event->user) {
                 try {
                     Cart::instance('shopping')->restore($event->user->id);
+                    Cart::instance('wishlist')->restore($event->user->id);
                 } catch (\Exception $e) {
                 }
             }
