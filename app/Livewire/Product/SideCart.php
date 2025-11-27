@@ -6,6 +6,7 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class SideCart extends Component
 {
@@ -72,6 +73,14 @@ class SideCart extends Component
     public function removeFromCart($rowId)
     {
         Cart::instance('shopping')->remove($rowId);
+        $this->storeCart();
         $this->dispatch('cart-updated');
+    }
+
+    private function storeCart()
+    {
+        if (Auth::check()) {
+            Cart::store(Auth::user()->id);
+        }
     }
 }

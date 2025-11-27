@@ -18,21 +18,7 @@ class Shop extends Component
 
     public function toggleWishlist($productId)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
-
-        $user = Auth::user();
-        $wishlist = Wishlist::where('user_id', $user->id)->where('product_id', $productId)->first();
-
-        if ($wishlist) {
-            $wishlist->delete();
-        } else {
-            Wishlist::create([
-                'user_id' => $user->id,
-                'product_id' => $productId,
-            ]);
-        }
+        
         
         $this->loadWishlist();
     }
@@ -68,11 +54,7 @@ class Shop extends Component
 
     public function loadWishlist()
     {
-        if (Auth::check()) {
-            $this->wishlistProductIds = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
-        } else {
-            $this->wishlistProductIds = [];
-        }
+        
     }
 
     public function filterByCategory($slug)

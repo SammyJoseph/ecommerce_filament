@@ -7,6 +7,7 @@ use App\Models\VariantSize;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class AddToCart extends Component
 {
@@ -171,7 +172,7 @@ class AddToCart extends Component
                         'slug' => $this->product->slug,
                         'product_id' => $this->product->id,
                     ],
-                ]);
+                ]);                
 
                 $this->dispatch('cart-updated');
                 $this->dispatch('open-side-cart');
@@ -183,6 +184,10 @@ class AddToCart extends Component
                 ]);
                 session()->flash('error', 'Error al agregar el producto al carrito.');
             }
+        }
+
+        if (Auth::check()) {
+            Cart::store(Auth::user()->id);
         }
     }
 }

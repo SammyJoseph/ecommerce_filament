@@ -5,6 +5,7 @@ namespace App\Livewire\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class ShoppingCart extends Component
 {    
@@ -88,13 +89,22 @@ class ShoppingCart extends Component
     public function removeFromCart($rowId)
     {
         Cart::instance('shopping')->remove($rowId);
+        $this->storeCart();
         $this->dispatch('cart-updated');
     }
 
     public function clearCart()
     {
         Cart::instance('shopping')->destroy();
+        $this->storeCart();
         $this->dispatch('cart-updated');
+    }
+
+    private function storeCart()
+    {
+        if (Auth::check()) {
+            Cart::store(Auth::user()->id);
+        }
     }
 
     public function updateQuantity($rowId, $qty)

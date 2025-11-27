@@ -6,6 +6,7 @@ use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class QuickViewAddToCart extends Component
 {
@@ -85,6 +86,10 @@ class QuickViewAddToCart extends Component
                     'product_id' => $product->id,
                 ],
             ]);
+        }
+
+        if (Auth::check()) {
+            Cart::store(Auth::user()->id);
         }
 
         $this->dispatch('cart-updated');
