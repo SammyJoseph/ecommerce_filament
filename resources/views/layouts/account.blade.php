@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="my-account-wrapper pt-120 pb-120">
+    <div class="my-account-wrapper pt-100 pb-120">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -34,10 +34,6 @@
                                     <a href="{{ route('user.orders') }}" class="{{ request()->routeIs('user.orders') || request()->routeIs('user.order.details') ? 'active' : '' }}">
                                         <i class="fa fa-cart-arrow-down"></i> 
                                         Orders
-                                    </a>
-                                    <a href="{{ route('user.download') }}" class="{{ request()->routeIs('user.download') ? 'active' : '' }}">
-                                        <i class="fa fa-cloud-download"></i> 
-                                        Download
                                     </a>
                                     <a href="{{ route('user.payment-method') }}" class="{{ request()->routeIs('user.payment-method') ? 'active' : '' }}">
                                         <i class="fa fa-credit-card"></i> 

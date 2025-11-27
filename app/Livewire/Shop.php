@@ -68,6 +68,7 @@ class Shop extends Component
 
         $this->storeCart();
         $this->loadWishlist();
+        $this->dispatch('wishlist-updated');
     }
 
     private function loadWishlist()

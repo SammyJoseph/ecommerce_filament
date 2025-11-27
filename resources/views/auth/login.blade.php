@@ -5,30 +5,17 @@
 @section('container-class', 'container')
 
 @section('content')
-    <div class="breadcrumb-area bg-gray">
-        <div class="container">
-            <div class="breadcrumb-content text-center">
-                <ul>
-                    <li>
-                        <a href="{{ route('index') }}">Home</a>
-                    </li>
-                    <li class="active">Login - Register</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="login-register-area pt-115 pb-120">
+    <div class="login-register-area pt-100 pb-120">
         <div class="container">
             <div class="row">
                 <div class="col-lg-7 col-md-12 ms-auto me-auto">
                     <div class="login-register-wrapper">
                         <div class="login-register-tab-list nav">
                             <a class="active" data-bs-toggle="tab" href="#lg1">
-                                <h4> login </h4>
+                                <h4>Login</h4>
                             </a>
                             <a data-bs-toggle="tab" href="#lg2">
-                                <h4> register </h4>
+                                <h4>Register</h4>
                             </a>
                         </div>
                         <div class="tab-content">

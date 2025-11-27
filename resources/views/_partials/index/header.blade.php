@@ -118,11 +118,15 @@
                                 <a href="{{ route('user.my-account') }}"><i class="icon-user"></i></a>
                             </div>
                             <div class="same-style-2">
-                                <a href="{{ route('wishlist') }}"><i class="icon-heart"></i><span class="pro-count red">03</span></a>
+                                <a href="{{ route('wishlist') }}">
+                                    <i class="icon-heart"></i>
+                                    <livewire:header.wishlist-count />
+                                </a>
                             </div>
                             <div class="same-style-2 header-cart">
                                 <a class="cart-active" href="#">
-                                    <i class="icon-basket-loaded"></i><span class="pro-count red">02</span>
+                                    <i class="icon-basket-loaded">
+                                    </i><livewire:header.cart-count />
                                 </a>
                             </div>
                         </div>
@@ -145,11 +149,11 @@
                             <a href="{{ route('login') }}"><i class="icon-user"></i></a>
                         </div>
                         <div class="same-style-2">
-                            <a href="{{ route('wishlist') }}"><i class="icon-heart"></i><span class="pro-count red">03</span></a>
+                            <a href="{{ route('wishlist') }}"><i class="icon-heart"></i><livewire:header.wishlist-count /></a>
                         </div>
                         <div class="same-style-2 header-cart">
                             <a class="cart-active" href="#">
-                                <i class="icon-basket-loaded"></i><span class="pro-count red">02</span>
+                                <i class="icon-basket-loaded"></i><livewire:header.cart-count />
                             </a>
                         </div>
                         <div class="same-style-2 main-menu-icon">
