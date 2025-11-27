@@ -47,6 +47,11 @@ class IndexController extends Controller
         return view('product.product-details', compact('product', 'variantCombinations', 'relatedProducts'));
     }    
 
+    public function wishlist()
+    {
+        return view('product.wishlist');
+    }
+
     public function shop()
     {
         return view('shop');

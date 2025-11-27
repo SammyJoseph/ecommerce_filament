@@ -10,7 +10,7 @@ class CheckoutController extends Controller
     public function index()
     {
         if (Cart::instance('shopping')->count() == 0) {
-            return redirect()->route('cart.index');
+            return redirect()->route('cart');
         }
 
         return view('checkout.index');

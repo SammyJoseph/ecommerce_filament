@@ -9,9 +9,33 @@ use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 
+use App\Models\Wishlist;
+use Illuminate\Support\Facades\Auth;
+
 class Shop extends Component
 {
     use WithPagination;
+
+    public function toggleWishlist($productId)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $user = Auth::user();
+        $wishlist = Wishlist::where('user_id', $user->id)->where('product_id', $productId)->first();
+
+        if ($wishlist) {
+            $wishlist->delete();
+        } else {
+            Wishlist::create([
+                'user_id' => $user->id,
+                'product_id' => $productId,
+            ]);
+        }
+        
+        $this->loadWishlist();
+    }
 
     public $search = '';
     public $category_slug = '';
@@ -22,6 +46,7 @@ class Shop extends Component
     public $sort_by = '';
     public $on_sale = false;
     public $is_new = false;
+    public $wishlistProductIds = [];
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -38,6 +63,16 @@ class Shop extends Component
     {
         $this->price_range_max = ceil(Product::query()->max(DB::raw('CASE WHEN sale_price > 0 AND sale_price < price THEN sale_price ELSE price END')) ?? 1000);
         $this->max_price = request()->input('max_price', $this->price_range_max);
+        $this->loadWishlist();
+    }
+
+    public function loadWishlist()
+    {
+        if (Auth::check()) {
+            $this->wishlistProductIds = Wishlist::where('user_id', Auth::id())->pluck('product_id')->toArray();
+        } else {
+            $this->wishlistProductIds = [];
+        }
     }
 
     public function filterByCategory($slug)

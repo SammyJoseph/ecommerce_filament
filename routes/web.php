@@ -30,14 +30,15 @@ Route::middleware([
     Route::get('/my-account/payment-method', [UserController::class, 'paymentMethod'])->name('user.payment-method');
 });
 
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::get('/raw-cart', function () {
     Cart::instance('shopping');
     $cart = Cart::content();
     return response()->json($cart);
 });
 
-Route::get('/shop', [IndexController::class, 'shop'])->name('shop.index');
+Route::get('/shop', [IndexController::class, 'shop'])->name('shop');
+Route::get('/wishlist', [IndexController::class, 'wishlist'])->name('wishlist');
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/process_payment', [CheckoutController::class, 'process']);

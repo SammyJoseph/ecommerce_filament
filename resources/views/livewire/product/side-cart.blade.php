@@ -29,7 +29,7 @@
                 <h4>Subtotal: <span>${{ $subtotal }}</span></h4>
             </div>
             <div class="cart-checkout-btn">
-                <a class="btn-hover cart-btn-style" href="{{ route('cart.index') }}">view cart</a>
+                <a class="btn-hover cart-btn-style" href="{{ route('cart') }}">view cart</a>
                 <a class="no-mrg btn-hover cart-btn-style" href="{{ route('checkout.index') }}">checkout</a>
             </div>
         </div>

@@ -73,14 +73,14 @@
                                             <li><a href="index-10.html">Home version 10</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="{{ route('shop.index') }}">SHOP </a></li>
+                                    <li><a href="{{ route('shop') }}">SHOP </a></li>
                                     <li><a href="#">PAGES </a>
                                         <ul class="sub-menu-style">
                                             <li><a href="about-us.html">about us </a></li>
                                             <li><a href="cart.html">cart page</a></li>
                                             <li><a href="checkout.html">checkout </a></li>
                                             <li><a href="my-account.html">my account</a></li>
-                                            <li><a href="wishlist.html">wishlist </a></li>
+                                            <li><a href="{{ route('wishlist') }}">wishlist </a></li>
                                             <li><a href="compare.html">compare </a></li>
                                             <li><a href="contact.html">contact us </a></li>
                                             <li><a href="order-tracking.html">order tracking</a></li>
@@ -118,7 +118,7 @@
                                 <a href="{{ route('user.my-account') }}"><i class="icon-user"></i></a>
                             </div>
                             <div class="same-style-2">
-                                <a href="wishlist.html"><i class="icon-heart"></i><span class="pro-count red">03</span></a>
+                                <a href="{{ route('wishlist') }}"><i class="icon-heart"></i><span class="pro-count red">03</span></a>
                             </div>
                             <div class="same-style-2 header-cart">
                                 <a class="cart-active" href="#">
@@ -142,10 +142,10 @@
                 <div class="col-7">
                     <div class="header-action header-action-flex">
                         <div class="same-style-2">
-                            <a href="login-register.html"><i class="icon-user"></i></a>
+                            <a href="{{ route('login') }}"><i class="icon-user"></i></a>
                         </div>
                         <div class="same-style-2">
-                            <a href="wishlist.html"><i class="icon-heart"></i><span class="pro-count red">03</span></a>
+                            <a href="{{ route('wishlist') }}"><i class="icon-heart"></i><span class="pro-count red">03</span></a>
                         </div>
                         <div class="same-style-2 header-cart">
                             <a class="cart-active" href="#">

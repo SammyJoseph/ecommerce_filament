@@ -84,7 +84,7 @@
                 </div>
                 <div class="shop-bottom-area">
                     <div class="tab-content jump tw-relative">
-                        <div wire:loading.flex class="tw-absolute tw-inset-0 tw-justify-center tw-items-center tw-bg-white/75 tw-z-50">
+                        <div wire:loading.flex wire:target="per_page,sort_by,search,filterByCategory,min_price,max_price,on_sale,is_new,gotoPage,previousPage,nextPage" class="tw-absolute tw-inset-0 tw-justify-center tw-items-center tw-bg-white/75 tw-z-50">
                             <div class="tw-animate-spin tw-rounded-full tw-h-12 tw-w-12 tw-border-4 tw-border-solid tw-border-gray-300 tw-border-t-red-600"></div>
                         </div>
                         <div id="shop-1" class="tab-pane active">
@@ -114,7 +114,13 @@
                                                 <span class="pro-badge left bg-red">-{{ round((($product->price - $product->sale_price) / $product->price) * 100) }}%</span>
                                             @endif
                                             <div class="product-action-2 tooltip-style-2">
-                                                <button title="Wishlist"><i class="icon-heart"></i></button>
+                                                <button title="Wishlist" wire:click="toggleWishlist({{ $product->id }})">
+                                                    @if (in_array($product->id, $wishlistProductIds))
+                                                        <svg class="tw-w-5 tw-text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Z"/></svg>
+                                                    @else
+                                                        <svg class="tw-w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="m480-173.85-30.31-27.38q-97.92-89.46-162-153.15-64.07-63.7-101.15-112.35-37.08-48.65-51.81-88.04Q120-594.15 120-634q0-76.31 51.85-128.15Q223.69-814 300-814q52.77 0 99 27t81 78.54Q514.77-760 561-787q46.23-27 99-27 76.31 0 128.15 51.85Q840-710.31 840-634q0 39.85-14.73 79.23-14.73 39.39-51.81 88.04-37.08 48.65-100.77 112.35Q609-290.69 510.31-201.23L480-173.85Zm0-54.15q96-86.77 158-148.65 62-61.89 98-107.39t50-80.61q14-35.12 14-69.35 0-60-40-100t-100-40q-47.77 0-88.15 27.27-40.39 27.27-72.31 82.11h-39.08q-32.69-55.61-72.69-82.5Q347.77-774 300-774q-59.23 0-99.62 40Q160-694 160-634q0 34.23 14 69.35 14 35.11 50 80.61t98 107q62 61.5 158 149.04Zm0-273Z"/></svg>
+                                                    @endif
+                                                </button>
                                                 <button title="Quick View" x-on:click="updateProductData({{ $productData }})" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="icon-size-fullscreen icons"></i></button>
                                             </div>
                                         </div>
@@ -229,7 +235,9 @@
                                             <p>{{ $product->description }}</p>
                                             <div class="product-list-action">
                                                 <button title="Add To Cart"><i class="icon-basket-loaded"></i></button>
-                                                <button title="Wishlist"><i class="icon-heart"></i></button>
+                                                <button title="Wishlist" wire:click="toggleWishlist({{ $product->id }})">
+                                                    <i class="icon-heart {{ in_array($product->id, $wishlistProductIds) ? 'tw-text-red-500' : '' }}"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
