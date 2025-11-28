@@ -1,17 +1,17 @@
 @props(['id' => null, 'maxWidth' => null])
 
 <x-modal :id="$id" :maxWidth="$maxWidth" {{ $attributes }}>
-    <div class="px-6 py-4">
-        <div class="text-lg font-medium text-gray-900">
+    <div class="tw-px-6 tw-py-4">
+        <div class="tw-text-lg tw-font-medium tw-text-gray-900">
             {{ $title }}
         </div>
 
-        <div class="mt-4 text-sm text-gray-600">
+        <div class="tw-mt-4 tw-text-sm tw-text-gray-600">
             {{ $content }}
         </div>
     </div>
 
-    <div class="flex flex-row justify-end px-6 py-4 bg-gray-100 text-end">
+    <div class="tw-flex tw-flex-row tw-justify-end tw-px-6 tw-py-4 tw-bg-gray-100 tw-text-end">
         {{ $footer }}
     </div>
 </x-modal>

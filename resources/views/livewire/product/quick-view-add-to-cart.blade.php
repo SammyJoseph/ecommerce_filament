@@ -3,7 +3,7 @@
         <a title="Add to Cart" href="#" 
            @click.prevent="
                 if (product.has_variants && (!selectedColor || !selectedSize)) {
-                    alert('Por favor selecciona un color y una talla.');
+                    $wire.$toggle('showValidationModal');
                     return;
                 }
                 let variantData = null;
@@ -13,13 +13,12 @@
                 }
                 $wire.addToCart(product.id, parseInt(document.getElementById('quick-view-quantity').value), variantData);
            ">
-           <span wire:loading.remove wire:target="addToCart">Añadir al carrito</span>
-           <span wire:loading wire:target="addToCart">Procesando...</span>
+           <span wire:loading.remove wire:target="addToCart">Add to cart</span>
+           <span wire:loading wire:target="addToCart">Adding...</span>
         </a>
     </div>
     <div class="pro-details-action tw-inline-block">
-        <a title="Añadir a la lista de deseos" href="#"><i class="icon-heart"></i></a>
-        <a title="Añadir para comparar" href="#"><i class="icon-refresh"></i></a>
+        <a title="Add to wishlist" href="#"><i class="icon-heart"></i></a>
         <a class="social" title="Social" href="#"><i class="icon-share"></i></a>
         <div class="product-dec-social">
             <a class="facebook" title="Facebook" href="#"><i class="icon-social-facebook"></i></a>
@@ -28,4 +27,21 @@
             <a class="pinterest" title="Pinterest" href="#"><i class="icon-social-pinterest"></i></a>
         </div>
     </div>
+
+    {{-- Modal de validación --}}
+    <x-dialog-modal wire:model.live="showValidationModal">
+        <x-slot name="title">
+            {{ __('Selección requerida') }}
+        </x-slot>
+
+        <x-slot name="content">
+            {{ __('Por favor selecciona un color y una talla antes de añadir el producto al carrito.') }}
+        </x-slot>
+
+        <x-slot name="footer">
+            <x-secondary-button wire:click="$toggle('showValidationModal')" wire:loading.attr="disabled">
+                {{ __('Entendido') }}
+            </x-secondary-button>
+        </x-slot>
+    </x-dialog-modal>
 </div>

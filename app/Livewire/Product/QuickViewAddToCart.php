@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 class QuickViewAddToCart extends Component
 {
+    public $showValidationModal = false;
+
     public function render()
     {
         return view('livewire.product.quick-view-add-to-cart');
