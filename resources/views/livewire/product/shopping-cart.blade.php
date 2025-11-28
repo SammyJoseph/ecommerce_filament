@@ -90,12 +90,30 @@
                     </div>
                     <div class="tax-wrapper">
                         <p>Enter your destination to get a shipping estimate.</p>
+                        
+                        @auth
+                            <div class="tax-select-wrapper tw-mb-4">
+                                <div class="tax-select">
+                                    <label>
+                                        Saved Address
+                                    </label>
+                                    <select wire:model.live="selectedAddressId" class="email s-email s-wid">
+                                        @foreach($userAddresses as $address)
+                                            <option value="{{ $address->id }}">
+                                                {{ $address->address }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endauth
+
                         <div class="tax-select-wrapper" wire:ignore>
                             <div class="tax-select">
                                 <label>
                                     * Departamento
                                 </label>
-                                <select id="select-departamento" class="email s-email s-wid">
+                                <select id="select-departamento" class="email s-email s-wid" {{ auth()->check() ? 'disabled' : '' }}>
                                     <option value="">Seleccione Departamento</option>
                                 </select>
                             </div>
@@ -149,7 +167,7 @@
                     @if (session()->has('coupon'))
                     <p class="tw-mb-6">
                         Discount
-                        <button wire:click="removeCoupon" class="tw-ml-2">x</button>
+                        <button wire:click="removeCoupon" class="tw-ml-2 tw-border-none tw-bg-transparent">x</button>
                         <span class="tw-float-end">-{{ number_format($cartDiscount, 2) }}</span></p>
                     @endif
                     <div class="total-shipping tw-flex tw-justify-between tw-items-center">
@@ -194,27 +212,24 @@
             const provSelect = document.getElementById('select-provincia');
             const distSelect = document.getElementById('select-distrito');
 
-            let departamentos = [];
+            // Initial values from Livewire (CODES not names)
+            const initialDept = @json($selectedDeptCode);
+            const initialProv = @json($selectedProvCode);
+            const initialDist = @json($selectedDistCode);
+
+            // Load from local storage via Livewire instead of GitHub
+            let departamentos = @json($departments);
             let provincias = {};
             let distritos = {};
 
-            // Initial values from Livewire
-            const initialDept = @json($selectedDepartment);
-            const initialProv = @json($selectedProvince);
-            const initialDist = @json($selectedDistrict);
+            // Auth status
+            const isLoggedIn = @json(auth()->check());
 
-            // URLs for JSON data
-            const deptUrl = 'https://raw.githubusercontent.com/joseluisq/ubigeos-peru/master/json/departamentos.json';
-            const provUrl = 'https://raw.githubusercontent.com/joseluisq/ubigeos-peru/master/json/provincias.json';
-            const distUrl = 'https://raw.githubusercontent.com/joseluisq/ubigeos-peru/master/json/distritos.json';
-
-            // Fetch all data in parallel for better UX (caching strategy)
+            // Load all data from public folder
             Promise.all([
-                fetch(deptUrl).then(res => res.json()),
-                fetch(provUrl).then(res => res.json()),
-                fetch(distUrl).then(res => res.json())
-            ]).then(([deptData, provData, distData]) => {
-                departamentos = deptData;
+                fetch('/ubigeo/provincias.json').then(res => res.json()),
+                fetch('/ubigeo/distritos.json').then(res => res.json())
+            ]).then(([provData, distData]) => {
                 provincias = provData;
                 distritos = distData;
 
@@ -259,7 +274,10 @@
                         option.textContent = prov.nombre_ubigeo;
                         provSelect.appendChild(option);
                     });
-                    provSelect.disabled = false;
+                    // Only enable if NOT logged in
+                    if (!isLoggedIn) {
+                        provSelect.disabled = false;
+                    }
                 }
             }
 
@@ -275,7 +293,10 @@
                         option.textContent = dist.nombre_ubigeo;
                         distSelect.appendChild(option);
                     });
-                    distSelect.disabled = false;
+                    // Only enable if NOT logged in
+                    if (!isLoggedIn) {
+                        distSelect.disabled = false;
+                    }
                 }
             }
 
@@ -294,6 +315,24 @@
             distSelect.addEventListener('change', function() {
                 const distId = this.value;
                 @this.set('selectedDistrict', distId);
+            });
+
+            window.addEventListener('address-changed', event => {
+                const { department, province, district } = event.detail;
+                
+                if (department) {
+                    deptSelect.value = department;
+                    populateProvincias(department);
+                    
+                    if (province) {
+                        provSelect.value = province;
+                        populateDistritos(province);
+                        
+                        if (district) {
+                            distSelect.value = district;
+                        }
+                    }
+                }
             });
         });
     </script>
