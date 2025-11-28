@@ -38,6 +38,11 @@ Route::get('/raw-cart', function () {
 
 Route::get('/shop', [IndexController::class, 'shop'])->name('shop');
 Route::get('/wishlist', [IndexController::class, 'wishlist'])->name('wishlist');
+Route::get('/raw-wishlist', function () {
+    Cart::instance('wishlist');
+    $cart = Cart::content();
+    return response()->json($cart);
+});
 
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::post('/checkout/process_payment', [CheckoutController::class, 'process']);

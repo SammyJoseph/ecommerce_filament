@@ -49,20 +49,20 @@ class Shop extends Component
     public function toggleWishlist($productId)
     {
         $product = Product::findOrFail($productId);
-        
-        // Verificar si el producto ya está en el wishlist
+    
         $cartItem = Cart::instance('wishlist')->content()->firstWhere('id', $productId);
         
         if ($cartItem) {
-            // Si existe, removerlo
             Cart::instance('wishlist')->remove($cartItem->rowId);
         } else {
-            // Si no existe, agregarlo
             Cart::instance('wishlist')->add([
                 'id'    => $product->id,
                 'name'  => $product->name,
                 'qty'   => 1,
                 'price' => $product->price,
+                'options' => [
+                    'image' => $product->getFirstMediaUrl('product_images', 'preview'),
+                ],
             ]);
         }
 
@@ -73,12 +73,10 @@ class Shop extends Component
 
     private function loadWishlist()
     {
-        // Si el usuario está autenticado, restaurar su wishlist
         if (Auth::check()) {
             Cart::instance('wishlist')->restore(Auth::id());
         }
         
-        // Cargar los IDs de productos en el wishlist
         $this->wishlistProductIds = Cart::instance('wishlist')->content()->pluck('id')->toArray();
     }
 

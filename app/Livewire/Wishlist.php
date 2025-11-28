@@ -28,6 +28,23 @@ class Wishlist extends Component
         }
     }
 
+    public $confirmingItemDeletion = false;
+    public $itemToDeleteId = null;
+
+    public function confirmItemDeletion($productId)
+    {
+        $this->itemToDeleteId = $productId;
+        $this->confirmingItemDeletion = true;
+    }
+
+    public function deleteItem()
+    {
+        $this->removeFromWishlist($this->itemToDeleteId);
+        $this->confirmingItemDeletion = false;
+        $this->itemToDeleteId = null;
+        $this->dispatch('wishlist-updated');
+    }
+
     private function storeCart()
     {
         if (Auth::check()) {
@@ -55,6 +72,8 @@ class Wishlist extends Component
                     'product' => $products->get($item->id),
                     'qty' => $item->qty,
                     'price' => $item->price,
+                    'sale_price' => $item->sale_price,
+                    'image' => $products->get($item->id)->getFirstMediaUrl('product_images', 'preview'),
                 ];
             });
         }
