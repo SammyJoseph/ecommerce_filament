@@ -200,6 +200,7 @@ class Checkout extends Component
             'number' => 'ORD-' . strtoupper(uniqid()),
             'total_amount' => $this->calculateTotal() - $this->shipping,
             'shipping_amount' => $this->shipping,
+            'discount_amount' => $this->discount,
             'status' => 'pending',
             'currency' => 'PEN',
             'shipping_address_id' => $shippingAddressId,
@@ -398,7 +399,8 @@ class Checkout extends Component
         
         Log::info('Checkout: Processing cart items', [
             'count' => $cartContent->count(),
-            'content_dump' => $cartContent->toArray()
+            'content_dump' => $cartContent->toArray(),
+            'discount_applied' => $this->discount
         ]);
 
         foreach ($cartContent as $item) {
@@ -410,6 +412,21 @@ class Checkout extends Component
                 "currency_id" => "PEN"
             ];
         }
+
+        // Agregar el descuento como un item negativo si existe
+        if ($this->discount > 0) {
+            $couponInfo = session('coupon');
+            $couponCode = $couponInfo['code'] ?? 'DESCUENTO';
+            
+            $items[] = [
+                "id" => "discount-" . $couponCode,
+                "title" => "Descuento por cupón: " . $couponCode,
+                "quantity" => 1,
+                "unit_price" => -1 * (float) $this->discount,  // Precio negativo
+                "currency_id" => "PEN"
+            ];
+        }
+
         return $items;
     }
 
