@@ -45,9 +45,11 @@ class ShoppingCart extends Component
             
             $sessionAddressId = session('selected_address_id');
             
-            if ($sessionAddressId && $this->userAddresses->contains('id', $sessionAddressId)) {
+            $addresses = collect($this->userAddresses);
+
+            if ($sessionAddressId && $addresses->contains('id', $sessionAddressId)) {
                 $this->selectedAddressId = $sessionAddressId;
-                $address = $this->userAddresses->firstWhere('id', $sessionAddressId);
+                $address = $addresses->firstWhere('id', $sessionAddressId);
                 $this->setAddressLocation($address);
             } elseif ($defaultAddress) {
                 $this->selectedAddressId = $defaultAddress->id;
