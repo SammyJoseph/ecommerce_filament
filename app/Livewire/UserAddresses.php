@@ -31,6 +31,9 @@ class UserAddresses extends Component
     public $selectedProvId = '';
     public $selectedDistId = '';
 
+    public $confirmingAddressDeletion = false;
+    public $addressIdToDelete = null;
+
     protected $rules = [
         'department' => 'required|string|max:255',
         'province' => 'required|string|max:255',
@@ -216,13 +219,25 @@ class UserAddresses extends Component
         $this->cancel();
     }
 
-    public function delete($id)
+    public function confirmAddressDeletion($id)
     {
-        $address = UserAddress::findOrFail($id);
+        $this->confirmingAddressDeletion = true;
+        $this->addressIdToDelete = $id;
+    }
+
+    public function deleteAddress()
+    {
+        $address = UserAddress::findOrFail($this->addressIdToDelete);
+        
         if ($address->user_id !== Auth::id()) {
             abort(403);
         }
+        
         $address->delete();
+        
+        $this->confirmingAddressDeletion = false;
+        $this->addressIdToDelete = null;
+        
         session()->flash('message', 'Address deleted successfully.');
     }
 

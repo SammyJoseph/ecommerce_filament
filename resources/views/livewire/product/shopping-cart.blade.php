@@ -105,15 +105,21 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="tw-bg-gray-50 tw-rounded-lg tw-mt-4">
+                                    <div class="tw-flex tw-items-center tw-justify-between"><h5>Departamento:</h5> <p>{{ $selectedDepartment ?? 'Not selected' }}</p></div>
+                                    <div class="tw-flex tw-items-center tw-justify-between mt-2"><h5>Provincia:</h5> <p>{{ $selectedProvince ?? 'Not selected' }}</p></div>
+                                    <div class="tw-flex tw-items-center tw-justify-between mt-2"><h5>Distrito:</h5> <p>{{ $selectedDistrict ?? 'Not selected' }}</p></div>
+                                </div>
                             </div>
                         @endauth
 
+                        @guest
                         <div class="tax-select-wrapper" wire:ignore>
                             <div class="tax-select">
                                 <label>
                                     * Departamento
                                 </label>
-                                <select id="select-departamento" class="email s-email s-wid" {{ auth()->check() ? 'disabled' : '' }}>
+                                <select id="select-departamento" class="email s-email s-wid">
                                     <option value="">Seleccione Departamento</option>
                                 </select>
                             </div>
@@ -133,7 +139,8 @@
                                     <option value="">Seleccione Distrito</option>
                                 </select>
                             </div>
-                        </div>                        
+                        </div>     
+                        @endguest
                     </div>
                 </div>
             </div>
@@ -208,24 +215,24 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Only run ubigeo logic for guests
+            const isLoggedIn = @json(auth()->check());
+            if (isLoggedIn) {
+                return; // Exit early for authenticated users
+            }
+
             const deptSelect = document.getElementById('select-departamento');
             const provSelect = document.getElementById('select-provincia');
             const distSelect = document.getElementById('select-distrito');
 
-            // Initial values from Livewire (CODES not names)
             const initialDept = @json($selectedDeptCode);
             const initialProv = @json($selectedProvCode);
             const initialDist = @json($selectedDistCode);
 
-            // Load from local storage via Livewire instead of GitHub
             let departamentos = @json($departments);
             let provincias = {};
             let distritos = {};
 
-            // Auth status
-            const isLoggedIn = @json(auth()->check());
-
-            // Load all data from public folder
             Promise.all([
                 fetch('/ubigeo/provincias.json').then(res => res.json()),
                 fetch('/ubigeo/distritos.json').then(res => res.json())
@@ -235,7 +242,6 @@
 
                 populateDepartamentos();
                 
-                // Restore selections if they exist
                 if (initialDept) {
                     deptSelect.value = initialDept;
                     populateProvincias(initialDept);
@@ -261,7 +267,6 @@
             }
 
             function populateProvincias(deptId) {
-                // Reset and disable child selects
                 provSelect.innerHTML = '<option value="">Seleccione Provincia</option>';
                 distSelect.innerHTML = '<option value="">Seleccione Distrito</option>';
                 provSelect.disabled = true;
@@ -274,15 +279,11 @@
                         option.textContent = prov.nombre_ubigeo;
                         provSelect.appendChild(option);
                     });
-                    // Only enable if NOT logged in
-                    if (!isLoggedIn) {
-                        provSelect.disabled = false;
-                    }
+                    provSelect.disabled = false;
                 }
             }
 
             function populateDistritos(provId) {
-                // Reset and disable child select
                 distSelect.innerHTML = '<option value="">Seleccione Distrito</option>';
                 distSelect.disabled = true;
 
@@ -293,10 +294,7 @@
                         option.textContent = dist.nombre_ubigeo;
                         distSelect.appendChild(option);
                     });
-                    // Only enable if NOT logged in
-                    if (!isLoggedIn) {
-                        distSelect.disabled = false;
-                    }
+                    distSelect.disabled = false;
                 }
             }
 
@@ -333,7 +331,7 @@
                         }
                     }
                 }
-            });
+            });            
         });
     </script>
 @endpush

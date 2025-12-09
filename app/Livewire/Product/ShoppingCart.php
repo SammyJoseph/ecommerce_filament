@@ -73,7 +73,7 @@ class ShoppingCart extends Component
     public function updatedSelectedAddressId($value)
     {
         if ($value) {
-            $address = $this->userAddresses->where('id', $value)->first();
+            $address = collect($this->userAddresses)->where('id', $value)->first();
             if ($address) {
                 $this->setAddressLocation($address);
                 
