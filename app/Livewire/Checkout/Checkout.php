@@ -43,6 +43,13 @@ class Checkout extends Component
     public $selectedProvId = '';
     public $selectedDistId = '';
 
+    protected $ubigeoService;
+
+    public function boot(\App\Services\UbigeoService $ubigeoService)
+    {
+        $this->ubigeoService = $ubigeoService;
+    }
+
     protected $rules = [
         'firstName'     => 'required|min:2',
         'lastName'      => 'required|min:2',
@@ -113,10 +120,44 @@ class Checkout extends Component
             $this->lastName = $user->last_name ?? '';
             $this->email = $user->email;
             $this->phone = $user->phone_number ?? '';
-            $this->address = $user->defaultAddress->address ?? '';
-            $this->reference = $user->defaultAddress->reference ?? '';
             $this->shippingAddresses = $user->addresses;
-            $this->selectedShippingAddressId = $user->defaultAddress?->id ?? '';
+            
+            $sessionAddressId = session('selected_address_id');
+            $targetAddress = null;
+
+            if ($sessionAddressId) {
+                $targetAddress = $user->addresses->firstWhere('id', $sessionAddressId);
+            }
+
+            if (!$targetAddress) {
+                $targetAddress = $user->defaultAddress;
+            }
+
+            if ($targetAddress) {
+                $this->selectedShippingAddressId = $targetAddress->id;
+                $this->address = $targetAddress->address;
+                $this->reference = $targetAddress->reference ?? '';
+            } else {
+                 $this->address = '';
+                 $this->reference = '';
+                 $this->selectedShippingAddressId = '';
+            }
+        } else {
+            // Load from session for guests if available
+            $this->selectedDeptId = session('selected_department');
+            if ($this->selectedDeptId) {
+                $this->updatedSelectedDeptId($this->selectedDeptId);
+                
+                $this->selectedProvId = session('selected_province');
+                if ($this->selectedProvId) {
+                    $this->updatedSelectedProvId($this->selectedProvId);
+                    
+                    $this->selectedDistId = session('selected_district');
+                    if ($this->selectedDistId) {
+                        $this->updatedSelectedDistId($this->selectedDistId);
+                    }
+                }
+            }
         }
     }
 
@@ -277,10 +318,16 @@ class Checkout extends Component
             if ($address) {
                 $this->address = $address->address;
                 $this->reference = $address->reference ?? '';
+                
+                // Store in session for consistency if they go back to cart
+                session()->put('selected_address_id', $value);
             }
         } else {
             $this->address = '';
             $this->reference = '';
+            // Clear session if desired, or keep last valid? Usually clearing makes sense if they explicitly select "new address"
+            // But logic above for new address is value=""
+            session()->forget('selected_address_id');
         }
     }
 
@@ -289,8 +336,25 @@ class Checkout extends Component
     }
     
     public function getShippingProperty() { 
-        return session('shipping_cost', 0); 
+        $deptId = null;
+
+        if ($this->selectedShippingAddressId) {
+             $address = collect($this->shippingAddresses)->where('id', $this->selectedShippingAddressId)->first();
+             if ($address) {
+                 $dept = collect($this->departments)->firstWhere('nombre_ubigeo', $address->department);
+                 $deptId = $dept['id_ubigeo'] ?? null;
+             }
+        } elseif ($this->selectedDeptId) {
+            $deptId = $this->selectedDeptId;
+        } else {
+             $deptId = session('selected_department');
+        }
+
+        // Use service with fallback or direct call
+        return $deptId ? $this->ubigeoService->getShippingRate($deptId) : 0;
     }
+
+    // Tarifas de envío removidas (ahora en UbigeoService)
     
     public function getDiscountProperty() {
         if (session()->has('coupon')) {
@@ -307,10 +371,7 @@ class Checkout extends Component
 
     protected function loadDepartments()
     {
-        $path = storage_path('app/ubigeo/departamentos.json');
-        if (file_exists($path)) {
-            $this->departments = json_decode(file_get_contents($path), true);
-        }
+        $this->departments = $this->ubigeoService->getDepartments();
     }
 
     public function updatedSelectedDeptId($value)
@@ -326,11 +387,7 @@ class Checkout extends Component
         $this->districts = [];
 
         if ($value) {
-            $path = storage_path('app/ubigeo/provincias.json');
-            if (file_exists($path)) {
-                $allProvinces = json_decode(file_get_contents($path), true);
-                $this->provinces = $allProvinces[$value] ?? [];
-            }
+            $this->provinces = $this->ubigeoService->getProvinces($value);
         }
     }
 
@@ -344,11 +401,7 @@ class Checkout extends Component
         $this->districts = [];
 
         if ($value) {
-            $path = storage_path('app/ubigeo/distritos.json');
-            if (file_exists($path)) {
-                $allDistricts = json_decode(file_get_contents($path), true);
-                $this->districts = $allDistricts[$value] ?? [];
-            }
+            $this->districts = $this->ubigeoService->getDistricts($value);
         }
     }
 
@@ -361,34 +414,21 @@ class Checkout extends Component
     protected function reverseLookupUbigeo()
     {
         // 1. Find Department ID
-        $dept = collect($this->departments)->firstWhere('nombre_ubigeo', $this->department);
-        if ($dept) {
-            $this->selectedDeptId = $dept['id_ubigeo'];
-            
+        $this->selectedDeptId = $this->ubigeoService->getDepartmentIdByName($this->department);
+        
+        if ($this->selectedDeptId) {
             // Load Provinces
-            $pathProv = storage_path('app/ubigeo/provincias.json');
-            if (file_exists($pathProv)) {
-                $allProvinces = json_decode(file_get_contents($pathProv), true);
-                $this->provinces = $allProvinces[$this->selectedDeptId] ?? [];
+            $this->provinces = $this->ubigeoService->getProvinces($this->selectedDeptId);
+            
+            // 2. Find Province ID
+            $this->selectedProvId = $this->ubigeoService->getProvinceIdByName($this->selectedDeptId, $this->province);
+            
+            if ($this->selectedProvId) {
+                // Load Districts
+                $this->districts = $this->ubigeoService->getDistricts($this->selectedProvId);
                 
-                // 2. Find Province ID
-                $prov = collect($this->provinces)->firstWhere('nombre_ubigeo', $this->province);
-                if ($prov) {
-                    $this->selectedProvId = $prov['id_ubigeo'];
-                    
-                    // Load Districts
-                    $pathDist = storage_path('app/ubigeo/distritos.json');
-                    if (file_exists($pathDist)) {
-                        $allDistricts = json_decode(file_get_contents($pathDist), true);
-                        $this->districts = $allDistricts[$this->selectedProvId] ?? [];
-                        
-                        // 3. Find District ID
-                        $dist = collect($this->districts)->firstWhere('nombre_ubigeo', $this->district);
-                        if ($dist) {
-                            $this->selectedDistId = $dist['id_ubigeo'];
-                        }
-                    }
-                }
+                // 3. Find District ID
+                $this->selectedDistId = $this->ubigeoService->getDistrictIdByName($this->selectedProvId, $this->district);
             }
         }
     }
@@ -435,7 +475,6 @@ class Checkout extends Component
         return view('livewire.checkout.checkout', [
             'cartItems' => Cart::instance('shopping')->content(),
             'subtotal' => $this->subtotal,
-            'shipping' => $this->shipping,
             'discount' => $this->discount,
             'total' => $this->calculateTotal(),
         ]);

@@ -28,17 +28,11 @@ class ShoppingCart extends Component
     public $provinces = [];
     public $districts = [];
 
-    // Tarifas de envío por departamento (ID Ubigeo -> Precio)
-    protected function getShippingRate($departmentId): float
+    protected $ubigeoService;
+
+    public function boot(\App\Services\UbigeoService $ubigeoService)
     {
-        return match ($departmentId) {
-            '3926' => 15.00, // Lima
-            '3606', '2625' => 20.00, // Ica, Ancash
-            '3788', '3884', '4236', '4551', '2900', '4180', '4519' => 25.00, // Costa Lejana
-            '3143', '3518', '4204', '3655', '3414', '3020', '2812', '3292', '4309' => 30.00, // Sierra
-            '2534', '4108', '4431', '4567', '4165' => 35.00, // Selva
-            default => 35.00,
-        };
+        $this->ubigeoService = $ubigeoService;
     }
 
     public function mount()
@@ -49,9 +43,16 @@ class ShoppingCart extends Component
             $this->userAddresses = Auth::user()->addresses;
             $defaultAddress = Auth::user()->defaultAddress;
             
-            if ($defaultAddress) {
+            $sessionAddressId = session('selected_address_id');
+            
+            if ($sessionAddressId && $this->userAddresses->contains('id', $sessionAddressId)) {
+                $this->selectedAddressId = $sessionAddressId;
+                $address = $this->userAddresses->firstWhere('id', $sessionAddressId);
+                $this->setAddressLocation($address);
+            } elseif ($defaultAddress) {
                 $this->selectedAddressId = $defaultAddress->id;
                 $this->setAddressLocation($defaultAddress);
+                session()->put('selected_address_id', $defaultAddress->id);
             }
         } else {
             // For guests, load CODES from session (not names)
@@ -64,10 +65,7 @@ class ShoppingCart extends Component
 
     protected function loadDepartments()
     {
-        $path = storage_path('app/ubigeo/departamentos.json');
-        if (file_exists($path)) {
-            $this->departments = json_decode(file_get_contents($path), true);
-        }
+        $this->departments = $this->ubigeoService->getDepartments();
     }
 
     public function updatedSelectedAddressId($value)
@@ -78,15 +76,17 @@ class ShoppingCart extends Component
                 $this->setAddressLocation($address);
                 
                 // Get ubigeo codes for the frontend
-                $deptCode = $this->getDepartmentCode($address->department);
-                $provCode = $this->getProvinceCode($deptCode, $address->province);
-                $distCode = $this->getDistrictCode($provCode, $address->district);
+                $deptCode = $this->ubigeoService->getDepartmentIdByName($address->department);
+                $provCode = $this->ubigeoService->getProvinceIdByName($deptCode, $address->province);
+                $distCode = $this->ubigeoService->getDistrictIdByName($provCode, $address->district);
                 
                 $this->dispatch('address-changed', 
                     department: $deptCode,
                     province: $provCode,
                     district: $distCode
                 );
+                
+                session()->put('selected_address_id', $value);
             }
         }
     }
@@ -99,53 +99,20 @@ class ShoppingCart extends Component
         $this->selectedDistrict = $address->district;
         
         // Convert names to ubigeo codes
-        $this->selectedDeptCode = $this->getDepartmentCode($address->department);
-        $this->selectedProvCode = $this->getProvinceCode($this->selectedDeptCode, $address->province);
-        $this->selectedDistCode = $this->getDistrictCode($this->selectedProvCode, $address->district);
+        $this->selectedDeptCode = $this->ubigeoService->getDepartmentIdByName($address->department);
+        $this->selectedProvCode = $this->ubigeoService->getProvinceIdByName($this->selectedDeptCode, $address->province);
+        $this->selectedDistCode = $this->ubigeoService->getDistrictIdByName($this->selectedProvCode, $address->district);
         
         // Calculate shipping using the CODE
-        $this->shippingCost = $this->getShippingRate($this->selectedDeptCode);
+        $this->shippingCost = $this->ubigeoService->getShippingRate($this->selectedDeptCode);
         
         // Sync with session (store CODE for shipping calculation)
         session()->put('selected_department', $this->selectedDeptCode);
         session()->put('selected_province', $this->selectedProvCode);
         session()->put('selected_district', $this->selectedDistCode);
-        session()->put('shipping_cost', $this->shippingCost);
     }
 
-    protected function getDepartmentCode($departmentName)
-    {
-        $dept = collect($this->departments)->firstWhere('nombre_ubigeo', $departmentName);
-        return $dept['id_ubigeo'] ?? '';
-    }
 
-    protected function getProvinceCode($departmentCode, $provinceName)
-    {
-        if (!$departmentCode) return '';
-        
-        $path = storage_path('app/ubigeo/provincias.json');
-        if (file_exists($path)) {
-            $allProvinces = json_decode(file_get_contents($path), true);
-            $provinces = $allProvinces[$departmentCode] ?? [];
-            $prov = collect($provinces)->firstWhere('nombre_ubigeo', $provinceName);
-            return $prov['id_ubigeo'] ?? '';
-        }
-        return '';
-    }
-
-    protected function getDistrictCode($provinceCode, $districtName)
-    {
-        if (!$provinceCode) return '';
-        
-        $path = storage_path('app/ubigeo/distritos.json');
-        if (file_exists($path)) {
-            $allDistricts = json_decode(file_get_contents($path), true);
-            $districts = $allDistricts[$provinceCode] ?? [];
-            $dist = collect($districts)->firstWhere('nombre_ubigeo', $districtName);
-            return $dist['id_ubigeo'] ?? '';
-        }
-        return '';
-    }
 
     public function updatedSelectedDepartment($value)
     {
@@ -153,9 +120,8 @@ class ShoppingCart extends Component
         // But per requirements: "no dejando editar los selects" for logged in users.
         // So this might only be triggered by guest users or if we allow it.
         
-        $this->shippingCost = $value ? $this->getShippingRate($value) : 0;
+        $this->shippingCost = $value ? $this->ubigeoService->getShippingRate($value) : 0;
         session()->put('selected_department', $value);
-        session()->put('shipping_cost', $this->shippingCost);
 
         $this->selectedProvince = null;
         $this->selectedDistrict = null;
