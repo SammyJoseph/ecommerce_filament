@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
 
 class ProductSeeder extends Seeder
@@ -13,10 +13,22 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create some products with variants (60% chance)
-        Product::factory(20)->create();
+        $categories = Category::all();
 
-        // Ensure we have at least a few products with color options for testing
-        Product::factory(5)->withVariants()->create();
+        // Create 12 products
+        for ($i = 0; $i < 12; $i++) {
+            $factory = Product::factory();
+
+            if ($categories->count() > 0) {
+                $factory = $factory->state(['category_id' => $categories->random()->id]);
+            }
+
+            // Randomly decide if this product should have variants (60% chance)
+            if (fake()->boolean(60)) {
+                $factory = $factory->withVariants();
+            }
+
+            $factory->create();
+        }
     }
 }

@@ -59,6 +59,13 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
                 'role:admin',
+            ])
+            ->navigationGroups([
+                'Products',
+                'Sales',
+                'Marketing',
+                'Home Page',
+                'Access Control',
             ]);
     }
 }
