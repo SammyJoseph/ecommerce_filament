@@ -50,6 +50,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductSeeder::class);
         $this->call(CouponSeeder::class);
         $this->call(HomePageSettingsSeeder::class);
+        $this->call(HeroSlideSeeder::class);
         $this->call(OrderSeeder::class);
     }
 }

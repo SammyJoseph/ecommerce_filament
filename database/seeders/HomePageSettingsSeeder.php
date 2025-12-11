@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class HomePageSettingsSeeder extends Seeder
 {
@@ -12,19 +13,44 @@ class HomePageSettingsSeeder extends Seeder
      */
     public function run(): void
     {
+        // Copy images to storage
+        $disk = Storage::disk('public');
+        $sourceDir = public_path('assets/images');
+
+        // Prepare About Us Image
+        $aboutImagePath = 'about-us/logo.png';
+        $aboutImageSource = $sourceDir . '/about/logo.png';
+        
+        if (file_exists($aboutImageSource)) {
+            $disk->put($aboutImagePath, file_get_contents($aboutImageSource));
+        }
+
+        // Prepare Banner Images
+        $banner1Path = 'banners/banner-1.jpg';
+        $banner1Source = $sourceDir . '/banner/banner-1.jpg';
+        if (file_exists($banner1Source)) {
+            $disk->put($banner1Path, file_get_contents($banner1Source));
+        }
+
+        $banner2Path = 'banners/banner-2.jpg';
+        $banner2Source = $sourceDir . '/banner/banner-2.jpg';
+        if (file_exists($banner2Source)) {
+            $disk->put($banner2Path, file_get_contents($banner2Source));
+        }
+
         $banners = [
             [
-                'title' => 'Zara Pattern Boxed <br>Underwear',
+                'title' => 'Zara Pattern Boxed Underwear',
                 'description' => 'Stretch, fresh-cool help you alway comfortable',
-                'image' => 'assets/images/banner/banner-1.jpg',
-                'link' => 'product-details.html',
+                'image' => $banner1Path,
+                'link' => '#',
                 'text_color' => '',
             ],
             [
                 'title' => 'Basic Color Caps',
                 'description' => 'Minimalist never cool, choose and make the simple great again!',
-                'image' => 'assets/images/banner/banner-2.jpg',
-                'link' => 'product-details.html',
+                'image' => $banner2Path,
+                'link' => '#',
                 'text_color' => '',
             ]
         ];
@@ -50,7 +76,7 @@ class HomePageSettingsSeeder extends Seeder
                 'group' => 'home_page',
                 'name' => 'about_us_image',
                 'locked' => 0,
-                'payload' => json_encode('assets/images/about/logo.png'),
+                'payload' => json_encode($aboutImagePath),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
