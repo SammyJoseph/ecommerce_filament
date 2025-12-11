@@ -42,6 +42,14 @@ class OrderService
                 $userId = $this->getUserIdFromPayment($paymentData);
                 $order->user_id = $userId;
             }
+
+            if ($order->user_id) {
+                $user = User::find($order->user_id);
+                if ($user) {
+                    $user->assignRole('customer');
+                    $user->removeRole('user');
+                }
+            }
             
             $order->save();
 

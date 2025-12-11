@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Log;
 use MercadoPago\Client\Payment\PaymentClient;
 use MercadoPago\MercadoPagoConfig;
 
+use Gloudemans\Shoppingcart\Facades\Cart;
+
 class MPController extends Controller
 {
     protected $orderService;
@@ -20,6 +22,7 @@ class MPController extends Controller
 
     public function success(Request $request)
     {
+        Cart::instance('shopping')->destroy();
         return view('payment.success');
     }
     

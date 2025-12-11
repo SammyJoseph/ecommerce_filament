@@ -17,11 +17,12 @@ class RolesPermissionsSeeder extends Seeder
     {
         // Roles
         Role::create(['name' => 'user', 'guard_name' => 'web']);
-        $adminRole = Role::create(['name' => 'admin', 'guard_name' => 'web']); // guard_name es buena práctica si se usan múltiples guards
+        Role::create(['name' => 'customer', 'guard_name' => 'web']);
+        $adminRole = Role::create(['name' => 'admin', 'guard_name' => 'web']);
 
         // Permisos
         Permission::create(['name' => 'edit products']);
         Permission::create(['name' => 'delete users']);
-        $adminRole->givePermissionTo(Permission::all()); // Dar todos los permisos al rol admin
+        $adminRole->givePermissionTo(Permission::all());
     }
 }

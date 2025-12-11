@@ -61,8 +61,8 @@ class AdminPanelProvider extends PanelProvider
                 'role:admin',
             ])
             ->navigationGroups([
-                'Products',
                 'Sales',
+                'Products',
                 'Marketing',
                 'Home Page',
                 'Access Control',

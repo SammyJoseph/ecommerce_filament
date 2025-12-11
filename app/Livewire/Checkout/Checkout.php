@@ -190,7 +190,7 @@ class Checkout extends Component
                 Log::error('MP Error: ' . $e->getMessage());
                 session()->flash('error', 'Error al procesar: ' . $e->getMessage());
             }
-        } 
+        }
     }
 
     public function processMercadoPago($orderId)
@@ -293,6 +293,8 @@ class Checkout extends Component
             'password' => bcrypt(uniqid()),
         ]);
 
+        $user->assignRole('user');
+
         auth()->login($user);
 
         return $user->id;
@@ -366,8 +368,6 @@ class Checkout extends Component
         return $deptId ? $this->ubigeoService->getShippingRate($deptId) : 0;
     }
 
-    // Tarifas de envío removidas (ahora en UbigeoService)
-    
     public function getDiscountProperty() {
         if (session()->has('coupon')) {
             $coupon = session('coupon');
