@@ -198,6 +198,22 @@ class Checkout extends Component
         MercadoPagoConfig::setAccessToken(config('services.mercadopago.access_token'));
         $client = new PreferenceClient();
 
+        if (app()->environment('local')) {
+            $backUrls = [
+                "success" => "https://boutique.artisam.dev/payment/success",
+                "failure" => "https://boutique.artisam.dev/payment/failure",
+                "pending" => "https://boutique.artisam.dev/payment/pending"
+            ];
+            $notificationUrl = "https://sagacious-attestable-coy.ngrok-free.dev/mp/webhook";
+        } else {
+            $backUrls = [
+                "success" => route('payment.success'),
+                "failure" => route('payment.failure'),
+                "pending" => route('payment.pending')
+            ];
+            $notificationUrl = route('mp.webhook');
+        }
+
         $preference = $client->create([
             "items" => $this->getCartItems(),
             "payer" => [
@@ -213,19 +229,15 @@ class Checkout extends Component
                 ]
             ],
             "external_reference" => (string) $orderId, 
-            "back_urls" => [
-                "success" => "https://boutique.artisam.dev/payment/success",
-                "failure" => "https://boutique.artisam.dev/payment/failure",
-                "pending" => "https://boutique.artisam.dev/payment/pending"
-            ],
+            "back_urls" => $backUrls,
             "auto_return" => "approved",
-            "notification_url" => "https://sagacious-attestable-coy.ngrok-free.dev/mp/webhook",
+            "notification_url" => $notificationUrl,
             "shipments" => [
                 "cost" => $this->shipping,
                 "mode" => "not_specified",
             ],
         ]);
-
+        
         return redirect()->away($preference->init_point);
     }
 

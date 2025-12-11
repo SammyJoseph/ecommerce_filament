@@ -20,17 +20,17 @@ class MPController extends Controller
 
     public function success(Request $request)
     {
-        
+        return view('payment.success');
     }
     
     public function failure(Request $request)
     {
-        
+        return view('payment.failure');
     }
     
     public function pending(Request $request)
     {
-        
+        return view('payment.pending');
     }
 
     public function webhook(Request $request)
