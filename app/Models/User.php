@@ -9,9 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens;
 
@@ -83,5 +85,10 @@ class User extends Authenticatable
     public function defaultAddress()
     {
         return $this->hasOne(UserAddress::class)->where('is_default', true);
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasRole('admin');
     }
 }
