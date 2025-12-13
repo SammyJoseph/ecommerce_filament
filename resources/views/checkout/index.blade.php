@@ -1,4 +1,4 @@
-@extends('layouts.index')
+@extends('layouts.site')
 @section('title', 'Checkout | Norda - Minimal eCommerce HTML Template')
 
 @section('header-extra-classes', '') 

@@ -1,4 +1,4 @@
-@extends('layouts.index')
+@extends('layouts.site')
 @section('title', 'Norda - Minimal eCommerce HTML Template')
 
 @section('main-wrapper-attrs')

@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Order;
 use App\Models\Product;
-use Gloudemans\Shoppingcart\Facades\Cart;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 
-class IndexController extends Controller
+class SiteController extends Controller
 {    
-    public function index()
+    public function index(): View
     {
         $categories = Category::with(['products' => function($query) {
             $query->take(10)->with(['variants' => function($q) {
@@ -21,7 +19,7 @@ class IndexController extends Controller
         return view('index', compact('categories'));
     }
 
-    public function productDetails(Product $product)
+    public function productDetails(Product $product): View
     {
         $product->load([
             'variants' => function($query) {
@@ -47,13 +45,23 @@ class IndexController extends Controller
         return view('product.product-details', compact('product', 'variantCombinations', 'relatedProducts'));
     }    
 
-    public function wishlist()
+    public function wishlist(): View
     {
         return view('product.wishlist');
     }
 
-    public function shop()
+    public function shop(): View
     {
         return view('shop');
+    }
+
+    public function about(): View
+    {
+        return view('about');
+    }
+
+    public function contact(): View
+    {
+        return view('contact');
     }
 }

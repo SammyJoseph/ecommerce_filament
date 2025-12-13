@@ -1,16 +1,16 @@
 <?php
 
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\IndexController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Payment\MPController;
 use App\Http\Controllers\Product\CartController;
 use App\Http\Controllers\UserController;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/product/{product}', [IndexController::class, 'productDetails'])->name('product.details');
+Route::get('/product/{product}', [SiteController::class, 'productDetails'])->name('product.details');
 
-Route::get('/', [IndexController::class, 'index'])->name('index');
+Route::get('/', [SiteController::class, 'index'])->name('index');
 
 Route::middleware([
     'auth:sanctum',
@@ -36,8 +36,8 @@ Route::get('/raw-cart', function () {
     return response()->json($cart);
 });
 
-Route::get('/shop', [IndexController::class, 'shop'])->name('shop');
-Route::get('/wishlist', [IndexController::class, 'wishlist'])->name('wishlist');
+Route::get('/shop', [SiteController::class, 'shop'])->name('shop');
+Route::get('/wishlist', [SiteController::class, 'wishlist'])->name('wishlist');
 Route::get('/raw-wishlist', function () {
     Cart::instance('wishlist');
     $cart = Cart::content();
@@ -53,3 +53,6 @@ Route::get('/payment/failure', [MPController::class, 'failure'])->name('payment.
 Route::get('/payment/pending', [MPController::class, 'pending'])->name('payment.pending');
 
 Route::post('/mp/webhook', [MPController::class, 'webhook'])->name('mp.webhook');
+
+Route::get('/about', [SiteController::class, 'about'])->name('about');
+Route::get('/contact', [SiteController::class, 'contact'])->name('contact');

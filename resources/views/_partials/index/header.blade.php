@@ -58,44 +58,12 @@
                     <div class="col-xl-8 col-lg-7">
                         <div class="main-menu main-menu-padding-1 main-menu-lh-1">
                             <nav>
-                                <ul>
-                                    <li><a href="index.html">HOME </a>
-                                        <ul class="sub-menu-style">
-                                            <li><a href="index.html">Home version 1 </a></li>
-                                            <li><a href="index-2.html">Home version 2</a></li>
-                                            <li><a href="index-3.html">Home version 3</a></li>
-                                            <li><a href="index-4.html">Home version 4</a></li>
-                                            <li><a href="index-5.html">Home version 5</a></li>
-                                            <li><a href="index-6.html">Home version 6</a></li>
-                                            <li><a href="index-7.html">Home version 7</a></li>
-                                            <li><a href="index-8.html">Home version 8</a></li>
-                                            <li><a href="index-9.html">Home version 9</a></li>
-                                            <li><a href="index-10.html">Home version 10</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="{{ route('shop') }}">SHOP </a></li>
-                                    <li><a href="#">PAGES </a>
-                                        <ul class="sub-menu-style">
-                                            <li><a href="about-us.html">about us </a></li>
-                                            <li><a href="cart.html">cart page</a></li>
-                                            <li><a href="checkout.html">checkout </a></li>
-                                            <li><a href="my-account.html">my account</a></li>
-                                            <li><a href="{{ route('wishlist') }}">wishlist </a></li>
-                                            <li><a href="compare.html">compare </a></li>
-                                            <li><a href="contact.html">contact us </a></li>
-                                            <li><a href="order-tracking.html">order tracking</a></li>
-                                            <li><a href="login-register.html">login / register </a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="blog.html">BLOG </a>
-                                        <ul class="sub-menu-style">
-                                            <li><a href="blog.html">blog standard </a></li>
-                                            <li><a href="blog-no-sidebar.html">blog no sidebar </a></li>
-                                            <li><a href="blog-right-sidebar.html">blog right sidebar</a></li>
-                                            <li><a href="blog-details.html">blog details</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="contact.html">CONTACT </a></li>
+                                <ul class="tw-uppercase">
+                                    <li><a href="{{ route('index') }}" @class(['!tw-text-red-500' => request()->routeIs('index')])>Home</a></li>
+                                    <li><a href="{{ route('shop') }}" @class(['!tw-text-red-500' => request()->routeIs('shop')])>Shop</a></li>
+                                    <li><a href="{{ route('about') }}" @class(['!tw-text-red-500' => request()->routeIs('about')])>About us</a></li>
+                                    <li><a href="#">Blog</a></li>
+                                    <li><a href="{{ route('contact') }}" @class(['!tw-text-red-500' => request()->routeIs('contact')])>Contact</a></li>
                                 </ul>
                             </nav>
                         </div>

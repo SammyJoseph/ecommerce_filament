@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="{{  asset('assets/css/vendor/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{  asset('assets/css/vendor/simple-line-icons.css') }}">
+<link rel="stylesheet" href="{{  asset('assets/css/vendor/elegant.css') }}">
+<link rel="stylesheet" href="{{  asset('assets/css/vendor/linear-icon.css') }}">
+<link rel="stylesheet" href="{{  asset('assets/css/plugins/nice-select.css') }}">
+<link rel="stylesheet" href="{{  asset('assets/css/plugins/easyzoom.css') }}">
+<link rel="stylesheet" href="{{  asset('assets/css/plugins/slick.css') }}">
+<link rel="stylesheet" href="{{  asset('assets/css/plugins/animate.css') }}">
+<link rel="stylesheet" href="{{  asset('assets/css/plugins/magnific-popup.css') }}">
+<link rel="stylesheet" href="{{  asset('assets/css/plugins/jquery-ui.css') }}">
+<link rel="stylesheet" href="{{  asset('assets/css/style.css?v=0.01') }}">
