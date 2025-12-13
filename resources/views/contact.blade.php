@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div class="contact-area pt-115 pb-120">
+    <div class="contact-area pt-100 pb-120">
         <div class="container">
             <div class="contact-info-wrap-3 pb-85">
                 <h3>contact info</h3>

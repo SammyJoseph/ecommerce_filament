@@ -62,7 +62,7 @@
                                     <li><a href="{{ route('index') }}" @class(['!tw-text-red-500' => request()->routeIs('index')])>Home</a></li>
                                     <li><a href="{{ route('shop') }}" @class(['!tw-text-red-500' => request()->routeIs('shop')])>Shop</a></li>
                                     <li><a href="{{ route('about') }}" @class(['!tw-text-red-500' => request()->routeIs('about')])>About us</a></li>
-                                    <li><a href="#">Blog</a></li>
+                                    <li><a href="{{ route('blog.index') }}" @class(['!tw-text-red-500' => request()->routeIs('blog.index')])>Blog</a></li>
                                     <li><a href="{{ route('contact') }}" @class(['!tw-text-red-500' => request()->routeIs('contact')])>Contact</a></li>
                                 </ul>
                             </nav>

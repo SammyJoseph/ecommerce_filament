@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div class="about-us-area pt-120 pb-120">
+    <div class="about-us-area pt-100 pb-120">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-3">

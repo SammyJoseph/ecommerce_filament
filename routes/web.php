@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Payment\MPController;
@@ -56,3 +57,5 @@ Route::post('/mp/webhook', [MPController::class, 'webhook'])->name('mp.webhook')
 
 Route::get('/about', [SiteController::class, 'about'])->name('about');
 Route::get('/contact', [SiteController::class, 'contact'])->name('contact');
+
+Route::resource('blog', BlogController::class);
