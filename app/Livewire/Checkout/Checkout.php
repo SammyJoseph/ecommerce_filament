@@ -8,11 +8,14 @@ use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\MercadoPagoConfig;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
 use App\Models\User;
 use App\Models\UserAddress;
+use App\Models\VariantSize;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Checkout extends Component
 {
@@ -165,6 +168,10 @@ class Checkout extends Component
     {
         $this->validate();
 
+        if (!$this->validateStock()) {
+            return;
+        }
+
         if (empty($this->selectedShippingAddressId)) {
             $this->validate([
                 'department' => 'required',
@@ -183,6 +190,8 @@ class Checkout extends Component
                 $order = $this->createOrder();
                 $redirect = $this->processMercadoPago($order->id);
                 
+                $this->reduceStock();
+
                 DB::commit();
                 return $redirect;
             } catch (\Exception $e) {
@@ -191,6 +200,74 @@ class Checkout extends Component
                 session()->flash('error', 'Error al procesar: ' . $e->getMessage());
             }
         }
+    }
+
+    private function createOrder()
+    {
+        $contactInfo = "Cliente: {$this->firstName} {$this->lastName} | Tel: {$this->phone}";
+
+        $userId = $this->resolveUserId();
+        $shippingAddressId = $this->resolveAddressId($userId);
+
+        $order = Order::create([
+            'user_id' => $userId,
+            'number' => 'ORD-' . strtoupper(Str::random(5)),
+            'total_amount' => $this->calculateTotal() - $this->shipping,
+            'shipping_amount' => $this->shipping,
+            'discount_amount' => $this->discount,
+            'status' => 'pending',
+            'currency' => 'PEN',
+            'shipping_address_id' => $shippingAddressId,
+            'notes' => $contactInfo . " | Notas: " . $this->notes,
+        ]);
+
+        $cartItems = Cart::instance('shopping')->content();
+        foreach ($cartItems as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item->options->product_id ?? $item->id,
+                'quantity' => $item->qty,
+                'price' => (float) $item->price,
+            ]);
+
+        }
+
+        return $order;
+    }
+
+    private function reduceStock()
+    {
+        $cartItems = Cart::instance('shopping')->content();
+        foreach ($cartItems as $item) {
+            if (isset($item->options->variant_size_id) && $variantSize = VariantSize::find($item->options->variant_size_id)) {
+                $variantSize->decrement('stock', $item->qty);
+            } elseif ($product = Product::find($item->options->product_id ?? $item->id)) {
+                $product->decrement('stock', $item->qty);
+            }
+        }
+    }
+
+    private function validateStock()
+    {
+        $cartItems = Cart::instance('shopping')->content();
+        foreach ($cartItems as $item) {
+            $stock = 0;
+            
+            if (isset($item->options->variant_size_id)) {
+                $variantSize = VariantSize::find($item->options->variant_size_id);
+                if ($variantSize) {
+                    $stock = $variantSize->stock;
+                }
+            } elseif ($product = Product::find($item->options->product_id ?? $item->id)) {
+                $stock = $product->stock;
+            }
+
+            if ($item->qty > $stock) {
+                session()->flash('error', "Stock insuficiente para '{$item->name}'. Disponibles: {$stock}");
+                return false;
+            }
+        }
+        return true;
     }
 
     public function processMercadoPago($orderId)
@@ -239,38 +316,7 @@ class Checkout extends Component
         ]);
         
         return redirect()->away($preference->init_point);
-    }
-
-    private function createOrder()
-    {
-        $contactInfo = "Cliente: {$this->firstName} {$this->lastName} | Tel: {$this->phone}";
-
-        $userId = $this->resolveUserId();
-        $shippingAddressId = $this->resolveAddressId($userId);
-
-        $order = Order::create([
-            'user_id' => $userId,
-            'number' => 'ORD-' . strtoupper(uniqid()),
-            'total_amount' => $this->calculateTotal() - $this->shipping,
-            'shipping_amount' => $this->shipping,
-            'discount_amount' => $this->discount,
-            'status' => 'pending',
-            'currency' => 'PEN',
-            'shipping_address_id' => $shippingAddressId,
-            'notes' => $contactInfo . " | Notas: " . $this->notes,
-        ]);
-
-        foreach (Cart::instance('shopping')->content() as $item) {
-            OrderItem::create([
-                'order_id' => $order->id,
-                'product_id' => $item->options->product_id ?? $item->id,
-                'quantity' => $item->qty,
-                'price' => (float) $item->price,
-            ]);
-        }
-
-        return $order;
-    }
+    }    
 
     private function resolveUserId()
     {

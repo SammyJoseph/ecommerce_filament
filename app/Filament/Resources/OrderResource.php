@@ -195,6 +195,7 @@ class OrderResource extends Resource
     {
         return $table
             ->recordUrl(null)
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('number')
                     ->searchable()

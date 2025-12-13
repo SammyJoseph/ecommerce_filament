@@ -18,12 +18,6 @@ class CouponResource extends Resource
     protected static ?string $activeNavigationIcon = 'heroicon-s-ticket';
 
     protected static ?string $navigationGroup = 'Marketing';
-    protected static ?int $navigationSort = 3;
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::valid()->count();
-    }
 
     public static function form(Form $form): Form
     {
