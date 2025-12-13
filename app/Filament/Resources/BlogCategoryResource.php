@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BlogResource\Pages;
-use App\Filament\Resources\BlogResource\RelationManagers;
-use App\Models\Blog;
+use App\Filament\Resources\BlogCategoryResource\Pages;
+use App\Filament\Resources\BlogCategoryResource\RelationManagers;
+use App\Models\BlogCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,22 +16,22 @@ use Illuminate\Support\Str;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 
-class BlogResource extends Resource
+class BlogCategoryResource extends Resource
 {
-    protected static ?string $model = Blog::class;
+    protected static ?string $model = BlogCategory::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $navigationLabel = 'Articles';
+    protected static ?string $navigationLabel = 'Categories';
     protected static ?string $navigationGroup = 'Blog';
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Section::make()
-                    ->schema([                        
-                        Forms\Components\TextInput::make('title')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
@@ -45,22 +45,8 @@ class BlogResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->unique(ignoreRecord: true),
-                        Forms\Components\Select::make('categories')
-                            ->relationship('categories', 'name')
-                            ->multiple()
-                            ->preload()
-                            ->searchable(),
-                        Forms\Components\RichEditor::make('content')
+                        Forms\Components\Textarea::make('description')
                             ->columnSpanFull(),
-                    ])->columns(2),
-                Forms\Components\Section::make()
-                    ->schema([
-                        Forms\Components\FileUpload::make('image')
-                            ->image()
-                            ->directory('blog')
-                            ->columnSpanFull(),
-                        Forms\Components\DateTimePicker::make('published_at')
-                            ->native(false),
                         Forms\Components\Toggle::make('is_visible')
                             ->required()
                             ->default(true),
@@ -72,20 +58,13 @@ class BlogResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('image'),
-                Tables\Columns\TextColumn::make('title')
+                Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
-                    ->searchable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('categories.name')
-                    ->badge(),
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('is_visible')
                     ->boolean()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('published_at')
-                    ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -119,9 +98,9 @@ class BlogResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBlogs::route('/'),
-            'create' => Pages\CreateBlog::route('/create'),
-            'edit' => Pages\EditBlog::route('/{record}/edit'),
+            'index' => Pages\ListBlogCategories::route('/'),
+            'create' => Pages\CreateBlogCategory::route('/create'),
+            'edit' => Pages\EditBlogCategory::route('/{record}/edit'),
         ];
     }
 }

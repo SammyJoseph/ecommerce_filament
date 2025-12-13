@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Blog;
 
 use App\Models\Blog;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
@@ -12,10 +13,11 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::where('is_visible', true)
-            ->whereDate('published_at', '<=', now())
+        $blogs = Blog::visible()
+            ->with(['categories'])
             ->orderBy('published_at', 'desc')
-            ->paginate(9);
+            ->paginate(6);
+            
         return view('blog.index', compact('blogs'));
     }
 

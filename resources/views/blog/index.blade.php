@@ -10,7 +10,7 @@
             <div class="breadcrumb-content text-center">
                 <ul>
                     <li>
-                        <a href="index.html">Home</a>
+                        <a href="{{ route('index') }}">Home</a>
                     </li>
                     <li class="active">Blog</li>
                 </ul>
@@ -26,13 +26,17 @@
                         <div class="col-lg-6 col-md-6 col-12 col-sm-6">
                             <div class="blog-wrap mb-40">
                                 <div class="blog-img mb-20">
-                                    <a href="blog-details.html"><img src="assets/images/blog/blog-1.jpg" alt="blog-img"></a>
+                                    <a href="{{ route('blog.show', $blog->slug) }}"><img src="{{ asset('storage/' . $blog->image) }}" alt="blog-img"></a>
                                 </div>
                                 <div class="blog-content">
                                     <div class="blog-meta">
                                         <ul>
-                                            <li><a href="#">News </a></li>
-                                            <li>May 25, 2022</li>
+                                            <li>
+                                                @foreach ($blog->categories as $category)
+                                                <a href="{{ route('blog-category.show', $category->slug) }}">{{ $category->name }}</a>@if (!$loop->last), @endif
+                                                @endforeach
+                                            </li>
+                                            <li>{{ $blog->published_at->format('F j, Y') }}</li>
                                         </ul>
                                     </div>
                                     <h1><a href="{{ route('blog.show', $blog->slug) }}">{{ $blog->title }}</a></h1>

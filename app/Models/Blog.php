@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Blog extends Model
 {
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
     protected $fillable = [
         'title',
         'slug',
@@ -23,5 +24,16 @@ class Blog extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(BlogCategory::class);
+    }
+
+    public function scopeVisible($query)
+    {
+        return $query->where('is_visible', true)
+            ->whereDate('published_at', '<=', now());
     }
 }

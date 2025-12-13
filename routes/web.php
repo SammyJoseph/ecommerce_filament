@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Blog\BlogController;
+use App\Http\Controllers\Blog\BlogCategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Payment\MPController;
@@ -59,3 +60,4 @@ Route::get('/about', [SiteController::class, 'about'])->name('about');
 Route::get('/contact', [SiteController::class, 'contact'])->name('contact');
 
 Route::resource('blog', BlogController::class);
+Route::resource('blog-category', BlogCategoryController::class);

@@ -24,7 +24,7 @@
                     <div class="blog-details-wrapper">
                         <div class="blog-details-top">
                             <div class="blog-details-img">
-                                <img alt="" src="assets/images/blog/blog-details.jpg">
+                                <img alt="" src="{{ asset('storage/' . $blog->image) }}">
                             </div>
                             <div class="blog-details-content">
                                 <div class="blog-meta-2">

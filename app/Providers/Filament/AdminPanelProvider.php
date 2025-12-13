@@ -64,6 +64,7 @@ class AdminPanelProvider extends PanelProvider
                 'Sales',
                 'Products',
                 'Marketing',
+                'Blog',
                 'Home Page',
                 'Access Control',
             ]);
