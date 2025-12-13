@@ -12,7 +12,10 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::all();
+        $blogs = Blog::where('is_visible', true)
+            ->whereDate('published_at', '<=', now())
+            ->orderBy('published_at', 'desc')
+            ->paginate(9);
         return view('blog.index', compact('blogs'));
     }
 

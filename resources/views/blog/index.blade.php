@@ -22,6 +22,7 @@
             <div class="row flex-row-reverse">
                 <div class="col-lg-9">
                     <div class="row">
+                        @foreach ($blogs as $blog)
                         <div class="col-lg-6 col-md-6 col-12 col-sm-6">
                             <div class="blog-wrap mb-40">
                                 <div class="blog-img mb-20">
@@ -34,90 +35,11 @@
                                             <li>May 25, 2022</li>
                                         </ul>
                                     </div>
-                                    <h1><a href="blog-details.html">Five things you only know if you’re at Chanel's Hamburg Show</a></h1>
+                                    <h1><a href="{{ route('blog.show', $blog->slug) }}">{{ $blog->title }}</a></h1>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-12 col-sm-6">
-                            <div class="blog-wrap mb-40">
-                                <div class="blog-img mb-20">
-                                    <a href="blog-details.html"><img src="assets/images/blog/blog-2.jpg" alt="blog-img"></a>
-                                </div>
-                                <div class="blog-content">
-                                    <div class="blog-meta">
-                                        <ul>
-                                            <li><a href="#">Inspiration </a></li>
-                                            <li>May 25, 2022</li>
-                                        </ul>
-                                    </div>
-                                    <h1><a href="blog-details.html">Designers matched perfectly to you on Envato Studio</a></h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-12 col-sm-6">
-                            <div class="blog-wrap mb-40">
-                                <div class="blog-img mb-20">
-                                    <a href="blog-details.html"><img src="assets/images/blog/blog-3.jpg" alt="blog-img"></a>
-                                </div>
-                                <div class="blog-content">
-                                    <div class="blog-meta">
-                                        <ul>
-                                            <li><a href="#">Lookbook </a></li>
-                                            <li>May 25, 2022</li>
-                                        </ul>
-                                    </div>
-                                    <h1><a href="blog-details.html">Calvin Klein Shoes Collection 2022, Activites Summer</a></h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-12 col-sm-6">
-                            <div class="blog-wrap mb-40">
-                                <div class="blog-img mb-20">
-                                    <a href="blog-details.html"><img src="assets/images/blog/blog-6.jpg" alt="blog-img"></a>
-                                </div>
-                                <div class="blog-content">
-                                    <div class="blog-meta">
-                                        <ul>
-                                            <li><a href="#">News </a></li>
-                                            <li>May 25, 2022</li>
-                                        </ul>
-                                    </div>
-                                    <h1><a href="blog-details.html">Five things you only know if you’re at Chanel's Hamburg Show</a></h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-12 col-sm-6">
-                            <div class="blog-wrap mb-40">
-                                <div class="blog-img mb-20">
-                                    <a href="blog-details.html"><img src="assets/images/blog/blog-7.jpg" alt="blog-img"></a>
-                                </div>
-                                <div class="blog-content">
-                                    <div class="blog-meta">
-                                        <ul>
-                                            <li><a href="#">Inspiration </a></li>
-                                            <li>May 25, 2022</li>
-                                        </ul>
-                                    </div>
-                                    <h1><a href="blog-details.html">Designers matched perfectly to you on Envato Studio</a></h1>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-12 col-sm-6">
-                            <div class="blog-wrap mb-40">
-                                <div class="blog-img mb-20">
-                                    <a href="blog-details.html"><img src="assets/images/blog/blog-8.jpg" alt="blog-img"></a>
-                                </div>
-                                <div class="blog-content">
-                                    <div class="blog-meta">
-                                        <ul>
-                                            <li><a href="#">Lookbook </a></li>
-                                            <li>May 25, 2022</li>
-                                        </ul>
-                                    </div>
-                                    <h1><a href="blog-details.html">Calvin Klein Shoes Collection 2022, Activites Summer</a></h1>
-                                </div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                     <div class="pro-pagination-style text-center mt-10">
                         <ul>
