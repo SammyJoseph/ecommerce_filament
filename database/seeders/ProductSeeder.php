@@ -15,8 +15,8 @@ class ProductSeeder extends Seeder
     {
         $categories = Category::all();
 
-        // Create 12 products
-        for ($i = 0; $i < 12; $i++) {
+        // Create 24 products
+        for ($i = 0; $i < 24; $i++) {
             $factory = Product::factory();
 
             if ($categories->count() > 0) {

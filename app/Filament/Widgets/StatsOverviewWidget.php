@@ -55,19 +55,19 @@ class StatsOverviewWidget extends BaseWidget
         $ordersChart = $this->getChartData('orders');
 
         return [
-            Stat::make('Revenue', '$' . number_format($currentRevenue / 1000, 2) . 'k')
+            Stat::make('Revenue', '$' . number_format($currentRevenue, 2))
                 ->description(abs($revenueChange) . '% ' . ($revenueChange >= 0 ? 'increase' : 'decrease'))
                 ->descriptionIcon($revenueChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->chart($revenueChart)
                 ->color($revenueChange >= 0 ? 'success' : 'danger'),
             
-            Stat::make('New customers', number_format($currentCustomers / 1000, 2) . 'k')
+            Stat::make('New customers', number_format($currentCustomers))
                 ->description(abs($customersChange) . '% ' . ($customersChange >= 0 ? 'increase' : 'decrease'))
                 ->descriptionIcon($customersChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->chart($customersChart)
                 ->color($customersChange >= 0 ? 'success' : 'danger'),
             
-            Stat::make('New orders', number_format($currentOrders / 1000, 2) . 'k')
+            Stat::make('New orders', number_format($currentOrders))
                 ->description(abs($ordersChange) . '% ' . ($ordersChange >= 0 ? 'increase' : 'decrease'))
                 ->descriptionIcon($ordersChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->chart($ordersChart)

@@ -21,18 +21,13 @@ class TotalCustomersChart extends ChartWidget
     {
         $currentYear = Carbon::now()->year;
         
-        // Get cumulative customer count per month
         $labels = [];
         $data = [];
-        
-        // Fixed demo data for consistent display
-        $demoData = [4500, 5800, 6200, 7500, 8200, 9100, 10500, 10800, 12100, 13500, 14800, 17200];
         
         for ($month = 1; $month <= 12; $month++) {
             $monthName = Carbon::create(null, $month, 1)->format('M');
             $labels[] = $monthName;
             
-            // Get total customers up to this month
             $count = User::whereYear('created_at', '<=', $currentYear)
                 ->where(function($query) use ($currentYear, $month) {
                     $query->whereYear('created_at', '<', $currentYear)
@@ -43,8 +38,7 @@ class TotalCustomersChart extends ChartWidget
                 })
                 ->count();
             
-            // Use real data if available, otherwise use fixed demo data
-            $data[] = $count > 0 ? $count : $demoData[$month - 1];
+            $data[] = $count;
         }
 
         return [

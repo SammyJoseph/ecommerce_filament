@@ -21,7 +21,6 @@ class OrdersPerMonthChart extends ChartWidget
     {
         $currentYear = Carbon::now()->year;
         
-        // Get orders grouped by month
         $monthlyOrders = Order::select(
                 DB::raw('MONTH(created_at) as month'),
                 DB::raw('COUNT(*) as count')
@@ -35,18 +34,11 @@ class OrdersPerMonthChart extends ChartWidget
         $labels = [];
         $data = [];
         
-        // Fixed demo data for consistent display
-        $demoData = [3000, 4500, 5200, 3800, 5800, 6300, 8900, 7200, 9200, 9800, 10400, 9600];
-
-        // Generate data for all 12 months
         for ($month = 1; $month <= 12; $month++) {
             $monthName = Carbon::create(null, $month, 1)->format('M');
             $labels[] = $monthName;
             
-            // Use actual count from database if available
-            $count = $monthlyOrders->get($month, 0);
-            // Use real data if available, otherwise use fixed demo data
-            $data[] = $count > 0 ? $count : $demoData[$month - 1];
+            $data[] = $monthlyOrders->get($month, 0);
         }
 
         return [
