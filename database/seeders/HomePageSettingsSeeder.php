@@ -55,7 +55,34 @@ class HomePageSettingsSeeder extends Seeder
             ]
         ];
 
-        DB::table('settings')->insert([
+        // Prepare Instagram Images
+        $instagramItems = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $instagramPath = "instagram/{$i}.jpg";
+            $instagramSource = $sourceDir . "/instagram/{$i}.jpg";
+            if (file_exists($instagramSource)) {
+                $disk->put($instagramPath, file_get_contents($instagramSource));
+                $instagramItems[] = [
+                    'image' => $instagramPath,
+                    'link' => '#',
+                ];
+            }
+        }
+
+        // Prepare Brand Logos
+        $brandLogos = [];
+        for ($i = 1; $i <= 5; $i++) {
+            $brandLogoPath = "brands/brand-logo-{$i}.png";
+            $brandLogoSource = $sourceDir . "/brand-logo/brand-logo-{$i}.png";
+            if (file_exists($brandLogoSource)) {
+                $disk->put($brandLogoPath, file_get_contents($brandLogoSource));
+                $brandLogos[] = [
+                    'image' => $brandLogoPath,
+                ];
+            }
+        }
+
+        DB::table('settings')->insertOrIgnore([
             [
                 'group' => 'home_page',
                 'name' => 'about_us_title',
@@ -93,6 +120,38 @@ class HomePageSettingsSeeder extends Seeder
                 'name' => 'banners',
                 'locked' => 0,
                 'payload' => json_encode($banners),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'group' => 'home_page',
+                'name' => 'instagram_title',
+                'locked' => 0,
+                'payload' => json_encode('Our Instagram'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'group' => 'home_page',
+                'name' => 'instagram_hashtag',
+                'locked' => 0,
+                'payload' => json_encode('#monkeylover'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'group' => 'home_page',
+                'name' => 'instagram_items',
+                'locked' => 0,
+                'payload' => json_encode($instagramItems),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'group' => 'home_page',
+                'name' => 'brand_logos',
+                'locked' => 0,
+                'payload' => json_encode($brandLogos),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

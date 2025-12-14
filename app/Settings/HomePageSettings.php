@@ -11,6 +11,10 @@ class HomePageSettings extends Settings
     public string $about_us_image;
     public string $about_us_author;
     public array $banners;
+    public string $instagram_title;
+    public string $instagram_hashtag;
+    public array $instagram_items;
+    public array $brand_logos;
 
     public static function group(): string
     {

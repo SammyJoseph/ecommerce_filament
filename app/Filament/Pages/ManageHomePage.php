@@ -65,6 +65,46 @@ class ManageHomePage extends SettingsPage
                                     ->columns(2)
                                     ->maxItems(2)
                             ]),
+                        Forms\Components\Tabs\Tab::make('Instagram')
+                            ->schema([
+                                Forms\Components\TextInput::make('instagram_title')
+                                    ->label('Title')
+                                    ->default('Our Instagram')
+                                    ->rules(['required'])
+                                    ->validationAttribute('title'),
+                                Forms\Components\TextInput::make('instagram_hashtag')
+                                    ->label('Hashtag')
+                                    ->default('#monkeylover')
+                                    ->rules(['required'])
+                                    ->validationAttribute('hashtag'),
+                                Forms\Components\Repeater::make('instagram_items')
+                                    ->label('Images (Max 5)')
+                                    ->schema([
+                                        Forms\Components\FileUpload::make('image')
+                                            ->image()
+                                            ->directory('instagram')
+                                            ->rules(['required'])
+                                            ->validationAttribute('image'),
+                                        Forms\Components\TextInput::make('link')
+                                            ->label('Link')
+                                            ->rules(['nullable', 'url']),
+                                    ])
+                                    ->grid(5)
+                                    ->maxItems(5)
+                            ]),
+                        Forms\Components\Tabs\Tab::make('Brands')
+                            ->schema([
+                                Forms\Components\Repeater::make('brand_logos')
+                                    ->label('Brand Logos')
+                                    ->schema([
+                                        Forms\Components\FileUpload::make('image')
+                                            ->image()
+                                            ->directory('brands')
+                                            ->rules(['required'])
+                                            ->validationAttribute('image'),
+                                    ])
+                                    ->grid(5)
+                            ]),
                     ])->columnSpanFull()
             ]);
     }

@@ -16,7 +16,11 @@ class SiteController extends Controller
             }]);
         }])->take(5)->get();
 
-        return view('index', compact('categories'));
+        $settings = app(\App\Settings\HomePageSettings::class);
+        $instagramItems = $settings->instagram_items ?? [];
+        $brandLogos = $settings->brand_logos ?? [];
+
+        return view('index', compact('categories', 'settings', 'instagramItems', 'brandLogos'));
     }
 
     public function productDetails(Product $product): View
