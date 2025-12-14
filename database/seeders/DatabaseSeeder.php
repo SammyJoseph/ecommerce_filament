@@ -52,5 +52,7 @@ class DatabaseSeeder extends Seeder
         $this->call(HomePageSettingsSeeder::class);
         $this->call(HeroSlideSeeder::class);
         $this->call(OrderSeeder::class);
+        $this->call(BlogCategorySeeder::class);
+        $this->call(BlogSeeder::class);
     }
 }
