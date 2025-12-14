@@ -247,7 +247,7 @@
                             @endforeach
                         </div>
                     </div>
-                    {{ $products->links('livewire.shop-pagination') }}
+                    {{ $products->links('livewire.pagination') }}
                 </div>
             </div>
             <div class="col-lg-3">
