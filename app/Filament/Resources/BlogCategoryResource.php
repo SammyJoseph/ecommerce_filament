@@ -63,6 +63,9 @@ class BlogCategoryResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('blogs_count')
+                    ->counts('blogs')
+                    ->label('Posts'),                
                 Tables\Columns\IconColumn::make('is_visible')
                     ->boolean()
                     ->sortable(),

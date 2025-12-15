@@ -60,6 +60,7 @@ Route::get('/about', [SiteController::class, 'about'])->name('about');
 Route::get('/contact', [SiteController::class, 'contact'])->name('contact');
 
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/preview/{token}', [BlogController::class, 'preview'])->name('blog.preview');
 Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/blog/categories', [BlogController::class, 'blogCategoryIndex'])->name('blog.category.index');
 Route::get('/blog/category/{category}', [BlogController::class, 'blogCategoryShow'])->name('blog.category.show');

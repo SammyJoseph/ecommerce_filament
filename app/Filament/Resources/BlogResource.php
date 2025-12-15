@@ -50,12 +50,44 @@ class BlogResource extends Resource
                             ->multiple()
                             ->preload()
                             ->searchable(),
-                        Forms\Components\RichEditor::make('content')
+                        Forms\Components\Builder::make('content')
+                            ->blocks([
+                                Forms\Components\Builder\Block::make('paragraph')
+                                    ->schema([
+                                        Forms\Components\RichEditor::make('text')
+                                            ->label('Paragraph Content')
+                                            ->disableToolbarButtons(['attachFiles']),
+                                    ]),
+                                Forms\Components\Builder\Block::make('quote')
+                                    ->schema([
+                                        Forms\Components\Textarea::make('text')
+                                            ->label('Quote Text')
+                                            ->rows(3)
+                                            ->required(),
+                                        Forms\Components\TextInput::make('author')
+                                            ->label('Author (Optional)'),
+                                    ]),
+                                Forms\Components\Builder\Block::make('two_images')
+                                    ->label('Row with 2 Images')
+                                    ->schema([
+                                        Forms\Components\FileUpload::make('image_left')
+                                            ->label('Image Left')
+                                            ->image()
+                                            ->directory('blog-content'),
+                                        Forms\Components\FileUpload::make('image_right')
+                                            ->label('Image Right')
+                                            ->image()
+                                            ->directory('blog-content'),
+                                        Forms\Components\Textarea::make('caption')
+                                            ->label('Caption (Optional)'),
+                                    ])->columns(2),
+                            ])
                             ->columnSpanFull(),
                     ])->columns(2),
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\FileUpload::make('image')
+                            ->label('Featured Image')
                             ->image()
                             ->directory('blog')
                             ->columnSpanFull(),

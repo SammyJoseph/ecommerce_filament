@@ -34,25 +34,44 @@
                                     </ul>
                                 </div>
                                 <h1>{{ $blog->title }}</h1>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprhendit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qei officia deser mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam. </p>
-                                <blockquote>Lorem ipsum dolor sit amet, consecte adipisicing elit, sed do eiusmod tempor incididunt labo dolor magna aliqua. Ut enim ad minim veniam quis nostrud.</blockquote>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehendrit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                                
+                                @if(is_array($blog->content))
+                                    @foreach ($blog->content as $block)
+                                        @if ($block['type'] === 'paragraph')
+                                            <div class="mb-4">
+                                                {!! $block['data']['text'] !!}
+                                            </div>
+                                        @elseif ($block['type'] === 'quote')
+                                            <blockquote>
+                                                {{ $block['data']['text'] }}
+                                                @if(!empty($block['data']['author']))
+                                                    <footer>— {{ $block['data']['author'] }}</footer>
+                                                @endif
+                                            </blockquote>
+                                        @elseif ($block['type'] === 'two_images')
+                                            <div class="dec-img-wrapper">
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-6 col-12">
+                                                        <div class="dec-img mb-50">
+                                                            <img src="{{ Storage::url($block['data']['image_left']) }}" alt="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-6 col-12">
+                                                        <div class="dec-img mb-50">
+                                                            <img src="{{ Storage::url($block['data']['image_right']) }}" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @if(!empty($block['data']['caption']))
+                                                    <p>{{ $block['data']['caption'] }}</p>
+                                                @endif
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    {!! $blog->content !!}
+                                @endif
                             </div>
-                        </div>
-                        <div class="dec-img-wrapper">
-                            <div class="row">
-                                <div class="col-md-6 col-sm-6 col-12">
-                                    <div class="dec-img mb-50">
-                                        <img alt="" src="assets/images/blog/blog-details-2.jpg">
-                                    </div>
-                                </div>
-                                <div class="col-md-6 col-sm-6 col-12">
-                                    <div class="dec-img mb-50">
-                                        <img alt="" src="assets/images/blog/blog-details-3.jpg">
-                                    </div>
-                                </div>
-                            </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehendrit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
                         </div>
                         <div class="tag-share">
                             <div class="dec-tag">
