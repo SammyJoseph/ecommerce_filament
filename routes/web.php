@@ -11,7 +11,7 @@ use App\Http\Controllers\UserController;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/product/{product}', [SiteController::class, 'productDetails'])->name('product.details');
+Route::get('/product/{product}', [SiteController::class, 'productDetails'])->name('product.show');
 
 Route::get('/', [SiteController::class, 'index'])->name('index');
 

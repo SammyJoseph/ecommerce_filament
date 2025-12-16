@@ -131,7 +131,7 @@
                                                         </div>
                                                         <span>(5)</span>
                                                     </div>
-                                                    <h3><a href="{{ route('product.details', $item->product->slug) }}">{{ $item->product->name }}</a></h3>
+                                                    <h3><a href="{{ route('product.show', $item->product->slug) }}">{{ $item->product->name }}</a></h3>
                                                     <div class="product-price-2">
                                                         @if ($item->product->sale_price && $item->product->sale_price > 0)
                                                             <span class="new-price">${{ $item->product->sale_price }}</span>
@@ -152,7 +152,7 @@
                                                         </div>
                                                         <span>(5)</span>
                                                     </div>
-                                                    <h3><a href="{{ route('product.details', $item->product->slug) }}">{{ $item->product->name }}</a></h3>
+                                                    <h3><a href="{{ route('product.show', $item->product->slug) }}">{{ $item->product->name }}</a></h3>
                                                     <div class="product-price-2">
                                                         @if ($item->product->sale_price && $item->product->sale_price > 0)
                                                             <span class="new-price">${{ $item->product->sale_price }}</span>
@@ -209,7 +209,7 @@
                                         <div class="row">
                                             <div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
                                                 <div class="product-list-img">
-                                                    <a href="{{ route('product.details', $item->product->slug) }}">
+                                                    <a href="{{ route('product.show', $item->product->slug) }}">
                                                         <img src="{{ $item->image }}" alt="Product Style">
                                                     </a>
                                                     <div class="product-list-quickview">
@@ -219,7 +219,7 @@
                                             </div>
                                             <div class="col-xl-8 col-lg-7 col-md-6 col-sm-6">
                                                 <div class="shop-list-content">
-                                                    <h3><a href="{{ route('product.details', $item->product->slug) }}">{{ $item->product->name }}</a></h3>
+                                                    <h3><a href="{{ route('product.show', $item->product->slug) }}">{{ $item->product->name }}</a></h3>
                                                     <div class="pro-list-price">
                                                         @if ($item->product->sale_price && $item->product->sale_price > 0)
                                                             <span class="new-price">${{ $item->product->sale_price }}</span>

@@ -7,12 +7,12 @@
                 @forelse ($productsInCart as $product)
                     <li class="single-product-cart">
                         <div class="cart-img">
-                            <a href="{{ route('product.details', $product->id) }}">
+                            <a href="{{ route('product.show', $product->id) }}">
                                 <img src="{{ $product->options->image ?? $product->model->getFirstMediaUrl('product_images', 'thumb') ?? asset('assets/images/cart/cart-1.jpg') }}" alt="{{ $product->name }}">
                             </a>
                         </div>
                         <div class="cart-title">
-                            <h4><a href="{{ route('product.details', $product->id) }}">{{ $product->name }}</a></h4>
+                            <h4><a href="{{ route('product.show', $product->id) }}">{{ $product->name }}</a></h4>
                             <span>{{ $product->qty }} × ${{ number_format($product->price, 2) }}</span>
                         </div>
                         <div class="cart-delete">

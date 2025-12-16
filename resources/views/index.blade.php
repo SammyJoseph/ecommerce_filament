@@ -101,7 +101,7 @@
                         <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12">
                             <div class="single-product-wrap mb-35">
                                 <div class="product-img product-img-zoom mb-20">
-                                    <a href="{{ route('product.details', $product) }}">
+                                    <a href="{{ route('product.show', $product) }}">
                                         <img src="{{ $product->getFirstMediaUrl('product_images', 'preview') }}" alt="{{ $product->name }}">
                                     </a>
                                     <div class="product-action-wrap">
@@ -127,7 +127,7 @@
                                 </div>
                                 <div class="product-content-wrap">
                                     <div class="product-content-left">
-                                        <h4><a href="{{ route('product.details', $product) }}">{{ Str::limit($product->name, 27) }}</a></h4>
+                                        <h4><a href="{{ route('product.show', $product) }}">{{ Str::limit($product->name, 27) }}</a></h4>
                                         <div class="product-price">
                                             @if (!empty($product->sale_price) && $product->sale_price > 0)
                                                 <span class="sale-price">${{ $product->sale_price }}</span>

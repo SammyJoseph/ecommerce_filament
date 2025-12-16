@@ -9,7 +9,7 @@
             <div class="product-plr-1">
                 <div class="single-product-wrap">
                     <div class="product-img product-img-zoom mb-15">
-                        <a href="{{ route('product.details', $relatedProduct->slug) }}">
+                        <a href="{{ route('product.show', $relatedProduct->slug) }}">
                             @if($relatedProduct->getFirstMediaUrl('product_images'))
                                 <img src="{{ $relatedProduct->getFirstMediaUrl('product_images', 'preview') }}" alt="{{ $relatedProduct->name }}">
                             @else
@@ -39,7 +39,7 @@
                             </div>
                             <span>(2)</span>
                         </div>
-                        <h3><a href="{{ route('product.details', $relatedProduct->slug) }}">{{ $relatedProduct->name }}</a></h3>
+                        <h3><a href="{{ route('product.show', $relatedProduct->slug) }}">{{ $relatedProduct->name }}</a></h3>
                         <div class="product-price-2">
                             @if($relatedProduct->sale_price)
                                 <span class="new-price">${{ number_format($relatedProduct->sale_price, 2) }}</span>
@@ -60,7 +60,7 @@
                             </div>
                             <span>(2)</span>
                         </div>
-                        <h3><a href="{{ route('product.details', $relatedProduct->slug) }}">{{ $relatedProduct->name }}</a></h3>
+                        <h3><a href="{{ route('product.show', $relatedProduct->slug) }}">{{ $relatedProduct->name }}</a></h3>
                         <div class="product-price-2">
                             @if($relatedProduct->sale_price)
                                 <span class="new-price">${{ number_format($relatedProduct->sale_price, 2) }}</span>

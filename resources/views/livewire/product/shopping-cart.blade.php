@@ -19,7 +19,7 @@
                         <td class="product-thumbnail tw-p-6">
                             <img class="tw-inline tw-w-full tw-object-cover" src="{{ $product->options->image }}" alt="">
                         </td>
-                        <td class="product-name"><a href="{{ route('product.details', $product->options->slug) }}">{{ $product->name }}</a></td>
+                        <td class="product-name"><a href="{{ route('product.show', $product->options->slug) }}">{{ $product->name }}</a></td>
                         <td class="product-price-cart"><span class="amount">${{ number_format($product->price, 2) }}</span></td>
                         <td class="product-quantity pro-details-quality">
                             <div class="cart-plus-minus-livewire">

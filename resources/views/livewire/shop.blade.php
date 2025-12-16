@@ -1,4 +1,4 @@
-<div class="shop-area pt-100 pb-120"
+<div class="shop-area tw-pt-6 sm:tw-pt-12 lg:tw-pt-24 pb-120"
     x-data="{
         product: {},
         activeImage: '',
@@ -105,10 +105,10 @@
                                         'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                     ]);
                                 @endphp
-                                <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-12" wire:key="product-grid-{{ $product->id }}">
+                                <div class="col-xl-4 col-lg-4 col-6" wire:key="product-grid-{{ $product->id }}">
                                     <div class="single-product-wrap mb-35">
                                         <div class="product-img product-img-zoom mb-15">
-                                            <a href="product-details.html">
+                                            <a href="{{ route('product.show', $product->slug) }}">
                                                 <img src="{{ $product->getFirstMediaUrl('product_images', 'preview') }}" alt="{{ $product->name }}">
                                             </a>
                                             @if($product->sale_price && $product->sale_price < $product->price)
@@ -136,7 +136,7 @@
                                                 </div>
                                                 <span>(5)</span>
                                             </div>
-                                            <h3><a href="product-details.html">{{ $product->name }}</a></h3>
+                                            <h3><a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a></h3>
                                             <div class="product-price-2">
                                                 @if($product->sale_price && $product->sale_price < $product->price)
                                                     <span class="new-price">${{ number_format($product->sale_price, 2) }}</span>
@@ -157,7 +157,7 @@
                                                 </div>
                                                 <span>(5)</span>
                                             </div>
-                                            <h3><a href="product-details.html">{{ $product->name }}</a></h3>
+                                            <h3><a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a></h3>
                                             <div class="product-price-2">
                                                 @if($product->sale_price && $product->sale_price < $product->price)
                                                     <span class="new-price">${{ number_format($product->sale_price, 2) }}</span>
@@ -204,7 +204,7 @@
                                 <div class="row">
                                     <div class="col-xl-4 col-lg-5 col-md-6 col-sm-6">
                                         <div class="product-list-img">
-                                            <a href="product-details.html">
+                                            <a href="{{ route('product.show', $product->slug) }}">
                                                 <img src="{{ $product->getFirstMediaUrl('product_images', 'preview') }}" alt="{{ $product->name }}">
                                             </a>
                                             <div class="product-list-quickview">
@@ -214,7 +214,7 @@
                                     </div>
                                     <div class="col-xl-8 col-lg-7 col-md-6 col-sm-6">
                                         <div class="shop-list-content">
-                                            <h3><a href="product-details.html">{{ $product->name }}</a></h3>
+                                            <h3><a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a></h3>
                                             <div class="pro-list-price">
                                                 @if($product->sale_price && $product->sale_price < $product->price)
                                                     <span class="new-price">${{ number_format($product->sale_price, 2) }}</span>
