@@ -123,6 +123,13 @@ class UserResource extends Resource
         ];
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->whereDoesntHave('roles', function ($query) {
+            $query->where('name', 'super_admin');
+        });
+    }
+
     public static function getPages(): array
     {
         return [

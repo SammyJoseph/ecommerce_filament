@@ -19,10 +19,16 @@ class RolesPermissionsSeeder extends Seeder
         Role::create(['name' => 'user', 'guard_name' => 'web']);
         Role::create(['name' => 'customer', 'guard_name' => 'web']);
         $adminRole = Role::create(['name' => 'admin', 'guard_name' => 'web']);
+        $superAdminRole = Role::create(['name' => 'super_admin', 'guard_name' => 'web']);
 
         // Permisos
-        Permission::create(['name' => 'edit products']);
-        Permission::create(['name' => 'delete users']);
-        $adminRole->givePermissionTo(Permission::all());
+        Permission::create(['name' => 'view dashboard']);
+        Permission::create(['name' => 'manage products']);
+        Permission::create(['name' => 'manage users']);
+        Permission::create(['name' => 'manage site']);
+
+        // Asignar permisos
+        $adminRole->givePermissionTo(Permission::where('name', '!=', 'manage site')->get());
+        $superAdminRole->givePermissionTo(Permission::all());
     }
 }

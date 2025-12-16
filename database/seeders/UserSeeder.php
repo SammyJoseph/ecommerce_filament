@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
             'email' => 'sam@example.com',
             'phone_number' => '987654321',
         ]);
-        $admin->assignRole('admin');
+        $admin->assignRole('super_admin');
         
         // Create addresses for admin
         $admin->addresses()->create([

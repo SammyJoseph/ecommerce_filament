@@ -3,6 +3,7 @@
 use App\Http\Controllers\Blog\BlogController;
 use App\Http\Controllers\Blog\BlogCategoryController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Payment\MPController;
 use App\Http\Controllers\Product\CartController;
@@ -64,3 +65,7 @@ Route::get('/blog/preview/{token}', [BlogController::class, 'preview'])->name('b
 Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/blog/categories', [BlogController::class, 'blogCategoryIndex'])->name('blog.category.index');
 Route::get('/blog/category/{category}', [BlogController::class, 'blogCategoryShow'])->name('blog.category.show');
+
+Route::get('/doc', [DocumentationController::class, 'index'])->name('doc');
+Route::get('/doc/login/buyer', [DocumentationController::class, 'loginBuyer'])->name('doc.login.buyer');
+Route::get('/doc/login/admin', [DocumentationController::class, 'loginAdmin'])->name('doc.login.admin');

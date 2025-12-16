@@ -21,12 +21,10 @@ class SalesReports extends Page implements HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
-
     protected static string $view = 'filament.pages.sales-reports';
-
     protected static ?string $navigationGroup = 'Sales';
-
     protected static ?int $navigationSort = 2;
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function getSlug(): string
     {

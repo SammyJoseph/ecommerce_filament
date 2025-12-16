@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionResource extends Resource
 {
@@ -59,6 +60,12 @@ class PermissionResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
+    }
+
+    public static function canViewAny(): bool
+    {
+        $user = Auth::user();
+        return $user->hasRole('super_admin');
     }
 
     public static function getRelations(): array
