@@ -13,16 +13,15 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::factory()->create([
+        // Super Admin
+        $super_admin = User::factory()->create([
             'name' => 'Sam',
             'last_name' => 'Tab',
             'email' => 'sam@example.com',
             'phone_number' => '987654321',
         ]);
-        $admin->assignRole('super_admin');
-        
-        // Create addresses for admin
-        $admin->addresses()->create([
+        $super_admin->assignRole('super_admin');
+        $super_admin->addresses()->create([
             'department' => 'Lima',
             'province' => 'Lima',
             'district' => 'Miraflores',
@@ -31,34 +30,37 @@ class UserSeeder extends Seeder
             'address_type' => 'home',
             'is_default' => true,
         ]);
-        
+
+        // Admin
+        $admin = User::factory()->create([
+            'name' => 'Admin',
+            'last_name' => 'Owner',
+            'email' => 'admin@example.com',
+            'phone_number' => '987444333',
+        ]);
+        $admin->assignRole('admin');        
         $admin->addresses()->create([
             'department' => 'Lima',
             'province' => 'Lima',
-            'district' => 'San Isidro',
-            'address' => 'Av. Javier Prado 567',
-            'reference' => 'Edificio azul',
-            'address_type' => 'work',
-            'is_default' => false,
-        ]);
-
-        $user = User::factory()->create([
-            'name' => 'User',
-            'last_name' => 'Test',
-            'email' => 'user@example.com',
-            'phone_number' => '912345678',
-        ]);
-        $user->assignRole('user');
-        
-        // Create address for regular user
-        $user->addresses()->create([
-            'department' => 'Lima',
-            'province' => 'Lima',
-            'district' => 'Surco',
-            'address' => 'Jr. Las Camelias 890',
-            'reference' => 'Frente al parque',
+            'district' => 'Lima',
+            'address' => 'Av. Lima 123',
+            'reference' => 'Cerca del parque A',
             'address_type' => 'home',
             'is_default' => true,
         ]);
+
+        // Users
+        User::factory(8)->create()->each(function ($user) {
+            $user->assignRole('user');
+            $user->addresses()->create([
+                'department' => 'Lima',
+                'province' => 'Lima',
+                'district' => 'Surco',
+                'address' => 'Jr. Las Camelias 890',
+                'reference' => 'Frente al parque B',
+                'address_type' => 'home',
+                'is_default' => true,
+            ]);
+        });
     }
 }

@@ -174,9 +174,9 @@
 
     <main>
         <div class="card">
-            <h1>Bienvenido a la Demo de tu E-commmerce</h1>
+            <h1>Bienvenido a la Demo</h1>
             <p class="subtitle">
-                Explora la funcionalidad completa de tu nueva tienda.<br>
+                Explora la funcionalidad completa de tu nueva e-commerce.<br>
                 Selecciona un rol a continuación para iniciar la simulación.
             </p>
 

@@ -27,6 +27,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandLogo(fn () => view('filament.logo'))
+            ->homeUrl('/shop')
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -58,7 +60,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                'role:admin',
             ])
             ->navigationGroups([
                 'Sales',

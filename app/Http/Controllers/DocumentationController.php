@@ -11,17 +11,18 @@ class DocumentationController extends Controller
     {
         return view('doc');
     }
-    public function loginBuyer()
-    {
-        Auth::logout();
-        Auth::loginUsingId(2);
-        return redirect()->route('index');
-    }
 
     public function loginAdmin()
     {
         Auth::logout();
-        Auth::loginUsingId(1);
+        Auth::loginUsingId(2);
         return redirect('/admin');
     }
+
+    public function loginBuyer()
+    {
+        Auth::logout();
+        Auth::loginUsingId(3);
+        return redirect()->route('shop');
+    }    
 }

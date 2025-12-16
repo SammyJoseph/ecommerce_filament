@@ -25,13 +25,13 @@ class DatabaseSeeder extends Seeder
 
         try {
             $disk = Storage::disk($diskName);
-            $path = $prefix ? $prefix : ''; // Obtiene los directorios dentro del prefijo configurado
+            $path = $prefix ? $prefix : '';
             $directories = $disk->directories($path);
 
             $deletedCount = 0;
             foreach ($directories as $directory) {
                 $dirname = basename($directory);
-                if (is_numeric($dirname)) { // Solo borra los directorios que estén dentro del prefijo y sean numéricos (id de los modelos)
+                if (is_numeric($dirname)) {
                     $disk->deleteDirectory($directory);
                     $deletedCount++;
                 }
