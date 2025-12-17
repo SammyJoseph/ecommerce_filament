@@ -106,7 +106,7 @@
             <div class="row align-items-center">
                 <div class="col-5">
                     <div class="mobile-logo">
-                        <a href="index.html">
+                        <a href="{{ route('index') }}">
                             <img src="{{ asset('assets/images/logo/logo.png') }}">
                         </a>
                     </div>

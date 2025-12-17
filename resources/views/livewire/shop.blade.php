@@ -1,4 +1,4 @@
-<div class="shop-area tw-pt-6 sm:tw-pt-12 lg:tw-pt-24 pb-120"
+<div class="shop-area tw-pt-4 sm:tw-pt-12 lg:tw-pt-24 pb-120"
     x-data="{
         product: {},
         activeImage: '',
@@ -55,27 +55,27 @@
     <div class="container">
         <div class="row flex-row-reverse">
             <div class="col-lg-9">
-                <div class="shop-topbar-wrapper">
-                    <div class="shop-topbar-left">
-                        <div class="view-mode nav">
+                <div class="shop-topbar-wrapper tw-flex tw-space-x-2 tw-py-4 md:tw-py-4">
+                    <div class="shop-topbar-left tw-flex tw-items-center md:tw-block">
+                        <div class="view-mode nav tw-flex-nowrap">
                             <a class="active" href="#shop-1" data-bs-toggle="tab"><i class="icon-grid"></i></a>
                             <a href="#shop-2" data-bs-toggle="tab"><i class="icon-menu"></i></a>
                         </div>
-                        <p>Showing {{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }} of {{ $products->total() }} results </p>
+                        <p class="tw-mb-0 tw-whitespace-nowrap"><span class="tw-hidden md:tw-inline-block tw-mr-1">Showing</span>{{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }} of {{ $products->total() }}<span class="tw-hidden md:tw-inline-block tw-ml-1">results</span></p>
                     </div>
-                    <div class="product-sorting-wrapper">
-                        <div class="product-shorting shorting-style">
-                            <label>View :</label>
-                            <select wire:model.live="per_page">
+                    <div class="product-sorting-wrapper !tw-flex tw-justify-end tw-items-center tw-gap-2">
+                        <div class="product-shorting shorting-style !tw-my-0">
+                            <label class="tw-hidden md:tw-inline-block">View :</label>
+                            <select class="!tw-w-20" wire:model.live="per_page">
                                 <option value="6"> 6</option>
                                 <option value="12"> 12</option>
                                 <option value="24"> 24</option>
                                 <option value="48"> 48</option>
                             </select>
                         </div>
-                        <div class="product-show shorting-style">
-                            <label>Sort by :</label>
-                            <select wire:model.live="sort_by">
+                        <div class="product-show shorting-style !tw-my-0">
+                            <label class="tw-hidden md:tw-inline-block">Sort by :</label>
+                            <select class="!tw-w-24" wire:model.live="sort_by">
                                 <option value="">Default</option>
                                 <option value="price_low">Lowest Price</option>
                                 <option value="price_high">Highest Price</option>
@@ -89,7 +89,7 @@
                             <div class="tw-animate-spin tw-rounded-full tw-h-12 tw-w-12 tw-border-4 tw-border-solid tw-border-gray-300 tw-border-t-red-600"></div>
                         </div>
                         <div id="shop-1" class="tab-pane active">
-                            <div class="row">
+                            <div class="tw-grid tw-grid-cols-2 md:tw-grid-cols-3 tw-gap-4 md:tw-gap-6">
                                 @foreach ($products as $product)
                                 @php
                                     $productData = json_encode([
@@ -105,7 +105,7 @@
                                         'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                     ]);
                                 @endphp
-                                <div class="col-xl-4 col-lg-4 col-6" wire:key="product-grid-{{ $product->id }}">
+                                <div wire:key="product-grid-{{ $product->id }}">
                                     <div class="single-product-wrap mb-35" x-data="{ mobileHover: false }" :class="{ 'active-hover': mobileHover }" @click.outside="mobileHover = false">
                                         <div class="product-img product-img-zoom mb-15">
                                             <a href="{{ route('product.show', $product->slug) }}" @click="if(window.innerWidth < 1024) { $event.preventDefault(); mobileHover = !mobileHover; }">

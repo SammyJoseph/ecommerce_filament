@@ -12,36 +12,15 @@
                 </form>
             </div>
             <div class="mobile-menu-wrap mobile-header-padding-border-2">
-                <!-- mobile menu start -->
                 <nav>
                     <ul class="mobile-menu">
                         <li class="menu-item-has-children"><a href="{{ route('index') }}">Inicio</a></li>
                         <li class="menu-item-has-children "><a href="{{ route('shop') }}">Tienda</a></li>
-                        <li class="menu-item-has-children"><a href="#">Pages</a>
-                            <ul class="dropdown">
-                                <li><a href="about-us.html">about us </a></li>
-                                <li><a href="cart.html">cart page</a></li>
-                                <li><a href="checkout.html">checkout </a></li>
-                                <li><a href="my-account.html">my account</a></li>
-                                <li><a href="wishlist.html">wishlist </a></li>
-                                <li><a href="compare.html">compare </a></li>
-                                <li><a href="contact.html">contact us </a></li>
-                                <li><a href="order-tracking.html">order tracking</a></li>
-                                <li><a href="login-register.html">login / register </a></li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children "><a href="#">Blog</a>
-                            <ul class="dropdown">
-                                <li><a href="blog.html">blog standard </a></li>
-                                <li><a href="blog-no-sidebar.html">blog no sidebar </a></li>
-                                <li><a href="blog-right-sidebar.html">blog right sidebar</a></li>
-                                <li><a href="blog-details.html">blog details</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="contact.html">Contact us</a></li>
+                        <li class="menu-item-has-children "><a href="{{ route('about') }}">Nosotros</a></li>
+                        <li class="menu-item-has-children "><a href="{{ route('blog.index') }}">Blog</a></li>
+                        <li><a href="{{ route('contact') }}">Contacto</a></li>
                     </ul>
                 </nav>
-                <!-- mobile menu end -->
             </div>
             <div class="mobile-header-info-wrap mobile-header-padding-border-3">
                 <div class="single-mobile-header-info">
