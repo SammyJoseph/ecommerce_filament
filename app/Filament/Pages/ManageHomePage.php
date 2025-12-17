@@ -10,7 +10,7 @@ use Filament\Pages\SettingsPage;
 class ManageHomePage extends SettingsPage
 {
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
-    protected static ?string $navigationGroup = 'Home Page';
+    protected static ?string $navigationGroup = 'Site Settings';
     protected static ?string $navigationLabel = 'Static Content';
 
     protected static string $settings = HomePageSettings::class;

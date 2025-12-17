@@ -66,7 +66,7 @@ class AdminPanelProvider extends PanelProvider
                 'Products',
                 'Marketing',
                 'Blog',
-                'Home Page',
+                'Site Settings',
                 'Access Control',
             ]);
     }

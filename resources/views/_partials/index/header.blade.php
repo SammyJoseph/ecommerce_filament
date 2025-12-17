@@ -1,48 +1,45 @@
 <header class="header-area @yield('header-extra-classes')">
     <div class="@yield('container-class', 'container')">
         <div class="header-large-device">
+@inject('headerSettings', 'App\Settings\HeaderSettings')
             <div class="header-top header-top-ptb-1 border-bottom-1">
                 <div class="row">
                     <div class="col-xl-4 col-lg-5">
                         <div class="header-offer-wrap">
-                            <p><i class="icon-paper-plane"></i> FREE SHIPPING world wide for all orders over <span>$199</span></p>
+                            <p><i class="icon-paper-plane"></i> {{ $headerSettings->top_message_text }} <span>{{ $headerSettings->top_message_amount }}</span></p>
                         </div>
                     </div>
                     <div class="col-xl-8 col-lg-7">
                         <div class="header-top-right">
                             <div class="same-style-wrap">
                                 <div class="same-style same-style-border track-order">
-                                    <a href="order-tracking.html">Track Your Order</a>
+                                    <a href="{{ $headerSettings->track_order_url }}">{{ $headerSettings->track_order_text }}</a>
                                 </div>
                                 <div class="same-style same-style-border language-wrap">
-                                    <a class="language-dropdown-active" href="#">English <i class="icon-arrow-down"></i></a>
+                                    <a class="language-dropdown-active" href="#">{{ $headerSettings->languages[0]['name'] ?? 'Languages' }} <i class="icon-arrow-down"></i></a>
                                     <div class="language-dropdown">
                                         <ul>
-                                            <li><a href="#">English</a></li>
-                                            <li><a href="#">French</a></li>
-                                            <li><a href="#">German</a></li>
-                                            <li><a href="#">Spanish</a></li>
+                                            @foreach($headerSettings->languages as $language)
+                                                <li><a href="{{ $language['url'] }}">{{ $language['name'] }}</a></li>
+                                            @endforeach
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="same-style same-style-border currency-wrap">
-                                    <a class="currency-dropdown-active" href="#">US Dollar <i class="icon-arrow-down"></i></a>
+                                    <a class="currency-dropdown-active" href="#">{{ $headerSettings->currencies[0]['name'] ?? 'Currency' }} <i class="icon-arrow-down"></i></a>
                                     <div class="currency-dropdown">
                                         <ul>
-                                            <li><a href="#">USD</a></li>
-                                            <li><a href="#">EUR</a></li>
-                                            <li><a href="#">Real</a></li>
-                                            <li><a href="#">BDT</a></li>
+                                            @foreach($headerSettings->currencies as $currency)
+                                                <li><a href="{{ $currency['url'] }}">{{ $currency['name'] }}</a></li>
+                                            @endforeach
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                             <div class="social-style-1 social-style-1-mrg">
-                                <a href="#"><i class="icon-social-twitter"></i></a>
-                                <a href="#"><i class="icon-social-facebook"></i></a>
-                                <a href="#"><i class="icon-social-instagram"></i></a>
-                                <a href="#"><i class="icon-social-youtube"></i></a>
-                                <a href="#"><i class="icon-social-pinterest"></i></a>
+                                @foreach($headerSettings->social_links as $social)
+                                    <a href="{{ $social['url'] }}"><i class="{{ $social['icon'] }}"></i></a>
+                                @endforeach
                             </div>
                         </div>
                     </div>
