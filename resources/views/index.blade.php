@@ -99,9 +99,9 @@
                                 ]);
                             @endphp
                         <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12">
-                            <div class="single-product-wrap mb-35">
+                            <div class="single-product-wrap mb-35" x-data="{ mobileHover: false }" :class="{ 'active-hover': mobileHover }" @click.outside="mobileHover = false">
                                 <div class="product-img product-img-zoom mb-20">
-                                    <a href="{{ route('product.show', $product) }}">
+                                    <a href="{{ route('product.show', $product) }}" @click="if(window.innerWidth < 1024) { $event.preventDefault(); mobileHover = !mobileHover; }">
                                         <img src="{{ $product->getFirstMediaUrl('product_images', 'preview') }}" alt="{{ $product->name }}">
                                     </a>
                                     <div class="product-action-wrap">

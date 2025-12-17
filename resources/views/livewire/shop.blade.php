@@ -106,9 +106,9 @@
                                     ]);
                                 @endphp
                                 <div class="col-xl-4 col-lg-4 col-6" wire:key="product-grid-{{ $product->id }}">
-                                    <div class="single-product-wrap mb-35">
+                                    <div class="single-product-wrap mb-35" x-data="{ mobileHover: false }" :class="{ 'active-hover': mobileHover }" @click.outside="mobileHover = false">
                                         <div class="product-img product-img-zoom mb-15">
-                                            <a href="{{ route('product.show', $product->slug) }}">
+                                            <a href="{{ route('product.show', $product->slug) }}" @click="if(window.innerWidth < 1024) { $event.preventDefault(); mobileHover = !mobileHover; }">
                                                 <img src="{{ $product->getFirstMediaUrl('product_images', 'preview') }}" alt="{{ $product->name }}">
                                             </a>
                                             @if($product->sale_price && $product->sale_price < $product->price)
