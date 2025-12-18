@@ -13,16 +13,17 @@ class AddToCart extends Component
 {
     public ?Product $product = null;
     public $quantity = 1;
-    public $classes;
+    public $divClasses, $classes;
     public $selectedColorId = null;
     public $selectedSizeId = null;
     public $variantCombinations = [];
     public $availableSizes = [];
     public $showIcon = true;
 
-    public function mount(?Product $product = null, string $classes = '', bool $showIcon = true)
+    public function mount(?Product $product = null, string $divClasses = '', string $classes = '', bool $showIcon = true)
     {
         $this->product = $product;
+        $this->divClasses = $divClasses;
         $this->classes = $classes;
         $this->showIcon = $showIcon;
 

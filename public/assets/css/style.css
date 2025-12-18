@@ -15806,6 +15806,13 @@ textarea:focus {
   }
 }
 
+@media only screen and (max-width: 640px) {
+  .modal-dialog {
+    margin: 0 auto 8%;
+    padding: 10px 0;
+  }
+}
+
 .modal-dialog .modal-header .close {
   color: #333;
   cursor: pointer;
@@ -15818,12 +15825,12 @@ textarea:focus {
 }
 
 .modal-dialog .modal-body {
-  padding: 35px 15px;
+  padding: 15px 15px;
 }
 
-@media only screen and (min-width: 576px) and (max-width: 767px) {
+@media only screen and (min-width: 767px) {
   .modal-dialog .modal-body {
-    padding: 35px 30px;
+    padding: 35px 15px;
   }
 }
 

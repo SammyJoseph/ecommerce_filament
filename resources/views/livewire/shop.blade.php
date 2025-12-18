@@ -174,7 +174,7 @@
                                                         Add To Cart
                                                     </button>
                                                 @else
-                                                    @livewire('product.add-to-cart', ['product' => $product, 'showIcon' => false], key('cart-' . $product->id))
+                                                    @livewire('product.add-to-cart', ['product' => $product, 'divClasses' => 'tw-justify-center', 'showIcon' => false], key('cart-' . $product->id))
                                                 @endif
                                             </div>
                                         </div>

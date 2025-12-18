@@ -152,7 +152,7 @@
                         </div>
 
                         <div class="pro-details-action-wrap">
-                            @livewire('product.add-to-cart', ['product' => $product, 'classes' => ''])                        
+                            @livewire('product.add-to-cart', ['product' => $product, 'divClasses' => 'tw-justify-center', 'classes' => 'tw-flex tw-items-center'])                        
 
                             {{-- Share buttons --}}
                             <div class="pro-details-action" bis_skin_checked="1">

@@ -82,7 +82,7 @@
             <div class="tab-content jump">
                 @foreach ($categories as $category)
                 <div id="product-{{ $category->id }}" class="tab-pane {{ $loop->first ? 'active' : '' }}">
-                    <div class="row">
+                    <div class="tw-grid tw-grid-cols-2 md:tw-grid-cols-3 tw-gap-4 md:tw-gap-6">
                         @foreach ($category->products->take(8) as $product)
                             @php
                                 $productData = json_encode([
@@ -98,7 +98,7 @@
                                     'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                 ]);
                             @endphp
-                        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12">
+                        <div>
                             <div class="single-product-wrap mb-35" x-data="{ mobileHover: false }" :class="{ 'active-hover': mobileHover }" @click.outside="mobileHover = false">
                                 <div class="product-img product-img-zoom mb-20">
                                     <a href="{{ route('product.show', $product) }}" @click="if(window.innerWidth < 1024) { $event.preventDefault(); mobileHover = !mobileHover; }">
@@ -110,10 +110,10 @@
                                                 <button title="Add to Cart" class="tw-flex tw-items-center tw-gap-2"
                                                     x-on:click="updateProductData({{ $productData }})"
                                                     data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                    <i class="icon-basket-loaded !-tw-top-px"></i><span>Add to cart</span>
+                                                    <i class="icon-basket-loaded !-tw-top-px"></i><span>Add<span class="tw-hidden sm:tw-inline"> to cart</span></span>
                                                 </button>
                                             @else
-                                                @livewire('product.add-to-cart', ['product' => $product, 'classes' => 'tw-flex tw-items-center'])
+                                                @livewire('product.add-to-cart', ['product' => $product, 'divClasses' => 'tw-justify-start', 'classes' => 'tw-flex tw-items-center'])
                                             @endif
                                         </div>
                                         <div class="product-action-right tooltip-style">
@@ -130,10 +130,10 @@
                                         <h4><a href="{{ route('product.show', $product) }}">{{ Str::limit($product->name, 27) }}</a></h4>
                                         <div class="product-price">
                                             @if (!empty($product->sale_price) && $product->sale_price > 0)
-                                                <span class="sale-price">${{ $product->sale_price }}</span>
-                                                <span class="old-price">${{ $product->price }}</span>
+                                                <span class="sale-price !tw-text-base sm:!tw-text-xl">${{ $product->sale_price }}</span>
+                                                <span class="old-price !tw-text-base sm:!tw-text-xl">${{ $product->price }}</span>
                                             @else
-                                                <span class="regular-price">${{ $product->price }}</span>
+                                                <span class="regular-price !tw-text-base sm:!tw-text-xl">${{ $product->price }}</span>
                                             @endif
                                         </div>
                                     </div>
