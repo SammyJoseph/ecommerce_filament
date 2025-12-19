@@ -11,9 +11,9 @@
 <script src="{{ asset('assets/js/plugins/magnific-popup.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/sticky-sidebar.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/easyzoom.js') }}"></script>
-<script src="{{ asset('assets/js/plugins/scrollup.js') }}"></script>
+{{-- <script src="{{ asset('assets/js/plugins/scrollup.js') }}"></script> --}}
 <script src="{{ asset('assets/js/plugins/ajax-mail.js') }}"></script>
-<script src="{{ asset('assets/js/main.js?v=0.02') }}"></script>
+<script src="{{ asset('assets/js/main.js?v=0.03') }}"></script>
 
 <script>
     document.addEventListener('livewire:initialized', () => {

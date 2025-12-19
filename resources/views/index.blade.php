@@ -138,7 +138,7 @@
                                         </div>
                                     </div>
                                     <div class="product-content-right tooltip-style">
-                                        <button class="font-inc"><i class="icon-heart"></i><span>Wishlist</span></button>
+                                        @livewire('product.wishlist-toggle', ['productId' => $product->id], key('wishlist-' . $product->id))
                                     </div>
                                 </div>
                             </div>

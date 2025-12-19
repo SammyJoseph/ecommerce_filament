@@ -2,12 +2,12 @@
     "use strict";
 
     /*------ ScrollUp -------- */
-    $.scrollUp({
+    /* $.scrollUp({
         scrollText: '<i class="icon-arrow-up"></i>',
         easingType: 'linear',
         scrollSpeed: 900,
         animation: 'fade'
-    });
+    }); */
 
     /*------ Wow Active ----*/
     new WOW().init();
