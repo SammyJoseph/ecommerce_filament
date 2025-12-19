@@ -80,7 +80,12 @@
                                 </div>
                             </div>
                             <div class="same-style-2">
-                                <a href="{{ route('user.my-account') }}"><i class="icon-user"></i></a>
+                                <a href="{{ route('user.my-account') }}">
+                                    <i class="icon-user"></i>
+                                    @auth
+                                        <span class="tw-absolute -tw-top-2 -tw-right-1 tw-block tw-h-3 tw-w-3 tw-rounded-full tw-bg-green-400 tw-ring-2 tw-ring-white"></span>
+                                    @endauth
+                                </a>
                             </div>
                             <div class="same-style-2">
                                 <a href="{{ route('wishlist') }}">
@@ -111,7 +116,12 @@
                 <div class="col-7">
                     <div class="header-action header-action-flex">
                         <div class="same-style-2">
-                            <a href="{{ route('login') }}"><i class="icon-user"></i></a>
+                            <a href="{{ route('login') }}">
+                                <i class="icon-user"></i>
+                                @auth
+                                    <span class="tw-absolute -tw-top-2 -tw-right-1 tw-block tw-h-3 tw-w-3 tw-rounded-full tw-bg-green-400 tw-ring-2 tw-ring-white"></span>
+                                @endauth
+                            </a>
                         </div>
                         <div class="same-style-2">
                             <a href="{{ route('wishlist') }}"><i class="icon-heart"></i><livewire:header.wishlist-count /></a>

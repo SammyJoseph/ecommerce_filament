@@ -61,7 +61,7 @@
                             <a class="active" href="#shop-1" data-bs-toggle="tab"><i class="icon-grid"></i></a>
                             <a href="#shop-2" data-bs-toggle="tab"><i class="icon-menu"></i></a>
                         </div>
-                        <p class="tw-mb-0 tw-whitespace-nowrap"><span class="tw-hidden md:tw-inline-block tw-mr-1">Showing</span>{{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }} of {{ $products->total() }}<span class="tw-hidden md:tw-inline-block tw-ml-1">results</span></p>
+                        <p class="tw-mb-0 tw-whitespace-nowrap !tw-hidden sm:!tw-inline-block"><span class="tw-hidden md:tw-inline-block tw-mr-1">Showing</span>{{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }} of {{ $products->total() }}<span class="tw-hidden md:tw-inline-block tw-ml-1">results</span></p>
                     </div>
                     <div class="product-sorting-wrapper !tw-flex tw-justify-end tw-items-center tw-gap-2">
                         <div class="product-shorting shorting-style !tw-my-0">
@@ -164,7 +164,7 @@
                                             </div>
                                             <div class="pro-add-to-cart">
                                                 @if($product->has_variants)
-                                                    <button title="Add to Cart"
+                                                    <button title="Add to Cart" class="!tw-px-4 sm:!tw-px-7"
                                                         x-on:click="updateProductData({{ $productData }})"
                                                         data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                         Add To Cart

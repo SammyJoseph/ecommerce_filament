@@ -5,7 +5,7 @@
 @section('container-class', 'container')
 
 @section('content')
-    <div class="breadcrumb-area bg-gray">
+    <div class="breadcrumb-area bg-gray tw-py-6">
         <div class="container">
             <div class="breadcrumb-content text-center">
                 <ul>
@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div class="cart-main-area pt-50 pb-120">
+    <div class="cart-main-area tw-pt-7 sm:tw-pt-12 pb-120">
         <div class="container pt-30">
             <h3 class="cart-page-title">Your cart items</h3>
             @livewire('product.shopping-cart')

@@ -10,7 +10,7 @@
         <button
             @click="$wire.addToCart(getQuantity())"
             wire:loading.attr="disabled"
-            class="{{ $classes }} tw-relative tw-inline-flex tw-items-center tw-justify-center tw-gap-2 tw-transition-all tw-duration-200"
+            class="{{ $classes }} tw-relative tw-inline-flex tw-items-center tw-justify-center tw-gap-2 tw-transition-all tw-duration-200 !tw-px-4 sm:!tw-px-7"
             id="livewire-add-to-cart-btn"
         >
             @if($showIcon)

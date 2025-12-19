@@ -6,6 +6,8 @@ use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class Wishlist extends Component
 {
@@ -52,31 +54,45 @@ class Wishlist extends Component
         }
     }
 
+    use WithPagination;
+
     public function render()
     {
-        $wishlistItems = [];
+        $cartItems = Cart::instance('wishlist')->content();
+        $perPage = 20;
+        $page = $this->getPage();
+        $total = $cartItems->count();
+
+        $chunk = $cartItems->slice(($page - 1) * $perPage, $perPage);
         
-        if (Auth::check()) {
-            // Obtener los items del wishlist desde Cart
-            $cartItems = Cart::instance('wishlist')->content();
-            
-            // Cargar los productos asociados
-            $productIds = $cartItems->pluck('id')->toArray();
-            $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
-            
-            // Mapear los items del carrito con sus productos
-            $wishlistItems = $cartItems->map(function ($item) use ($products) {
-                return (object) [
-                    'rowId' => $item->rowId,
-                    'id' => $item->id,
-                    'product' => $products->get($item->id),
-                    'qty' => $item->qty,
-                    'price' => $item->price,
-                    'sale_price' => $item->sale_price,
-                    'image' => $products->get($item->id)->getFirstMediaUrl('product_images', 'preview'),
-                ];
-            });
-        }
+        $productIds = $chunk->pluck('id')->toArray();
+        $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
+        
+        $items = $chunk->map(function ($item) use ($products) {
+            $product = $products->get($item->id);
+            if (!$product) return null;
+
+            return (object) [
+                'rowId' => $item->rowId,
+                'id' => $item->id,
+                'product' => $product,
+                'qty' => $item->qty,
+                'price' => $item->price,
+                'sale_price' => $item->sale_price,
+                'image' => $product->getFirstMediaUrl('product_images', 'preview'),
+            ];
+        })->filter();
+
+        $wishlistItems = new LengthAwarePaginator(
+            $items,
+            $total,
+            $perPage,
+            $page,
+            [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'pageName' => 'page',
+            ]
+        );
 
         return view('livewire.wishlist', compact('wishlistItems'));
     }

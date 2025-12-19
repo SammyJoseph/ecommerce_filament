@@ -21,10 +21,7 @@ class WishlistToggle extends Component
     public function checkWishlistStatus()
     {
         if (Auth::check()) {
-            // Restore cart for checking status. 
-            // Note: In high traffic, restoring repeatedly might be inefficient, 
-            // but we follow Shop.php pattern here.
-            Cart::instance('wishlist')->restore(Auth::id());
+            Cart::instance('wishlist')->restore(Auth::id()); // Note: In high traffic, restoring repeatedly might be inefficient, 
         }
         
         $this->isInWishlist = Cart::instance('wishlist')->content()->contains('id', $this->productId);

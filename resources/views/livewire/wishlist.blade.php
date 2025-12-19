@@ -1,5 +1,5 @@
 <div>
-    <div class="shop-area pt-100 pb-120"
+    <div class="shop-area tw-pt-7 sm:tw-pt-16 pb-120"
         x-data="{
             product: {},
             activeImage: '',
@@ -56,7 +56,7 @@
         <div class="container">
             <div class="row flex-row-reverse">
                 <div class="col-lg-12">
-                    <div class="shop-topbar-wrapper">
+                    <div class="shop-topbar-wrapper tw-hidden">
                         <div class="shop-topbar-left">
                             <div class="view-mode nav">
                                 <a class="active" href="#shop-1" data-bs-toggle="tab"><i class="icon-grid"></i></a>
@@ -103,9 +103,9 @@
                                             ]);
                                         @endphp
                                         <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-                                            <div class="single-product-wrap mb-35">
+                                            <div class="single-product-wrap mb-35" x-data="{ mobileHover: false }" :class="{ 'active-hover': mobileHover }" @click.outside="mobileHover = false">
                                                 <div class="product-img product-img-zoom mb-15">
-                                                    <a href="product-details.html">
+                                                    <a href="{{ route('product.show', $item->product) }}" @click="if(window.innerWidth < 1024) { $event.preventDefault(); mobileHover = !mobileHover; }">
                                                         <img src="{{ $item->image }}" alt="">
                                                     </a>
                                                     @if ($item->product->sale_price && $item->product->sale_price > 0 && $item->product->sale_price < $item->product->price)
@@ -167,7 +167,7 @@
                                                                 Add To Cart
                                                             </button>
                                                         @else
-                                                            @livewire('product.add-to-cart', ['product' => $item->product, 'showIcon' => false], key('cart-wishlist-' . $item->product->id))
+                                                            @livewire('product.add-to-cart', ['product' => $item->product, 'divClasses' => 'tw-justify-center', 'showIcon' => false], key('cart-wishlist-' . $item->product->id))
                                                         @endif
                                                     </div>
                                                 </div>
@@ -245,7 +245,7 @@
                                                                 <i class="icon-basket-loaded"></i>
                                                             </button>
                                                         @else
-                                                            @livewire('product.add-to-cart', ['product' => $item->product, 'showIcon' => true], key('cart-wishlist-list-' . $item->product->id))
+                                                            @livewire('product.add-to-cart', ['product' => $item->product, 'divClasses' => 'tw-justify-center', 'showIcon' => true], key('cart-wishlist-list-' . $item->product->id))
                                                         @endif
                                                         <button title="Remove from Wishlist" wire:click="confirmItemDeletion('{{ $item->product->id }}')">
                                                             <svg class="tw-w-5 tw-text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
@@ -269,14 +269,7 @@
                                 @endforelse
                             </div>
                         </div>
-                        <div class="pro-pagination-style text-center mt-10">
-                            <ul>
-                                <li><a class="prev" href="#"><i class="icon-arrow-left"></i></a></li>
-                                <li><a class="active" href="#">1</a></li>
-                                <li><a href="#">2</a></li>
-                                <li><a class="next" href="#"><i class="icon-arrow-right"></i></a></li>
-                            </ul>
-                        </div>
+                        {{ $wishlistItems->links('livewire.pagination') }}
                     </div>
                 </div>
             </div>

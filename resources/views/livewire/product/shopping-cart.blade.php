@@ -3,7 +3,7 @@
         {{-- Productos en el carrito --}}
         <div class="table-content table-responsive cart-table-content">
             <table>
-                <thead>
+                <thead class="tw-hidden md:tw-table-header-group">
                     <tr>
                         <th>Image</th>
                         <th>Product Name</th>
@@ -64,9 +64,9 @@
             <div class="col-lg-12">
                 <div class="cart-shiping-update-wrapper">
                     <div class="cart-shiping-update">
-                        <a href="#">Continue Shopping</a>
+                        <a href="{{ route('shop') }}">Continue Shopping</a>
                     </div>
-                    <div class="cart-clear">
+                    <div class="cart-clear {{ $productsInCart->isEmpty() ? 'tw-hidden' : '' }}">
                         <button wire:click="clearCart" type="button">
                             <span>Clear Cart</span>
                             <div wire:loading wire:target="clearCart" class="tw-inline-block tw-ml-1">
@@ -81,7 +81,7 @@
             </div>
         </div>
         
-        <div class="row">
+        <div class="row {{ $productsInCart->isEmpty() ? 'tw-hidden' : '' }}">
             {{-- Dirección de envío --}}
             <div class="col-lg-4 col-md-6">
                 <div class="cart-tax">
