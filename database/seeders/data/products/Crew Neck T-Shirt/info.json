@@ -1,0 +1,36 @@
+{
+    "name": "Crew Neck T-Shirt",
+    "price": 19.90,
+    "description": "Made from high-quality cotton, this crew neck T-shirt from the Uniqlo U collection offers exceptional softness and durability for everyday wear.",
+    "categories": ["Polos", "Hombres"],
+    "variants": [
+        {
+            "color": "Negro",
+            "hex": "#302f35",
+            "sku": "482296-black",
+            "image": "black-variant.jpg",
+            "sizes": [ { "size": "M", "sku": "482296-black-M", "stock": 10 }, { "size": "L", "sku": "482296-black-L", "stock": 8 } ]
+        },
+        {
+            "color": "Naranja",
+            "hex": "#e2b086",
+            "sku": "482296-orange",          
+            "image": "orange-variant.jpg",
+            "sizes": [ { "size": "S", "sku": "482296-orange-S", "stock": 5 }, { "size": "L", "sku": "482296-orange-L", "stock": 8 } ]
+        },
+        {
+            "color": "Rosa",
+            "hex": "#e2d0d4",
+            "sku": "482296-pink",
+            "image": "pink-variant.jpg",
+            "sizes": [ { "size": "M", "sku": "482296-pink-M", "stock": 10 }, { "size": "L", "sku": "482296-pink-L", "stock": 8 } ]
+        },
+        {
+            "color": "Blanco",
+            "hex": "#f2f1ef",
+            "sku": "482296-white",
+            "image": "white-variant.jpg",
+            "sizes": [ { "size": "S", "sku": "482296-white-S", "stock": 5 }, { "size": "M", "sku": "482296-white-M", "stock": 10 } ]
+        }
+    ]
+}

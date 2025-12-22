@@ -23,6 +23,11 @@ class CategorySeeder extends Seeder
                 'is_visible'    => true,
             ],
             [
+                'name'          => 'Polos',
+                'description'   => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                'is_visible'    => true,
+            ],
+            [
                 'name'          => 'Hombres',
                 'description'   => 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
                 'is_visible'    => true,

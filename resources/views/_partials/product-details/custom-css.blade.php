@@ -32,4 +32,9 @@
         background-color: #333;
         color: #fff;
     }
+
+    .easyzoom-style .easyzoom-flyout img {
+        min-width: 100%;
+        min-height: 100%;
+    }
 </style>
