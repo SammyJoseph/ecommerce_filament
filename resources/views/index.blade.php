@@ -7,6 +7,7 @@
         activeImage: '',
         activeThumbIndex: 0,
         updateProductData(product) {
+            Livewire.dispatch('update-quick-view-product', { id: product.id });
             this.product = { ...product };
             if (product.images && product.images.length > 0) {
                 this.activeImage = product.images[0];

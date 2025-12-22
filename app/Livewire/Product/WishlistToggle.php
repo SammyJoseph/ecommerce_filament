@@ -6,15 +6,18 @@ use Livewire\Component;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 
 class WishlistToggle extends Component
 {
     public $productId;
     public $isInWishlist = false;
+    public $mini = false;
 
-    public function mount($productId)
+    public function mount($productId, $mini = false)
     {
         $this->productId = $productId;
+        $this->mini = $mini;
         $this->checkWishlistStatus();
     }
 
@@ -50,13 +53,21 @@ class WishlistToggle extends Component
         }
 
         $this->storeCart();
-        $this->dispatch('wishlist-updated');
+        $this->dispatch('wishlist-updated', $this->productId);
     }
 
     private function storeCart()
     {
         if (Auth::check()) {
             Cart::instance('wishlist')->store(Auth::id());
+        }
+    }
+
+    #[On('wishlist-updated')] 
+    public function updateWishlistStatus($productId = null)
+    {
+        if ($productId === null || $productId === $this->productId) {
+            $this->checkWishlistStatus();
         }
     }
 

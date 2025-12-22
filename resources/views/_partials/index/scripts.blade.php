@@ -8,6 +8,7 @@
 <script src="{{ asset('assets/js/plugins/jquery.nice-select.min.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/wow.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/jquery-ui.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/jquery-ui-touch-punch.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/magnific-popup.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/sticky-sidebar.js') }}"></script>
 <script src="{{ asset('assets/js/plugins/easyzoom.js') }}"></script>

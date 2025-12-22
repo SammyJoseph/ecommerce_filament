@@ -46,8 +46,6 @@
                             @endforeach
                         </select>
                     </div>
-                    @else
-                    
                     @endif
                     <div class="col-lg-12">
                         <div class="billing-info mb-20">                                                        
@@ -64,10 +62,10 @@
                                     </button>
                                 </div>
                             @else
-                                <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-4 tw-mb-4">
+                                <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-4 tw-mb-5">
                                     <div>
                                         <label>Department <abbr class="required" title="required">*</abbr></label>
-                                        <select wire:model.live="selectedDeptId" class="tw-w-full tw-border tw-p-2 tw-rounded" required>
+                                        <select wire:model.live="selectedDeptId" required>
                                             <option value="">Select</option>
                                             @foreach($departments as $dept)
                                                 <option value="{{ $dept['id_ubigeo'] }}">{{ $dept['nombre_ubigeo'] }}</option>
@@ -77,7 +75,7 @@
                                     </div>
                                     <div>
                                         <label>Province <abbr class="required" title="required">*</abbr></label>
-                                        <select wire:model.live="selectedProvId" class="tw-w-full tw-border tw-p-2 tw-rounded" {{ empty($provinces) ? 'disabled' : '' }} required>
+                                        <select wire:model.live="selectedProvId" {{ empty($provinces) ? 'disabled' : '' }} required>
                                             <option value="">Select</option>
                                             @foreach($provinces as $prov)
                                                 <option value="{{ $prov['id_ubigeo'] }}">{{ $prov['nombre_ubigeo'] }}</option>
@@ -87,7 +85,7 @@
                                     </div>
                                     <div>
                                         <label>District <abbr class="required" title="required">*</abbr></label>
-                                        <select wire:model.live="selectedDistId" class="tw-w-full tw-border tw-p-2 tw-rounded" {{ empty($districts) ? 'disabled' : '' }} required>
+                                        <select wire:model.live="selectedDistId" {{ empty($districts) ? 'disabled' : '' }} required>
                                             <option value="">Select</option>
                                             @foreach($districts as $dist)
                                                 <option value="{{ $dist['id_ubigeo'] }}">{{ $dist['nombre_ubigeo'] }}</option>
@@ -163,8 +161,8 @@
                                         </div>
 
                                         <div class="tw-flex tw-justify-end tw-gap-2">
-                                            <button wire:click="cancelEditAddress" class="tw-px-4 tw-py-2 tw-bg-gray-200 tw-rounded hover:tw-bg-gray-300">Cancel</button>
-                                            <button wire:click="saveAddress" class="tw-px-4 tw-py-2 tw-bg-black tw-text-white tw-rounded hover:tw-bg-gray-800">Save</button>
+                                            <button type="button" wire:click="cancelEditAddress" class="tw-px-4 tw-py-2 tw-bg-gray-200 tw-rounded hover:tw-bg-gray-300">Cancel</button>
+                                            <button type="button" wire:click="saveAddress" class="tw-px-4 tw-py-2 tw-bg-black tw-text-white tw-rounded hover:tw-bg-gray-800">Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -294,7 +292,7 @@
                         </div>
                     @endif
 
-                    <button type="submit" wire:loading.attr="disabled" wire:target="placeOrder" class="tw-border-none">                        
+                    <button type="submit" wire:loading.attr="disabled" wire:target="placeOrder" class="tw-border-none">
                         <span wire:loading.remove wire:target="placeOrder">PLACE ORDER</span>                        
                         <span wire:loading wire:target="placeOrder">
                             <i class="fa fa-spinner fa-spin mr-2"></i> PROCESSING...

@@ -5,7 +5,7 @@
 @section('container-class', 'container')
 
 @section('content')
-    <div class="breadcrumb-area bg-gray">
+    <div class="breadcrumb-area bg-gray tw-py-6">
         <div class="container">
             <div class="breadcrumb-content text-center">
                 <ul>
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="my-account-wrapper pt-100 pb-120">
+    <div class="my-account-wrapper tw-pt-7 sm:tw-pt-16 pb-120">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">

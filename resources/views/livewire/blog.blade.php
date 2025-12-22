@@ -1,4 +1,4 @@
-<div class="blog-area pt-100 pb-120">
+<div class="blog-area tw-pt-6 sm:tw-pt-24 pb-120">
     <div class="container">
         <div class="row flex-row-reverse">
             <div class="col-lg-9">

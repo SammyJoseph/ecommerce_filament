@@ -7,14 +7,23 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 
 class QuickViewAddToCart extends Component
 {
     public $showValidationModal = false;
+    public $productId = null;
 
     public function render()
     {
-        return view('livewire.product.quick-view-add-to-cart');
+        $product = $this->productId ? Product::find($this->productId) : null;
+        return view('livewire.product.quick-view-add-to-cart', compact('product'));
+    }
+
+    #[On('update-quick-view-product')] 
+    public function loadProduct($id)
+    {
+        $this->productId = $id;
     }
 
     public function addToCart($productId, $quantity, $variantData = null)

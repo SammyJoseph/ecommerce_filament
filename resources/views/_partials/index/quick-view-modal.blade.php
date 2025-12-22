@@ -117,13 +117,13 @@
                                 @livewire('product.quick-view-add-to-cart')
                             </div>
                             </div>
-</div>
-<style>
-    .pro-details-size-content ul li a.active {
-        background-color: #333;
-        color: #fff;
-    }
-</style>
+                        </div>
+                        <style>
+                            .pro-details-size-content ul li a.active {
+                                background-color: #333;
+                                color: #fff;
+                            }
+                        </style>
                     </div>
                 </div>
             </div>

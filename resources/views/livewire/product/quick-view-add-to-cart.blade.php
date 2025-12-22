@@ -18,7 +18,9 @@
         </a>
     </div>
     <div class="pro-details-action tw-inline-block">
-        <a title="Add to wishlist" href="#"><i class="icon-heart"></i></a>
+        @if($product)
+            @livewire('product.wishlist-toggle', ['productId' => $product->id, 'mini' => true], key('wishlist-' . $product->id))
+        @endif
         <a class="social" title="Social" href="#"><i class="icon-share"></i></a>
         <div class="product-dec-social">
             <a class="facebook" title="Facebook" href="#"><i class="icon-social-facebook"></i></a>
