@@ -132,7 +132,97 @@ class ProductFactory extends Factory
         });
     }
 
-    public function configure(): static
+    public function fromManualData(array $data, string $basePath): static
+    {
+        return $this->state(function (array $attributes) use ($data) {
+            return [
+                'name' => $data['name'],
+                'slug' => Str::slug($data['name']),
+                'description' => $data['description'],
+                'price' => $data['price'],
+                'stock' => 0, // Stock will be sum of variants
+                'is_visible' => true,
+                'is_featured' => false,
+            ];
+        })->afterCreating(function (Product $product) use ($data, $basePath) {
+            // Create options
+            $colorOption = ProductOption::create([
+                'product_id' => $product->id,
+                'name' => 'Color',
+                'type' => 'color',
+            ]);
+
+            $sizeOption = ProductOption::create([
+                'product_id' => $product->id,
+                'name' => 'Size',
+                'type' => 'size',
+            ]);
+
+            // Track total stock
+            $totalStock = 0;
+
+            foreach ($data['variants'] as $variantData) {
+                // Find or create color value
+                // In manual data, we assume color names are unique per product context or global? 
+                // ProductOptionValue is per ProductOption, so per product.
+                $colorValue = ProductOptionValue::create([
+                    'product_option_id' => $colorOption->id,
+                    'value' => $variantData['color'],
+                    'color_code' => $variantData['hex'] ?? $variantData['color_code'] ?? '#000000',
+                ]);
+
+                // Create Variant
+                $variant = Variant::create([
+                    'product_id' => $product->id,
+                    'color_id' => $colorValue->id,
+                    'sku' => $variantData['sku'],
+                    'is_visible' => true,
+                ]);
+
+                // Handle Image
+                if (isset($variantData['image'])) {
+                    $imagePath = $basePath . '/' . $variantData['image'];
+                    if (file_exists($imagePath)) {
+                        // Add to Variant
+                        $variant->addMedia($imagePath)
+                            ->preservingOriginal()
+                            ->toMediaCollection('variant_images');
+                            
+                        // Add to Product (Main Gallery)
+                        $product->addMedia($imagePath)
+                            ->preservingOriginal()
+                            ->toMediaCollection('product_images');
+                    } else {
+                        Log::warning("Image not found: $imagePath");
+                    }
+                }
+
+                // Handle Sizes
+                foreach ($variantData['sizes'] as $sizeData) {
+                    // Find or create size value
+                    // Check if size value already exists for this option
+                    $sizeValue = ProductOptionValue::firstOrCreate([
+                        'product_option_id' => $sizeOption->id,
+                        'value' => $sizeData['size'],
+                    ]);
+
+                    \App\Models\VariantSize::create([
+                        'variant_id' => $variant->id,
+                        'product_option_value_id' => $sizeValue->id,
+                        'price' => $data['price'], // Use base price or specific if needed? JSON doesn't define price per variant, only base.
+                        'sale_price' => null,
+                        'stock' => $sizeData['stock'],
+                    ]);
+
+                    $totalStock += $sizeData['stock'];
+                }
+            }
+
+            $product->update(['stock' => $totalStock]);
+        });
+    }
+
+    public function withRandomImages(): static
     {
         return $this->afterCreating(function (Product $product) {
             try {
@@ -153,5 +243,10 @@ class ProductFactory extends Factory
                 Log::error("Failed to add media for product ID {$product->id}: " . $e->getMessage());
             }
         });
+    }
+
+    public function configure(): static
+    {
+        return $this;
     }
 }
