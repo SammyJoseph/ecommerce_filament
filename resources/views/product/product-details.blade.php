@@ -9,9 +9,127 @@
 
     <div class="product-details-area pt-120 pb-115">
         <div class="container">
-            <div class="row">
+            <div class="row"
+                x-data="{
+                    product: {
+                        id: {{ $product->id }},
+                        price: {{ $product->price }},
+                        sale_price: {{ $product->sale_price ?? 'null' }},
+                        min_variant_price: {{ $product->min_variant_price ?? 0 }},
+                        variant_combinations: @js($variantCombinations)
+                    },
+                    paramSelectedColor: '{{ $product->param_selected_color ?? null }}',
+                    selectedColor: null,
+                    selectedSize: null,
+                    minPriceForSelectedColor: 0,
+                    allPricesSameForSelectedColor: false,
+                    allSizes: [],
+                    availableSizes: [],
+                    showColorPrompt: false,
+                    currentPrice: {{ $product->price }},
+                    currentSalePrice: {{ $product->sale_price ?? 'null' }},
+                    
+                    init() {
+                        // Initialize sizes
+                        this.allSizes = [];
+                        if (this.product.variant_combinations && this.product.variant_combinations.colors) {
+                            let sizes = new Set();
+                            Object.values(this.product.variant_combinations.colors).forEach(colorData => {
+                                    if (colorData.available_sizes) {
+                                        colorData.available_sizes.forEach(s => sizes.add(s));
+                                    }
+                            });
+                            this.allSizes = this.sortSizes(Array.from(sizes));
+                        }
+                        
+                        this.minPriceForSelectedColor = this.product.min_variant_price;
+
+                        // Auto-select color if passed in param (optional feature, good practice)
+                        if (this.paramSelectedColor && this.product.variant_combinations.colors[this.paramSelectedColor]) {
+                            this.selectColor(this.paramSelectedColor);
+                        }
+                    },
+                    
+                    selectColor(color) {
+                        this.selectedColor = color;
+                        this.selectedSize = null;
+                        this.showColorPrompt = false;
+                        
+                        // Reset to base product price until size is selected (or update based on min logic)
+                        this.currentPrice = this.product.price;
+                        this.currentSalePrice = this.product.sale_price;
+
+                        if (this.product.variant_combinations && this.product.variant_combinations.colors[color]) {
+                            this.availableSizes = this.sortSizes(this.product.variant_combinations.colors[color].available_sizes);
+                            
+                            // Calculate minimum price for this color
+                            let min = Infinity;
+                            let max = -Infinity;
+                            let found = false;
+                            this.availableSizes.forEach(size => {
+                                const key = color + '-' + size;
+                                const combo = this.product.variant_combinations.combinations[key];
+                                if (combo) {
+                                    let price = parseFloat(combo.price);
+                                    if (combo.sale_price && parseFloat(combo.sale_price) > 0) {
+                                        price = parseFloat(combo.sale_price);
+                                    }
+                                    if (price < min) min = price;
+                                    if (price > max) max = price;
+                                    found = true;
+                                }
+                            });
+                            this.minPriceForSelectedColor = found ? min : this.product.min_variant_price;
+                            this.allPricesSameForSelectedColor = found ? (min === max) : false;
+
+                            // Trigger image update (custom event or direct call)
+                            // Dispatch event for legacy jQuery or other listeners
+                            window.dispatchEvent(new CustomEvent('color-selected', { detail: { color: color } }));
+
+                        } else {
+                            this.availableSizes = [];
+                            this.minPriceForSelectedColor = this.product.min_variant_price;
+                        }
+                        
+                        // Dispatch to livewire if needed
+                        Livewire.dispatch('product-color-selected', { color: color });
+                    },
+
+                    selectSize(size) {
+                        if (!this.selectedColor) {
+                            this.showColorPrompt = true;
+                            return;
+                        }
+                        if (!this.availableSizes.includes(size)) return;
+
+                        this.selectedSize = size;
+                        this.showColorPrompt = false;
+                        if (this.selectedColor && this.product.variant_combinations) {
+                            const key = this.selectedColor + '-' + size;
+                            const combination = this.product.variant_combinations.combinations[key];
+                            if (combination) {
+                                this.currentPrice = combination.price;
+                                this.currentSalePrice = combination.sale_price;
+                            }
+                        }
+                        Livewire.dispatch('product-size-selected', { size: size });
+                    },
+
+                    sortSizes(sizes) {
+                            const order = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', '2XL', '3XL', '4XL', '5XL'];
+                            return sizes.sort((a, b) => {
+                                let ia = order.indexOf(a.toUpperCase());
+                                let ib = order.indexOf(b.toUpperCase());
+                                if (ia === -1 && ib === -1) return a.localeCompare(b);
+                                if (ia === -1) return 1;
+                                if (ib === -1) return -1;
+                                return ia - ib;
+                            });
+                    }
+                }"
+            >
                 <div class="col-lg-6 col-md-12">
-                    <div class="product-details-tab">
+                     <div class="product-details-tab">
                         <div class="product-dec-right pro-dec-big-img-slider">
                             @php
                                 $productImages = $product->getMedia('product_images');
@@ -97,8 +215,22 @@
                         <p>{!! $product->description !!}</p>
                         <div class="pro-details-price">
                             @if ($product->has_variants)
-                                <span class="new-price" id="variant-price"></span>
-                                <span class="old-price" id="variant-old-price" style="display: none;"></span>
+                                <template x-if="!selectedSize || !selectedColor">
+                                    <span class="new-price" x-text="(selectedColor && allPricesSameForSelectedColor ? 'S/.' : 'Desde S/.') + parseFloat(selectedColor ? minPriceForSelectedColor : product.min_variant_price).toFixed(2)"></span>
+                                </template>
+                                <template x-if="selectedSize && selectedColor">
+                                    <div>
+                                         <template x-if="currentSalePrice && currentSalePrice > 0">
+                                            <div>
+                                                <span class="new-price" x-text="'S/.' + parseFloat(currentSalePrice).toFixed(2)"></span>
+                                                <span class="old-price" x-text="'S/.' + parseFloat(currentPrice).toFixed(2)"></span>
+                                            </div>
+                                        </template>
+                                        <template x-if="!currentSalePrice || currentSalePrice <= 0">
+                                            <span class="new-price" x-text="'S/.' + parseFloat(currentPrice).toFixed(2)"></span>
+                                        </template>
+                                    </div>
+                                </template>
                             @else
                                 @if ($product->sale_price)
                                     <span class="new-price">${{ number_format($product->sale_price, 2) }}</span>
@@ -110,27 +242,56 @@
                         </div>
                         @if ($product->has_variants && !empty($variantCombinations['colors']))
                             <div class="pro-details-color-wrap">
-                                <span>Color:</span>
+                                <span>Color: <span x-text="selectedColor" style="display: inline-block; font-weight: bold;"></span></span>
                                 <div class="pro-details-color-content">
                                     <ul>
-                                        @foreach ($variantCombinations['colors'] as $color)
-                                            <li><a href="#" data-color="{{ $color['value'] }}" title="{{ $color['value'] }}" @style(['background-color: ' . $color['color_code']])></a></li>
+                                        @foreach ($variantCombinations['colors'] as $key => $color)
+                                        <li>
+                                            <a href="#" 
+                                               :class="{ 'active': selectedColor === '{{ $color['value'] }}' }"
+                                               @click.prevent="selectColor('{{ $color['value'] }}')"
+                                               title="{{ $color['value'] }}" 
+                                               style="background-color: {{ $color['color_code'] }}">
+                                            </a>
+                                        </li>
                                         @endforeach
                                     </ul>
                                 </div>
                             </div>
                         @endif
                         @if ($product->has_variants && !empty($variantCombinations['sizes']))
-                            <div class="pro-details-size">
+                           <div class="pro-details-size">
                                 <span>Size:</span>
                                 <div class="pro-details-size-content">
                                     <ul>
-                                        @foreach ($variantCombinations['sizes'] as $size)
-                                            <li><a href="#" data-size="{{ $size['value'] }}">{{ $size['value'] }}</a></li>
-                                        @endforeach
+                                        <template x-for="size in (selectedColor ? availableSizes : allSizes)" :key="size">
+                                            <li>
+                                                <a href="#" 
+                                                   :class="{ 
+                                                       'active': selectedSize === size
+                                                   }"
+                                                   @click.prevent="selectSize(size)"
+                                                   x-text="size">
+                                                </a>
+                                            </li>
+                                        </template>
                                     </ul>
+                                    <template x-if="showColorPrompt && !selectedColor">
+                                        <span style="display: block; width: 100%; color: red; margin-top: 12px; font-size: 0.9em;">Selecciona un color primero</span>
+                                    </template>
                                 </div>
                             </div>
+                            <style>
+                                .pro-details-size-content ul li a.active {
+                                    background-color: #333;
+                                    color: #fff;
+                                }
+                                .pro-details-size-content ul li a.disabled {
+                                    opacity: 0.5;
+                                    text-decoration: line-through;
+                                    cursor: not-allowed;
+                                }
+                            </style>
                         @endif
 
                         {{-- Quantity Controls --}}

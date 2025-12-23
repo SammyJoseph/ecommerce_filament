@@ -13,39 +13,88 @@
                 this.activeImage = product.images[0];
                 this.activeThumbIndex = 0;
             }
+            // Populate all possible sizes for this product
+            this.allSizes = [];
+            if (product.variant_combinations && product.variant_combinations.colors) {
+                let sizes = new Set();
+                Object.values(product.variant_combinations.colors).forEach(colorData => {
+                     if (colorData.available_sizes) {
+                         colorData.available_sizes.forEach(s => sizes.add(s));
+                     }
+                });
+                this.allSizes = this.sortSizes(Array.from(sizes));
+            }
+
             // Reset variant selection
             this.selectedColor = null;
+            this.minPriceForSelectedColor = product.min_variant_price;
+            this.allPricesSameForSelectedColor = false;
             this.selectedSize = null;
             this.quantity = 1;
+            this.showColorPrompt = false;
             this.currentPrice = product.price;
             this.currentSalePrice = product.sale_price;
         },
         selectedColor: null,
+        minPriceForSelectedColor: 0,
+        allPricesSameForSelectedColor: false,
         selectedSize: null,
         quantity: 1,
         availableSizes: [],
+        allSizes: [],
+        showColorPrompt: false,
         currentPrice: 0,
         currentSalePrice: 0,
         selectColor(color) {
             this.selectedColor = color;
             this.selectedSize = null;
+            this.showColorPrompt = false;
             
             // Reset to base product price until size is selected
             this.currentPrice = this.product.price;
             this.currentSalePrice = this.product.sale_price;
 
             if (this.product.variant_combinations && this.product.variant_combinations.colors[color]) {
-                this.availableSizes = this.product.variant_combinations.colors[color].available_sizes;
+                this.availableSizes = this.sortSizes(this.product.variant_combinations.colors[color].available_sizes);
+                
+                // Calculate minimum price for this color
+                let min = Infinity;
+                let max = -Infinity;
+                let found = false;
+                this.availableSizes.forEach(size => {
+                    const key = color + '-' + size;
+                    const combo = this.product.variant_combinations.combinations[key];
+                    if (combo) {
+                        let price = parseFloat(combo.price);
+                        if (combo.sale_price && parseFloat(combo.sale_price) > 0) {
+                            price = parseFloat(combo.sale_price);
+                        }
+                        if (price < min) min = price;
+                        if (price > max) max = price;
+                        found = true;
+                    }
+                });
+                this.minPriceForSelectedColor = found ? min : this.product.min_variant_price;
+                this.allPricesSameForSelectedColor = found ? (min === max) : false;
+
                 // Update image if color has one
                 if (this.product.variant_combinations.colors[color].image) {
                     this.activeImage = this.product.variant_combinations.colors[color].image;
                 }
             } else {
                 this.availableSizes = [];
+                this.minPriceForSelectedColor = this.product.min_variant_price;
             }
         },
         selectSize(size) {
+            if (!this.selectedColor) {
+                this.showColorPrompt = true;
+                return;
+            }
+            if (!this.availableSizes.includes(size)) return;
+
             this.selectedSize = size;
+            this.showColorPrompt = false;
             if (this.selectedColor && this.product.variant_combinations) {
                 const key = this.selectedColor + '-' + size;
                 const combination = this.product.variant_combinations.combinations[key];
@@ -54,6 +103,17 @@
                     this.currentSalePrice = combination.sale_price;
                 }
             }
+        },
+        sortSizes(sizes) {
+             const order = ['XXS', 'XS', 'S', 'M', 'L', 'XL', 'XXL', '2XL', '3XL', '4XL', '5XL'];
+             return sizes.sort((a, b) => {
+                 let ia = order.indexOf(a.toUpperCase());
+                 let ib = order.indexOf(b.toUpperCase());
+                 if (ia === -1 && ib === -1) return a.localeCompare(b); // both unknown
+                 if (ia === -1) return 1; // a unknown, put last
+                 if (ib === -1) return -1; // b unknown, put last
+                 return ia - ib;
+             });
         }
     }"
 @endsection

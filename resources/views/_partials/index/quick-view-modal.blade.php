@@ -48,7 +48,7 @@
                             <p x-html="product.description" class="tw-line-clamp-2"></p>
                             <div class="pro-details-price">
                                 <template x-if="product.has_variants && (!selectedSize || !selectedColor)">
-                                    <span class="new-price" x-text="'Desde S/.' + parseFloat(product.min_variant_price).toFixed(2)"></span>
+                                    <span class="new-price" x-text="(selectedColor && allPricesSameForSelectedColor ? 'S/.' : 'Desde S/.') + parseFloat(selectedColor ? minPriceForSelectedColor : product.min_variant_price).toFixed(2)"></span>
                                 </template>
                                 <template x-if="!product.has_variants || (selectedSize && selectedColor)">
                                     <div>
@@ -66,7 +66,7 @@
                             </div>
                             <template x-if="product.has_variants && product.variant_combinations">
                                 <div class="pro-details-color-wrap">
-                                    <span>Color:</span>
+                                    <span>Color: <span x-text="selectedColor" style="display: inline-block"></span></span>
                                     <div class="pro-details-color-content">
                                         <ul>
                                             <template x-for="(colorData, colorName) in product.variant_combinations.colors" :key="colorName">
@@ -89,19 +89,21 @@
                                     <span>Talla:</span>
                                     <div class="pro-details-size-content">
                                         <ul>
-                                            <template x-for="size in availableSizes" :key="size">
+                                            <template x-for="size in (selectedColor ? availableSizes : allSizes)" :key="size">
                                                 <li>
                                                     <a href="#" 
-                                                       :class="{ 'active': selectedSize === size }"
+                                                       :class="{ 
+                                                           'active': selectedSize === size
+                                                       }"
                                                        @click.prevent="selectSize(size)"
                                                        x-text="size">
                                                     </a>
                                                 </li>
                                             </template>
-                                            <template x-if="!selectedColor">
-                                                <li><span>Selecciona un color primero</span></li>
-                                            </template>
                                         </ul>
+                                        <template x-if="showColorPrompt && !selectedColor">
+                                            <span style="display: block; width: 100%; color: red; margin-top: 12px; font-size: 0.9em;">Selecciona un color primero</span>
+                                        </template>
                                     </div>
                                 </div>
                             </template>
@@ -129,6 +131,11 @@
                             .pro-details-size-content ul li a.active {
                                 background-color: #333;
                                 color: #fff;
+                            }
+                            .pro-details-size-content ul li a.disabled {
+                                opacity: 0.5;
+                                text-decoration: line-through;
+                                cursor: not-allowed;
                             }
                         </style>
                     </div>

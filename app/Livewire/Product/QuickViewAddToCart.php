@@ -39,7 +39,7 @@ class QuickViewAddToCart extends Component
 
         if ($product->has_variants) {
             if (!$variantData || !isset($variantData['variant_id']) || !isset($variantData['variant_size_id'])) {
-                $this->dispatch('notify', ['type' => 'error', 'message' => 'Por favor selecciona color y talla.']);
+                $this->dispatch('notify', ['type' => 'error', 'message' => 'Por favor, selecciona color y talla.']);
                 return;
             }
 

@@ -92,7 +92,7 @@ class AddToCart extends Component
         // For products with variants
         if ($this->product->has_variants) {
             if (!$this->selectedColorId || !$this->selectedSizeId) {
-                session()->flash('error', 'Por favor selecciona color y talla.');
+                session()->flash('error', 'Por favor, selecciona color y talla.');
                 return;
             }
 

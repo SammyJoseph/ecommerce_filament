@@ -39,25 +39,13 @@
     @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Sync JavaScript selections with Livewire
-            const $colorSwatches = $('.pro-details-color-content a');
-            const $sizeSwatches = $('.pro-details-size-content a');
-
-            // When color is clicked in JavaScript, update Livewire
-            $colorSwatches.on('click', function(e) {
-                const colorValue = $(this).data('color');
-                @this.call('selectColor', colorValue);
+            // Listen for Alpine/JS events dispatched from product-details
+            window.addEventListener('product-color-selected', event => {
+                @this.call('selectColor', event.detail.color);
             });
 
-            // When size is clicked in JavaScript, update Livewire
-            $sizeSwatches.on('click', function(e) {
-                const sizeValue = $(this).data('size');
-                @this.call('selectSize', sizeValue);
-            });
-
-            // Sync Livewire state with Add to Cart button disable state
-            Livewire.on('cart-updated', function() {
-                // Flash message will be shown by Livewire
+            window.addEventListener('product-size-selected', event => {
+                @this.call('selectSize', event.detail.size);
             });
         });
     </script>
