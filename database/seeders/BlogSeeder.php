@@ -24,11 +24,34 @@ class BlogSeeder extends Seeder
             $imageUrl = 'https://picsum.photos/' . $imageWidth . '/' . $imageHeight . '?random=' . rand(1, 1000);
             
             // Download image
-            $imageContent = file_get_contents($imageUrl);
-            $imageName = 'blog/' . \Illuminate\Support\Str::random(40) . '.jpg';
-            \Illuminate\Support\Facades\Storage::disk('public')->put($imageName, $imageContent);
+            // Download image
+            $imageContent = null;
+            try {
+                $context = stream_context_create([
+                    'http' => [
+                        'ignore_errors' => true,
+                        'timeout' => 5,
+                    ]
+                ]);
+                $imageContent = @file_get_contents($imageUrl, false, $context);
+            } catch (\Exception $e) {
+                // Fallback silencioso
+            }
 
-            $blog->update(['image' => $imageName]);
+            // Si falló la descarga, usar imagen local de backup
+            if (!$imageContent) {
+                $fallbackPath = public_path('assets/images/blog/blog-1.jpg');
+                if (file_exists($fallbackPath)) {
+                    $imageContent = file_get_contents($fallbackPath);
+                }
+            }
+            
+            if ($imageContent) {
+                $imageName = 'blog/' . \Illuminate\Support\Str::random(40) . '.jpg';
+                \Illuminate\Support\Facades\Storage::disk('public')->put($imageName, $imageContent);
+
+                $blog->update(['image' => $imageName]);
+            }
         });
     }
 }

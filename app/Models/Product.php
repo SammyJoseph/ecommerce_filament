@@ -64,6 +64,16 @@ class Product extends Model implements HasMedia
         return $this->variants()->exists();
     }
 
+    public function getMinVariantPriceAttribute()
+    {
+        return VariantSize::whereHas('variant', function ($query) {
+            $query->where('product_id', $this->id)
+                  ->where('is_visible', true);
+        })->get()->map(function ($variantSize) {
+            return ($variantSize->sale_price > 0) ? $variantSize->sale_price : $variantSize->price;
+        })->min();
+    }
+
     /**
      * Get valid combinations of options for this product
      * Returns array with colors, sizes, and their valid combinations with stock

@@ -47,14 +47,21 @@
                             </div>
                             <p x-html="product.description" class="tw-line-clamp-2"></p>
                             <div class="pro-details-price">
-                                <template x-if="currentSalePrice && currentSalePrice > 0">
-                                    <div>
-                                        <span class="new-price" x-text="'S/.' + currentSalePrice"></span>
-                                        <span class="old-price" x-text="'S/.' + currentPrice"></span>
-                                    </div>
+                                <template x-if="product.has_variants && (!selectedSize || !selectedColor)">
+                                    <span class="new-price" x-text="'Desde S/.' + parseFloat(product.min_variant_price).toFixed(2)"></span>
                                 </template>
-                                <template x-if="!currentSalePrice || currentSalePrice <= 0">
-                                    <span class="new-price" x-text="'S/.' + currentPrice"></span>
+                                <template x-if="!product.has_variants || (selectedSize && selectedColor)">
+                                    <div>
+                                        <template x-if="currentSalePrice && currentSalePrice > 0">
+                                            <div>
+                                                <span class="new-price" x-text="'S/.' + currentSalePrice"></span>
+                                                <span class="old-price" x-text="'S/.' + currentPrice"></span>
+                                            </div>
+                                        </template>
+                                        <template x-if="!currentSalePrice || currentSalePrice <= 0">
+                                            <span class="new-price" x-text="'S/.' + currentPrice"></span>
+                                        </template>
+                                    </div>
                                 </template>
                             </div>
                             <template x-if="product.has_variants && product.variant_combinations">

@@ -128,7 +128,15 @@ class VariantsRelationManager extends RelationManager
 
                 Tables\Columns\TextColumn::make('color.value')
                     ->label('Color')
-                    ->badge()
+                    ->formatStateUsing(function ($state, $record) {
+                        if ($state === 'N/A') {
+                            return $state;
+                        }
+                        $color = $record->color?->color_code ?? '#555555';
+                        return new \Illuminate\Support\HtmlString(
+                            '<span style="background-color: ' . $color . '; color: #fff; padding: 3px 10px; border-radius: 99px; font-size: 0.85em; font-weight: 600; text-shadow: 0 1px 1px rgba(0,0,0,0.3); white-space: nowrap;">' . $state . '</span>'
+                        );
+                    })
                     ->getStateUsing(function ($record) {
                         return $record->color ? $record->color->value : 'N/A';
                     }),

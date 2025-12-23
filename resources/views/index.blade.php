@@ -96,6 +96,7 @@
                                     'id' => $product->id,
                                     'slug' => $product->slug,
                                     'has_variants' => $product->has_variants,
+                                    'min_variant_price' => $product->min_variant_price,
                                     'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                 ]);
                             @endphp
@@ -130,7 +131,9 @@
                                     <div class="product-content-left">
                                         <h4><a href="{{ route('product.show', $product) }}">{{ Str::limit($product->name, 27) }}</a></h4>
                                         <div class="product-price">
-                                            @if (!empty($product->sale_price) && $product->sale_price > 0)
+                                            @if($product->has_variants)
+                                                <span class="regular-price">Desde ${{ number_format($product->min_variant_price, 2, '.', '') }}</span>
+                                            @elseif (!empty($product->sale_price) && $product->sale_price > 0)
                                                 <span class="sale-price">${{ $product->sale_price }}</span>
                                                 <span class="old-price">${{ $product->price }}</span>
                                             @else
