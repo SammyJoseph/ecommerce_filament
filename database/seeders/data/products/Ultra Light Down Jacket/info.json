@@ -9,28 +9,41 @@
             "hex": "#373737",
             "sku": "478273-black",
             "image": "black-variant.jpg",
-            "sizes": [ { "size": "S", "sku": "478273-black-S", "stock": 5 }, { "size": "M", "sku": "478273-black-M", "stock": 10 }, { "size": "L", "sku": "478273-black-L", "stock": 8 } ]
+            "sizes": [
+                { "size": "S", "sku": "478273-black-S", "stock": 5, "price": 79.70 },
+                { "size": "M", "sku": "478273-black-M", "stock": 10, "price": 79.90 },
+                { "size": "L", "sku": "478273-black-L", "stock": 8, "price": 84.90 }
+            ]
         },
         {
             "color": "Azul",
             "hex": "#354656",
             "sku": "478273-blue",          
             "image": "blue-variant.jpg",
-            "sizes": [ { "size": "S", "sku": "478273-blue-S", "stock": 5 }, { "size": "L", "sku": "478273-blue-L", "stock": 8 } ]
+            "sizes": [
+                { "size": "S", "sku": "478273-blue-S", "stock": 5, "price": 82.90 },
+                { "size": "L", "sku": "478273-blue-L", "stock": 8, "price": 87.90 }
+            ]
         },
         {
             "color": "Navy",
             "hex": "#383e4c",
             "sku": "478273-navy",
             "image": "navy-variant.jpg",
-            "sizes": [ { "size": "M", "sku": "478273-navy-M", "stock": 10 }, { "size": "L", "sku": "478273-navy-L", "stock": 8 } ]
+            "sizes": [
+                { "size": "M", "sku": "478273-navy-M", "stock": 10, "price": 85.90 },
+                { "size": "L", "sku": "478273-navy-L", "stock": 8, "price": 89.90 }
+            ]
         },
         {
             "color": "Oliva",
             "hex": "#494f47",
             "sku": "478273-olive",
             "image": "olive-variant.jpg",
-            "sizes": [ { "size": "S", "sku": "478273-olive-S", "stock": 5 }, { "size": "M", "sku": "478273-olive-M", "stock": 10 } ]
+            "sizes": [
+                { "size": "S", "sku": "478273-olive-S", "stock": 5, "price": 79.90 },
+                { "size": "M", "sku": "478273-olive-M", "stock": 10, "price": 83.90 }
+            ]
         }
     ]
 }

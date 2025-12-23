@@ -1,0 +1,49 @@
+{
+    "name": "Fleece Full-Zip Jacket Color Block",
+    "price": 49.90,
+    "description": "Distinctive tonal bicolor design.",
+    "categories": ["Casacas", "Hombres"],
+    "variants": [
+        {
+            "color": "Gris",
+            "hex": "#717477",
+            "sku": "479793-gray",
+            "image": "gray-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "479793-gray-S", "stock": 5, "price": 49.70 },
+                { "size": "M", "sku": "479793-gray-M", "stock": 10, "price": 49.80 },
+                { "size": "L", "sku": "479793-gray-L", "stock": 8, "price": 49.90 }
+            ]
+        },
+        {
+            "color": "Vino",
+            "hex": "#673325",
+            "sku": "479793-wine",          
+            "image": "wine-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "479793-wine-S", "stock": 5, "price": 54.90 },
+                { "size": "L", "sku": "479793-wine-L", "stock": 8, "price": 59.90 }
+            ]
+        },
+        {
+            "color": "Beige",
+            "hex": "#c8bfa3",
+            "sku": "479793-beige",
+            "image": "beige-variant.jpg",
+            "sizes": [
+                { "size": "M", "sku": "479793-beige-M", "stock": 10, "price": 52.90 },
+                { "size": "L", "sku": "479793-beige-L", "stock": 8, "price": 57.90 }
+            ]
+        },
+        {
+            "color": "Azul",
+            "hex": "#1b2c32",
+            "sku": "479793-blue",
+            "image": "blue-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "479793-blue-S", "stock": 5, "price": 49.90 },
+                { "size": "M", "sku": "479793-blue-M", "stock": 10, "price": 55.90 }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,49 @@
+{
+    "name": "Fleece Full-Zip Jacket",
+    "price": 49.90,
+    "description": "The Fleece Full-Zip Jacket is a lightweight essential.",
+    "categories": ["Casacas", "Hombres"],
+    "variants": [
+        {
+            "color": "Oliva",
+            "hex": "#394326",
+            "sku": "479792-olive",
+            "image": "olive-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "479792-olive-S", "stock": 5, "price": 49.70 },
+                { "size": "M", "sku": "479792-olive-M", "stock": 10, "price": 49.80 },
+                { "size": "L", "sku": "479792-olive-L", "stock": 8, "price": 49.90 }
+            ]
+        },
+        {
+            "color": "Negro",
+            "hex": "#1c1e21",
+            "sku": "479792-black",          
+            "image": "black-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "479792-black-S", "stock": 5, "price": 54.90 },
+                { "size": "L", "sku": "479792-black-L", "stock": 8, "price": 59.90 }
+            ]
+        },
+        {
+            "color": "Marrón",
+            "hex": "#a67946",
+            "sku": "479792-brown",
+            "image": "brown-variant.jpg",
+            "sizes": [
+                { "size": "M", "sku": "479792-brown-M", "stock": 10, "price": 52.90 },
+                { "size": "L", "sku": "479792-brown-L", "stock": 8, "price": 57.90 }
+            ]
+        },
+        {
+            "color": "Verde",
+            "hex": "#14323a",
+            "sku": "479792-green",
+            "image": "green-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "479792-green-S", "stock": 5, "price": 49.90 },
+                { "size": "M", "sku": "479792-green-M", "stock": 10, "price": 55.90 }
+            ]
+        }
+    ]
+}

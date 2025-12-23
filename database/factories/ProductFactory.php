@@ -209,7 +209,7 @@ class ProductFactory extends Factory
                     \App\Models\VariantSize::create([
                         'variant_id' => $variant->id,
                         'product_option_value_id' => $sizeValue->id,
-                        'price' => $data['price'], // Use base price or specific if needed? JSON doesn't define price per variant, only base.
+                        'price' => $sizeData['price'] ?? $data['price'],
                         'sale_price' => null,
                         'stock' => $sizeData['stock'],
                     ]);

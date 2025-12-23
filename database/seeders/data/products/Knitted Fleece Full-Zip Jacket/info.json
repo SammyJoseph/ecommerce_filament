@@ -1,0 +1,39 @@
+{
+    "name": "Knitted Fleece Full-Zip Jacket",
+    "price": 39.90,
+    "description": "Jointly developed with Swedish top athletes.",
+    "categories": ["Casacas", "Hombres"],
+    "variants": [
+        {
+            "color": "Navy",
+            "hex": "#25273c",
+            "sku": "479863-olive",
+            "image": "navy-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "479863-navy-S", "stock": 5, "price": 39.70 },
+                { "size": "M", "sku": "479863-navy-M", "stock": 10, "price": 39.80 },
+                { "size": "L", "sku": "479863-navy-L", "stock": 8, "price": 39.90 }
+            ]
+        },
+        {
+            "color": "Blanco",
+            "hex": "#e5e0db",
+            "sku": "479863-white",          
+            "image": "white-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "479863-white-S", "stock": 5, "price": 70.00 },
+                { "size": "L", "sku": "479863-white-L", "stock": 8, "price": 75.00 }
+            ]
+        },
+        {
+            "color": "Azul",
+            "hex": "#233c7f",
+            "sku": "479863-blue",
+            "image": "blue-variant.jpg",
+            "sizes": [
+                { "size": "M", "sku": "479863-blue-M", "stock": 10, "price": 49.90 },
+                { "size": "L", "sku": "479863-blue-L", "stock": 8, "price": 59.90 }
+            ]
+        }
+    ]
+}
