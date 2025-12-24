@@ -160,6 +160,7 @@ class ShoppingCart extends Component
         }
 
         $grandTotal = max(0, $subtotal - $discount + $this->shippingCost);
+        $cartQty = $productsInCart->sum('qty');
 
         return view('livewire.product.shopping-cart', [
             'productsInCart' => $productsInCart,
@@ -167,6 +168,7 @@ class ShoppingCart extends Component
             'cartDiscount' => $discount,
             'cartGrandTotal' => $grandTotal,
             'shippingCost' => $this->shippingCost,
+            'cartQty' => $cartQty,
         ]);
     }
 

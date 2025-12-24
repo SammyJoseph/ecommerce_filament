@@ -25,6 +25,9 @@
                     </li>
                 @endforelse
             </ul>
+            <div class="cart-qty">
+                <h4>Cantidad: <span>{{ $qty }}</span></h4>
+            </div>
             <div class="cart-total">
                 <h4>Subtotal: <span>${{ $subtotal }}</span></h4>
             </div>

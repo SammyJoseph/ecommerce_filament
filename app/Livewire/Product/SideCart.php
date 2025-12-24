@@ -34,6 +34,7 @@ class SideCart extends Component
 
         $subtotal = (float) str_replace(',', '', Cart::subtotal());
         $discount = 0;
+        $qty = $productsInCart->sum('qty');
 
         if (session()->has('coupon')) {
             $coupon = session('coupon');
@@ -47,7 +48,7 @@ class SideCart extends Component
 
         $grandTotal = max(0, $subtotal - $discount);
 
-        return view('livewire.product.side-cart', compact('productsInCart', 'subtotal', 'discount', 'grandTotal'));
+        return view('livewire.product.side-cart', compact('productsInCart', 'subtotal', 'discount', 'grandTotal', 'qty'));
     }
 
     #[On('open-side-cart')] 

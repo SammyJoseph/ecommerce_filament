@@ -192,8 +192,18 @@
                         <div class="your-order-middle">
                             <ul>
                                 @foreach($cartItems as $item)
-                                    <li>{{ $item->name }} X {{ $item->qty }} <span>${{ number_format($item->price, 2) }} </span></li>
+                                    <li class="tw-flex tw-justify-between tw-items-center">
+                                        <div>
+                                            {{ Str::words($item->name, 4) }} <span class="tw-text-gray-400 !tw-text-sm !tw-float-none">X {{ $item->qty }}</span>
+                                        </div>
+                                        <span>${{ number_format($item->price, 2) }} </span>
+                                    </li>
                                 @endforeach
+                            </ul>
+                        </div>
+                        <div class="your-order-info order-subtotal">
+                            <ul>
+                                <li>Cantidad <span>{{ $qty }} </span></li>
                             </ul>
                         </div>
                         <div class="your-order-info order-subtotal">

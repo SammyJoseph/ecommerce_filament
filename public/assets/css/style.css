@@ -4075,20 +4075,23 @@ textarea:focus {
   color: #ff2f2f;
 }
 
-.sidebar-cart-active .sidebar-cart-all .cart-content .cart-total {
+.sidebar-cart-active .sidebar-cart-all .cart-content .cart-total,
+.sidebar-cart-active .sidebar-cart-all .cart-content .cart-qty {
   display: block;
   width: 100%;
   margin: 16px 0 26px;
 }
 
-.sidebar-cart-active .sidebar-cart-all .cart-content .cart-total h4 {
+.sidebar-cart-active .sidebar-cart-all .cart-content .cart-total h4,
+.sidebar-cart-active .sidebar-cart-all .cart-content .cart-qty h4 {
   font-size: 16px;
   margin: 0;
   font-weight: 600;
   color: #000000;
 }
 
-.sidebar-cart-active .sidebar-cart-all .cart-content .cart-total h4 span {
+.sidebar-cart-active .sidebar-cart-all .cart-content .cart-total h4 span,
+.sidebar-cart-active .sidebar-cart-all .cart-content .cart-qty h4 span {
   font-size: 15px;
   color: #000000;
   float: right;

@@ -530,8 +530,12 @@ class Checkout extends Component
 
     public function render()
     {
+        Cart::instance('shopping');
+        $productsInCart = Cart::content();
+
         return view('livewire.checkout.checkout', [
-            'cartItems' => Cart::instance('shopping')->content(),
+            'cartItems' => $productsInCart,
+            'qty' => $productsInCart->sum('qty'),
             'subtotal' => $this->subtotal,
             'discount' => $this->discount,
             'total' => $this->calculateTotal(),
