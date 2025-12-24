@@ -60,7 +60,7 @@
             </table>
         </div>
         {{-- Botones de acción --}}
-        <div class="row">
+        <div class="row tw-hidden md:tw-flex">
             <div class="col-lg-12">
                 <div class="cart-shiping-update-wrapper">
                     <div class="cart-shiping-update">
@@ -157,8 +157,8 @@
                 </div>
             </div>
             {{-- Total del carrito --}}
-            <div class="col-lg-4 col-md-12">
-                <div class="grand-totall">
+            <div class="col-lg-4 col-md-12 tw-order-first lg:tw-order-none">
+                <div class="grand-totall tw-my-8 md:tw-mt-0 lg:tw-mb-0">
                     <div class="title-wrap">
                         <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
                     </div>
