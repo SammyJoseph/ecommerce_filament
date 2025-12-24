@@ -2,20 +2,12 @@
 
 @section('title', 'Payment Failed')
 
+@section('breadcrumbs')
+    <li class="active">Payment Failed</li>
+@endsection
+
 @section('content')
-<div class="breadcrumb-area bg-gray">
-    <div class="container">
-        <div class="breadcrumb-content text-center">
-            <ul>
-                <li>
-                    <a href="{{ route('index') }}">Home</a>
-                </li>
-                <li class="active">Payment Failed</li>
-            </ul>
-        </div>
-    </div>
-</div>
-<div class="cart-main-area pt-115 pb-120">
+<div class="cart-main-area tw-pt-5 sm:tw-pt-20 lg:tw-pt-24 pb-120">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center">

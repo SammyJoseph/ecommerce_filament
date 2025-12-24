@@ -4,20 +4,12 @@
 @section('header-extra-classes', '')
 @section('container-class', 'container')
 
+@section('breadcrumbs')
+    <li class="active">Contact us</li>
+@endsection
+
 @section('content')
-    <div class="breadcrumb-area bg-gray">
-        <div class="container">
-            <div class="breadcrumb-content text-center">
-                <ul>
-                    <li>
-                        <a href="index.html">Home</a>
-                    </li>
-                    <li class="active">Contact us </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="contact-area pt-100 pb-120">
+    <div class="contact-area tw-pt-0 sm:tw-pt-20 lg:tw-pt-24 pb-120">
         <div class="container">
             <div class="contact-info-wrap-3 pb-85">
                 <h3>contact info</h3>

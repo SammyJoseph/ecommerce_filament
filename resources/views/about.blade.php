@@ -4,20 +4,12 @@
 @section('header-extra-classes', '')
 @section('container-class', 'container')
 
+@section('breadcrumbs')
+    <li class="active">About us</li>
+@endsection
+
 @section('content')
-    <div class="breadcrumb-area bg-gray">
-        <div class="container">
-            <div class="breadcrumb-content text-center">
-                <ul>
-                    <li>
-                        <a href="index.html">Home</a>
-                    </li>
-                    <li class="active">about us </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="about-us-area pt-100 pb-120">
+    <div class="about-us-area tw-pt-0 sm:tw-pt-20 lg:tw-pt-24 pb-120">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-3">

@@ -20,10 +20,6 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
     Route::get('/my-account', [UserController::class, 'myAccount'])->name('user.my-account');
     Route::get('/my-account/orders', [UserController::class, 'orders'])->name('user.orders');
     Route::get('/my-account/order/{order}', [UserController::class, 'orderDetails'])->name('user.order.details');

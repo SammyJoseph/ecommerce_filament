@@ -4,10 +4,12 @@
 @section('header-extra-classes', '')
 @section('container-class', 'container')
 
-@section('content')
-    @include('_partials.product-details.breadcrumb')
+@section('breadcrumbs')
+    <li class="active">{{ $product->name }}</li>
+@endsection
 
-    <div class="product-details-area pt-120 pb-115">
+@section('content')
+    <div class="product-details-area tw-pt-6 sm:tw-pt-20 pb-120">
         <div class="container">
             <div class="row"
                 x-data="{

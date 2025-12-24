@@ -1,5 +1,5 @@
 <div>
-    <div class="shop-area tw-pt-7 sm:tw-pt-16 pb-120"
+    <div class="shop-area tw-pt-5 sm:tw-pt-20 lg:tw-pt-24 pb-120"
         x-data="{
             product: {},
             activeImage: '',
@@ -176,7 +176,7 @@
                                     @empty
                                         <div class="col-12">
                                             <div class="empty-wishlist">
-                                                <img src="assets/images/empty-wishlist.png" alt="">
+                                                <!-- <img src="assets/images/empty-wishlist.png" alt=""> -->
                                                 <h3 class="cart-page-title">Your wishlist is empty</h3>
                                                 <p>Start shopping now to add items to your wishlist.</p>
                                                 <div class="cart-shiping-update-wrapper">
@@ -260,7 +260,7 @@
                                 @empty
                                     <div class="col-12">
                                         <div class="empty-wishlist">
-                                            <img src="assets/images/empty-wishlist.png" alt="">
+                                            <!-- <img src="assets/images/empty-wishlist.png" alt=""> -->
                                             <h3>Your wishlist is empty</h3>
                                             <p>Start shopping now to add items to your wishlist.</p>
                                             <a href="index.html" class="btn btn-primary">Continue Shopping</a>

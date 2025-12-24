@@ -4,21 +4,12 @@
 @section('header-extra-classes', '')
 @section('container-class', 'container')
 
-@section('content')
-    <div class="breadcrumb-area bg-gray tw-py-6">
-        <div class="container">
-            <div class="breadcrumb-content text-center">
-                <ul>
-                    <li>
-                        <a href="{{ route('index') }}">Home</a>
-                    </li>
-                    <li class="active">My Account</li>
-                </ul>
-            </div>
-        </div>
-    </div>
+@section('breadcrumbs')
+    <li class="active">My Account</li>
+@endsection
 
-    <div class="my-account-wrapper tw-pt-7 sm:tw-pt-16 pb-120">
+@section('content')
+    <div class="my-account-wrapper tw-pt-5 sm:tw-pt-20 lg:tw-pt-24 pb-120">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">

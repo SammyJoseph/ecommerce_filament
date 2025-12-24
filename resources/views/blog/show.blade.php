@@ -4,20 +4,12 @@
 @section('header-extra-classes', '')
 @section('container-class', 'container')
 
+@section('breadcrumbs')
+    <li class="active">Blog details</li>
+@endsection
+
 @section('content')
-    <div class="breadcrumb-area bg-gray tw-py-6 tw-hidden sm:tw-block">
-        <div class="container">
-            <div class="breadcrumb-content text-center">
-                <ul>
-                    <li>
-                        <a href="index.html">Home</a>
-                    </li>
-                    <li class="active">Blog details</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="blog-area tw-pt-6 sm:tw-pt-24 pb-120">
+    <div class="blog-area tw-pt-0 sm:tw-pt-20 lg:tw-pt-24 pb-120">
         <div class="container">
             <div class="row flex-row-reverse">
                 <div class="col-lg-9">

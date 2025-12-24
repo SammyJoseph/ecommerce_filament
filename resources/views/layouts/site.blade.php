@@ -19,6 +19,21 @@
 
         @include('_partials.index.mobile-header')
 
+        @hasSection('breadcrumbs')
+            <div class="breadcrumb-area bg-gray @yield('breadcrumb-padding', 'tw-py-6') tw-hidden sm:tw-block">
+                <div class="container">
+                    <div class="breadcrumb-content text-center">
+                        <ul>
+                            <li>
+                                <a href="{{ route('index') }}">Home</a>
+                            </li>
+                            @yield('breadcrumbs')
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         @yield('content')
 
         @include('_partials.index.subscribe-area')
