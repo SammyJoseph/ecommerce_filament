@@ -14542,7 +14542,7 @@ textarea:focus {
   font-size: 18px;
   font-family: "simple-line-icons";
   content: "\e01e";
-  z-index: 999;
+  z-index: 10;
   color: #000000;
 }
 

@@ -20,11 +20,11 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/my-account', [UserController::class, 'myAccount'])->name('user.my-account');
+    Route::get('/my-account', [UserController::class, 'accountDetails'])->name('user.my-account');
+    Route::post('/my-account/update', [UserController::class, 'updateAccountDetails'])->name('user.update-account');
     Route::get('/my-account/orders', [UserController::class, 'orders'])->name('user.orders');
     Route::get('/my-account/order/{order}', [UserController::class, 'orderDetails'])->name('user.order.details');
     Route::get('/my-account/address', [UserController::class, 'address'])->name('user.address');
-    Route::get('/my-account/details', [UserController::class, 'accountDetails'])->name('user.details');
     Route::get('/my-account/payment-method', [UserController::class, 'paymentMethod'])->name('user.payment-method');
 });
 

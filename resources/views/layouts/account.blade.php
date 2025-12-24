@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-    <div class="my-account-wrapper tw-pt-5 sm:tw-pt-20 lg:tw-pt-24 pb-120">
+    <div class="my-account-wrapper tw-pt-5 sm:tw-pt-12 lg:tw-pt-16 pb-120">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -19,8 +19,8 @@
                             <div class="col-lg-3 col-md-4">
                                 <div class="myaccount-tab-menu nav" role="tablist">
                                     <a href="{{ route('user.my-account') }}" class="{{ request()->routeIs('user.my-account') ? 'active' : '' }}">
-                                        <i class="fa fa-dashboard"></i>
-                                        Dashboard
+                                        <i class="fa fa-user"></i>
+                                        Account Details
                                     </a>
                                     <a href="{{ route('user.orders') }}" class="{{ request()->routeIs('user.orders') || request()->routeIs('user.order.details') ? 'active' : '' }}">
                                         <i class="fa fa-cart-arrow-down"></i> 
@@ -34,10 +34,7 @@
                                         <i class="fa fa-map-marker"></i> 
                                         Address
                                     </a>
-                                    <a href="{{ route('user.details') }}" class="{{ request()->routeIs('user.details') ? 'active' : '' }}">
-                                        <i class="fa fa-user"></i> 
-                                        Account Details
-                                    </a>
+
                                     <form method="POST" action="{{ route('logout') }}" x-data>
                                         @csrf
                                         <a href="{{ route('logout') }}" @click.prevent="$root.submit();">

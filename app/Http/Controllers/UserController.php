@@ -2,15 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function myAccount()
+    public function accountDetails()
     {
         $user = auth()->user();
-        return view('user.my-account', compact('user'));
+        return view('user.account-details', compact('user'));
+    }
+
+    public function updateAccountDetails(UpdateUserRequest $request)
+    {
+        $user = auth()->user();
+        $user->fill($request->safe()->only(['name', 'last_name', 'email']));
+
+        if ($request->filled('new_password')) {
+            $user->password = Hash::make($request->new_password);
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'Account details updated successfully.');
     }
 
     public function orders()
@@ -39,12 +55,6 @@ class UserController extends Controller
         $addresses = $user->addresses()->orderBy('created_at', 'desc')->paginate(10);
         
         return view('user.address', compact('user', 'addresses'));
-    }
-
-    public function accountDetails()
-    {
-        $user = auth()->user();
-        return view('user.account-details', compact('user'));
     }
 
     public function download()

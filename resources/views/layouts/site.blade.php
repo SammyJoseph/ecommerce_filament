@@ -39,6 +39,9 @@
         @include('_partials.index.subscribe-area')
 
         @include('_partials.index.footer')
+
+        @include('_partials.success-alert')
+        @include('_partials.error-alert')
     </div>
 
     @include('_partials.index.scripts')

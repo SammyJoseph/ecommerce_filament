@@ -189,7 +189,7 @@ class UserAddresses extends Component
                 'is_default' => $this->is_default,
             ]);
             
-            session()->flash('message', 'Address created successfully.');
+            session()->flash('success', 'Address created successfully.');
             $this->cancel();
         } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
@@ -215,7 +215,7 @@ class UserAddresses extends Component
             'is_default' => $this->is_default,
         ]);
 
-        session()->flash('message', 'Address updated successfully.');
+        session()->flash('success', 'Address updated successfully.');
         $this->cancel();
     }
 
@@ -238,7 +238,7 @@ class UserAddresses extends Component
         $this->confirmingAddressDeletion = false;
         $this->addressIdToDelete = null;
         
-        session()->flash('message', 'Address deleted successfully.');
+        session()->flash('success', 'Address deleted successfully.');
     }
 
     public function cancel()

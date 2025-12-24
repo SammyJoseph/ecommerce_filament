@@ -1,16 +1,8 @@
 <div class="tw-relative">
     <h3>Billing Address</h3>
     
-    @if (session()->has('message'))
-        <div class="alert alert-success tw-mb-4 tw-p-2 tw-text-xs">
-            {{ session('message') }}
-        </div>
-    @endif
-    @if (session()->has('error'))
-        <div class="alert alert-danger tw-mb-4 tw-p-2 tw-text-xs">
-            {{ session('error') }}
-        </div>
-    @endif
+    @include('_partials.success-alert')
+    @include('_partials.error-alert')
     
     @if($isCreating || $isEditing)
         <div class="account-details-form">
