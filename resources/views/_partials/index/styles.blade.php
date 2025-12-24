@@ -8,4 +8,4 @@
 <link rel="stylesheet" href="{{  asset('assets/css/plugins/animate.css') }}">
 <link rel="stylesheet" href="{{  asset('assets/css/plugins/magnific-popup.css') }}">
 <link rel="stylesheet" href="{{  asset('assets/css/plugins/jquery-ui.css') }}">
-<link rel="stylesheet" href="{{  asset('assets/css/style.css?v=0.03') }}">
+<link rel="stylesheet" href="{{  asset('assets/css/style.css?v=0.04') }}">

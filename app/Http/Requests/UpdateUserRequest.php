@@ -25,6 +25,7 @@ class UpdateUserRequest extends FormRequest
             'name' => ['required', 'string', 'min:3', 'max:255'],
             'last_name' => ['required', 'string', 'min:3', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . auth()->id()],
+            'phone_number' => ['required', 'string', 'regex:/^9\d{8}$/'],
             'new_password' => ['nullable', 'confirmed', 'min:8'],
         ];
     }

@@ -6,37 +6,37 @@
                 <h3>Billing Details</h3>
                 
                 <div class="row">
-                    <div class="col-lg-6 col-md-6">
+                    <div class="col-lg-6 col-6 max-sm:tw-pr-1.5">
                         <div class="billing-info mb-20">
-                            <label>First Name <abbr class="required" title="required">*</abbr></label>
-                            <input type="text" wire:model="firstName" class="@error('firstName') border-danger @enderror" required>
+                            <label>Nombre <abbr class="required" title="required">*</abbr></label>
+                            <input type="text" wire:model="firstName" class="max-sm:!tw-px-2.5 @error('firstName') border-danger @enderror" required>
                             @error('firstName') <span class="text-danger text-small">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6">
+                    <div class="col-lg-6 col-6 max-sm:tw-pl-1.5">
                         <div class="billing-info mb-20">
-                            <label>Last Name <abbr class="required" title="required">*</abbr></label>
-                            <input type="text" wire:model="lastName" class="@error('lastName') border-danger @enderror" required>
+                            <label>Apellido <abbr class="required" title="required">*</abbr></label>
+                            <input type="text" wire:model="lastName" class="max-sm:!tw-px-2.5 @error('lastName') border-danger @enderror" required>
                             @error('lastName') <span class="text-danger text-small">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6">
+                    <div class="col-lg-6 col-6 max-sm:tw-pr-1.5">
                         <div class="billing-info mb-20">
-                            <label>Email Address <abbr class="required" title="required">*</abbr></label>
-                            <input type="email" wire:model="email" class="@error('email') border-danger @enderror" required>
+                            <label>Correo electrónico <abbr class="required" title="required">*</abbr></label>
+                            <input type="email" wire:model="email" class="max-sm:!tw-px-2.5 @error('email') border-danger @enderror" required>
                             @error('email') <span class="text-danger text-small">{{ $message }}</span> @enderror
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6">
+                    <div class="col-lg-6 col-6 max-sm:tw-pl-1.5">
                         <div class="billing-info mb-20">
-                            <label>Phone <abbr class="required" title="required">*</abbr></label>
-                            <input type="text" wire:model="phone" class="@error('phone') border-danger @enderror" required>
+                            <label>Teléfono <abbr class="required" title="required">*</abbr></label>
+                            <input type="text" wire:model="phone" class="max-sm:!tw-px-2.5 @error('phone') border-danger @enderror" required>
                             @error('phone') <span class="text-danger text-small">{{ $message }}</span> @enderror
                         </div>
                     </div>
                     @if(auth()->check())
                     <div class="col-lg-12 mb-3 tax-select">
-                        <label class="form-label">Select address</label>
+                        <label class="form-label">Seleccionar dirección</label>
                         <select wire:model.live="selectedShippingAddressId" class="email s-email s-wid tw-border tw-p-3">
                             <option value="" @if(count($shippingAddresses) >= 5) hidden @endif>Enter new address below</option>
                             @foreach($shippingAddresses as $addr)
@@ -58,7 +58,7 @@
                                         @endif
                                     </div>
                                     <button type="button" wire:click="editAddress" class="check-btn sqr-btn tw-border-none tw-bg-transparent hover:tw-text-blue-700 tw-text-xs">
-                                        Edit
+                                        Editar
                                     </button>
                                 </div>
                             @else
@@ -171,9 +171,9 @@
                     </div>                                                                                               
                 </div>
                 
-                <div class="additional-info-wrap">
-                    <label>Order notes</label>
-                    <textarea placeholder="Notes about your order, e.g. special notes for delivery." wire:model="notes"></textarea>
+                <div class="additional-info-wrap max-lg:!tw-mt-0">
+                    <label>Notas del pedido </label>
+                    <textarea class="!tw-bg-white" placeholder="Opcionalmente, agrega aquí notas para la tienda o el repartidor" wire:model="notes"></textarea>
                 </div>
             </div>
         </div>

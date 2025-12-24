@@ -18,7 +18,7 @@ class UserController extends Controller
     public function updateAccountDetails(UpdateUserRequest $request)
     {
         $user = auth()->user();
-        $user->fill($request->safe()->only(['name', 'last_name', 'email']));
+        $user->fill($request->safe()->only(['name', 'last_name', 'email', 'phone_number']));
 
         if ($request->filled('new_password')) {
             $user->password = Hash::make($request->new_password);
@@ -26,7 +26,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->back()->with('success', 'Account details updated successfully.');
+        return redirect()->back()->with('success', 'Los datos de tu cuenta han sido actualizados correctamente.');
     }
 
     public function orders()
