@@ -39,7 +39,9 @@ class SiteController extends Controller
         $variantCombinations = $product->getVariantCombinations();
 
         // Get related products from the same category
-        $relatedProducts = Product::where('category_id', $product->category_id)
+        $relatedProducts = Product::whereHas('categories', function ($query) use ($product) {
+                $query->whereIn('categories.id', $product->categories->pluck('id'));
+            })
             ->where('id', '!=', $product->id)
             ->where('is_visible', true)
             ->inRandomOrder()

@@ -165,6 +165,7 @@
                                         'has_variants' => $product->has_variants,
                                         'min_variant_price' => $product->min_variant_price,
                                         'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
+                                        'categories' => $product->categories->map(fn($c) => ['name' => $c->name, 'slug' => $c->slug])->values()->all(),
                                     ]);
                                 @endphp
                                 <div wire:key="product-grid-{{ $product->id }}">
@@ -261,6 +262,7 @@
                                     'has_variants' => $product->has_variants,
                                     'min_variant_price' => $product->min_variant_price,
                                     'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
+                                    'categories' => $product->categories->map(fn($c) => ['name' => $c->name, 'slug' => $c->slug])->values()->all(),
                                 ]);
                             @endphp
                             <div class="shop-list-wrap mb-30" wire:key="{{ $loopKey }}">
@@ -339,10 +341,14 @@
                         <div class="shop-catigory">
                             <ul>
                                 @foreach($categories as $category)
+                                    @php
+                                        $selected_slugs = $category_slugs ? explode(',', $category_slugs) : [];
+                                        $isActive = in_array($category->slug, $selected_slugs);
+                                    @endphp
                                     <li>
-                                        <a href="#" wire:click.prevent="filterByCategory('{{ $category->slug }}')" class="{{ $category_slug == $category->slug ? '!tw-text-red-500 !tw-flex tw-justify-between tw-items-center' : '' }}">
+                                        <a href="#" wire:click.prevent="filterByCategory('{{ $category->slug }}')" class="{{ $isActive ? '!tw-text-red-500 !tw-flex tw-justify-between tw-items-center' : '' }}">
                                             {{ $category->name }}
-                                            @if($category_slug == $category->slug)
+                                            @if($isActive)
                                                 <i class="icon-close"></i>
                                             @endif
                                         </a>

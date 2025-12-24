@@ -118,8 +118,15 @@
                             </div>
                             <div class="product-details-meta">
                                 <ul>
-                                    <li><span>Categorías:</span> <a href="#">Mujer,</a> <a href="#">Vestido,</a> <a href="#">Polo</a></li>
-                                    <li><span>Etiqueta: </span> <a href="#">Moda,</a> <a href="#">Mentone</a> , <a href="#">Texas</a></li>
+                                    <li>
+                                        <span>Categorías:</span>
+                                        <template x-for="(category, index) in product.categories" :key="index">
+                                            <span class="!tw-font-normal !tw-w-auto">
+                                                <a href="#" x-text="category.name"></a><i x-show="index < product.categories.length - 1" class="tw-mr-1">,</i>
+                                            </span>
+                                        </template>
+                                    </li>
+                                    <li><span>Etiquetas: </span> <a href="#">Moda,</a> <a href="#">Mentone</a>, <a href="#">Texas</a></li>
                                 </ul>
                             </div>
                             <div class="pro-details-action-wrap">

@@ -18,7 +18,7 @@ class Shop extends Component
     use WithPagination;
 
     public $search = '';
-    public $category_slug = '';
+    public $category_slugs = '';
     public $min_price = 0;
     public $max_price;
     public $price_range_max;
@@ -30,7 +30,7 @@ class Shop extends Component
 
     protected $queryString = [
         'search' => ['except' => ''],
-        'category_slug' => ['except' => ''],
+        'category_slugs' => ['except' => '', 'as' => 'categories'],
         'min_price' => ['except' => 0],
         'max_price' => ['except' => null],
         'per_page' => ['except' => 12],
@@ -89,7 +89,15 @@ class Shop extends Component
 
     public function filterByCategory($slug)
     {
-        $this->category_slug = $slug == $this->category_slug ? '' : $slug;
+        $current = $this->category_slugs ? explode(',', $this->category_slugs) : [];
+        
+        if (in_array($slug, $current)) {
+            $current = array_values(array_diff($current, [$slug]));
+        } else {
+            $current[] = $slug;
+        }
+        
+        $this->category_slugs = implode(',', $current);
         $this->resetPage();
     }
 
@@ -137,14 +145,17 @@ class Shop extends Component
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
 
-        $products = Product::query()->where('is_visible', true)
+        $products = Product::query()->with(['categories', 'media'])->where('is_visible', true)
             ->when($this->search, function (Builder $query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
-            ->when($this->category_slug, function (Builder $query) {
-                $query->whereHas('category', function (Builder $query) {
-                    $query->where('slug', $this->category_slug);
-                });
+            ->when($this->category_slugs, function (Builder $query) {
+                $slugs = explode(',', $this->category_slugs);
+                foreach ($slugs as $slug) {
+                    $query->whereHas('categories', function (Builder $query) use ($slug) {
+                        $query->where('slug', $slug);
+                    });
+                }
             })
             ->when($this->on_sale, function (Builder $query) {
                 $query->where('sale_price', '>', 0)
@@ -154,16 +165,34 @@ class Shop extends Component
                 $query->where('created_at', '>=', now()->subDays(30));
             })
             ->where(function (Builder $query) {
+                // Filter simple products
                 $query->where(function (Builder $q) {
-                    $q->where('sale_price', '>', 0)
-                        ->whereColumn('sale_price', '<', 'price')
-                        ->whereBetween('sale_price', [$this->min_price, $this->max_price]);
-                })->orWhere(function (Builder $q) {
-                    $q->where(function (Builder $q2) {
-                        $q2->where('sale_price', '<=', 0)
-                            ->orWhereNull('sale_price')
-                            ->orWhereColumn('sale_price', '>=', 'price');
-                    })->whereBetween('price', [$this->min_price, $this->max_price]);
+                    $q->where(function (Builder $saleQ) {
+                        $saleQ->where('sale_price', '>', 0)
+                            ->whereColumn('sale_price', '<', 'price')
+                            ->whereBetween('sale_price', [$this->min_price, $this->max_price]);
+                    })->orWhere(function (Builder $regularQ) {
+                        $regularQ->where(function (Builder $check) {
+                            $check->where('sale_price', '<=', 0)
+                                ->orWhereNull('sale_price')
+                                ->orWhereColumn('sale_price', '>=', 'price');
+                        })->whereBetween('price', [$this->min_price, $this->max_price]);
+                    });
+                })
+                // Filter products with variants
+                ->orWhereHas('variants', function (Builder $variantQ) {
+                    $variantQ->where('is_visible', true)
+                        ->whereHas('sizes', function (Builder $sizeQ) {
+                            $sizeQ->where(function (Builder $saleQ) {
+                                $saleQ->where('sale_price', '>', 0)
+                                    ->whereBetween('sale_price', [$this->min_price, $this->max_price]);
+                            })->orWhere(function (Builder $regularQ) {
+                                $regularQ->where(function (Builder $check) {
+                                    $check->where('sale_price', '<=', 0)
+                                        ->orWhereNull('sale_price');
+                                })->whereBetween('price', [$this->min_price, $this->max_price]);
+                            });
+                        });
                 });
             })
             ->when($this->sort_by, function (Builder $query) {

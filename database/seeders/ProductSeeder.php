@@ -16,37 +16,50 @@ class ProductSeeder extends Seeder
         $categories = Category::all();
         $manualProducts = $this->loadManualProducts();
 
+        // 1. Process Manual Products
+        foreach ($manualProducts as $mp) {
+            $data = $mp['data'];
+            
+            // Create Product
+            $product = Product::factory()
+                ->fromManualData($data, $mp['path'])
+                ->create(); // category_id is removed from fillable, so we don't pass it here
+
+            // Attach Categories
+            if (isset($data['categories']) && is_array($data['categories'])) {
+                $categoryIds = Category::whereIn('name', $data['categories'])->pluck('id');
+                $product->categories()->attach($categoryIds);
+            }
+        }
+
+        // 2. Create Random Products for Categories
+        // We ensure each category has at least a few products, mimicking previous logic but adapted
         foreach ($categories as $category) {
-            // Create 4 products for each category
-            for ($i = 0; $i < 4; $i++) {
-                
-                // Check if we have a manual product for this category
-                $manualIndex = null;
-                foreach ($manualProducts as $index => $mp) {
-                    if (in_array($category->name, $mp['data']['categories'] ?? [])) {
-                        $manualIndex = $index;
-                        break;
-                    }
+            // Check if category already has enough products (from manual load)
+            if ($category->products()->count() >= 4) {
+                continue;
+            }
+
+            // Create remaining needed products
+            $productsToCreate = 4 - $category->products()->count();
+
+            for ($i = 0; $i < $productsToCreate; $i++) {
+                $factory = Product::factory();
+
+                // Randomly decide if this product should have variants (50% chance)
+                if (fake()->boolean(50)) {
+                    $factory = $factory->withVariants();
                 }
 
-                if ($manualIndex !== null) {
-                    $mp = $manualProducts[$manualIndex];
-                    
-                    Product::factory()
-                        ->fromManualData($mp['data'], $mp['path'])
-                        ->create(['category_id' => $category->id]);
-
-                    // Remove used manual product to avoid duplicates
-                    unset($manualProducts[$manualIndex]);
-                } else {
-                    $factory = Product::factory()->state(['category_id' => $category->id]);
-
-                    // Randomly decide if this product should have variants (50% chance)
-                    if (fake()->boolean(50)) {
-                        $factory = $factory->withVariants();
-                    }
-
-                    $factory->withRandomImages()->create();
+                $product = $factory->withRandomImages()->create();
+                
+                // Attach main category and maybe random others
+                $product->categories()->attach($category->id);
+                
+                // Optionally attach 1-2 random other categories
+                if (fake()->boolean(30)) {
+                    $otherCategories = $categories->where('id', '!=', $category->id)->random(min(2, $categories->count() - 1));
+                    $product->categories()->attach($otherCategories->pluck('id'));
                 }
             }
         }

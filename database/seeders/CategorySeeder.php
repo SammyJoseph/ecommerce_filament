@@ -42,6 +42,31 @@ class CategorySeeder extends Seeder
                 'description'   => 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.',
                 'is_visible'    => true,
             ],
+            [
+                'name'          => 'Pantalones',
+                'description'   => 'Jeans, chinos y pantalones de vestir.',
+                'is_visible'    => true,
+            ],
+            [
+                'name'          => 'Zapatos',
+                'description'   => 'Calzado para toda ocasión.',
+                'is_visible'    => true,
+            ],
+            [
+                'name'          => 'Accesorios',
+                'description'   => 'Cinturones, gorras, bufandas y más.',
+                'is_visible'    => true,
+            ],
+            [
+                'name'          => 'Vestidos',
+                'description'   => 'Elegancia y frescura en cada diseño.',
+                'is_visible'    => true,
+            ],
+            [
+                'name'          => 'Novedades',
+                'description'   => 'Lo último de la temporada.',
+                'is_visible'    => true,
+            ],
         ];
 
         foreach ($categories as $category) {

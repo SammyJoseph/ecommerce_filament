@@ -79,10 +79,11 @@ class ProductResource extends Resource
 
             Forms\Components\Group::make()
                 ->schema([
-                    Forms\Components\Select::make('category_id')
-                        ->relationship('category', 'name')
+                    Forms\Components\Select::make('categories')
+                        ->relationship('categories', 'name')
                         ->searchable()
                         ->preload()
+                        ->multiple()
                         ->required(),
                     Forms\Components\Toggle::make('is_visible')
                         ->label('Visible')
@@ -137,7 +138,8 @@ class ProductResource extends Resource
             Tables\Columns\TextColumn::make('stock')
                 ->numeric()
                 ->sortable(),
-            Tables\Columns\TextColumn::make('category.name')
+            Tables\Columns\TextColumn::make('categories.name')
+                ->badge()
                 ->searchable()
                 ->sortable(),
             Tables\Columns\IconColumn::make('is_visible')
@@ -152,8 +154,8 @@ class ProductResource extends Resource
                 ->sortable(),
         ])
         ->filters([
-            Tables\Filters\SelectFilter::make('category_id')
-                ->relationship('category', 'name')
+            Tables\Filters\SelectFilter::make('categories')
+                ->relationship('categories', 'name')
                 ->label('Category'),
             Tables\Filters\TernaryFilter::make('is_visible'),
             Tables\Filters\TernaryFilter::make('is_featured'),
