@@ -126,7 +126,14 @@
                                             </span>
                                         </template>
                                     </li>
-                                    <li><span>Etiquetas: </span> <a href="#">Moda,</a> <a href="#">Mentone</a>, <a href="#">Texas</a></li>
+                                    <li x-show="product.tags && product.tags.length > 0">
+                                        <span>Etiquetas:</span>
+                                        <template x-for="(tag, index) in product.tags" :key="index">
+                                            <span class="!tw-font-normal !tw-w-auto">
+                                                <a href="#" x-text="tag.name"></a><i x-show="index < product.tags.length - 1" class="tw-mr-1">,</i>
+                                            </span>
+                                        </template>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="pro-details-action-wrap">

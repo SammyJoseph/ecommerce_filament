@@ -11,7 +11,7 @@ class SiteController extends Controller
     public function index(): View
     {
         $categories = Category::with(['products' => function($query) {
-            $query->take(10)->with(['variants' => function($q) {
+            $query->take(10)->with(['tags', 'variants' => function($q) {
                 $q->where('is_visible', true)->with(['color', 'sizes.size', 'media']);
             }]);
         }])->take(5)->get();

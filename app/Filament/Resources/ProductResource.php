@@ -85,6 +85,22 @@ class ProductResource extends Resource
                         ->preload()
                         ->multiple()
                         ->required(),
+                    Forms\Components\Select::make('tags')
+                        ->relationship('tags', 'name')
+                        ->searchable()
+                        ->preload()
+                        ->multiple()
+                        ->createOptionForm([
+                            Forms\Components\TextInput::make('name')
+                                ->required()
+                                ->maxLength(255)
+                                ->live(onBlur: true)
+                                ->afterStateUpdated(fn (Forms\Set $set, ?string $state) => $set('slug', \Illuminate\Support\Str::slug($state))),
+                            Forms\Components\TextInput::make('slug')
+                                ->required()
+                                ->maxLength(255)
+                                ->unique(\App\Models\Tag::class, 'slug'),
+                        ]),
                     Forms\Components\Toggle::make('is_visible')
                         ->label('Visible')
                         ->default(true),
@@ -142,6 +158,11 @@ class ProductResource extends Resource
                 ->badge()
                 ->searchable()
                 ->sortable(),
+            Tables\Columns\TextColumn::make('tags.name')
+                ->badge()
+                ->color('success')
+                ->searchable()
+                ->toggleable(isToggledHiddenByDefault: true),
             Tables\Columns\IconColumn::make('is_visible')
                 ->label('Visible')
                 ->boolean(),

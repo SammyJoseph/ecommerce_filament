@@ -3,6 +3,7 @@
     "price": 19.90,
     "description": "Made from high-quality cotton, this crew neck T-shirt from the Uniqlo U collection offers exceptional softness and durability for everyday wear.",
     "categories": ["Polos", "Hombres"],
+    "tags": ["Algodón", "Verano", "Casual"],
     "variants": [
         {
             "color": "Negro",

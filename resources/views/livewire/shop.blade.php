@@ -166,6 +166,7 @@
                                         'min_variant_price' => $product->min_variant_price,
                                         'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                         'categories' => $product->categories->map(fn($c) => ['name' => $c->name, 'slug' => $c->slug])->values()->all(),
+                                        'tags' => $product->tags->map(fn($t) => ['name' => $t->name, 'slug' => $t->slug])->values()->all(),
                                     ]);
                                 @endphp
                                 <div wire:key="product-grid-{{ $product->id }}">
@@ -263,6 +264,7 @@
                                     'min_variant_price' => $product->min_variant_price,
                                     'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                     'categories' => $product->categories->map(fn($c) => ['name' => $c->name, 'slug' => $c->slug])->values()->all(),
+                                    'tags' => $product->tags->map(fn($t) => ['name' => $t->name, 'slug' => $t->slug])->values()->all(),
                                 ]);
                             @endphp
                             <div class="shop-list-wrap mb-30" wire:key="{{ $loopKey }}">

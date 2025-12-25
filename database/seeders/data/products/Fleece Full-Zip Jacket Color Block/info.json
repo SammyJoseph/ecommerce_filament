@@ -3,6 +3,7 @@
     "price": 49.90,
     "description": "Distinctive tonal bicolor design.",
     "categories": ["Casacas", "Hombres"],
+    "tags": ["Algodón", "Invierno", "Casual"],
     "variants": [
         {
             "color": "Gris",

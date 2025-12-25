@@ -30,6 +30,12 @@ class ProductSeeder extends Seeder
                 $categoryIds = Category::whereIn('name', $data['categories'])->pluck('id');
                 $product->categories()->attach($categoryIds);
             }
+
+            // Attach Tags
+            if (isset($data['tags']) && is_array($data['tags'])) {
+                $tagIds = \App\Models\Tag::whereIn('name', $data['tags'])->pluck('id');
+                $product->tags()->attach($tagIds);
+            }
         }
 
         // 2. Create Random Products for Categories

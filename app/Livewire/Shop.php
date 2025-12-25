@@ -145,7 +145,7 @@ class Shop extends Component
             ->where('created_at', '>=', now()->subDays(30))
             ->count();
 
-        $products = Product::query()->with(['categories', 'media'])->where('is_visible', true)
+        $products = Product::query()->with(['categories', 'tags', 'media'])->where('is_visible', true)
             ->when($this->search, function (Builder $query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })

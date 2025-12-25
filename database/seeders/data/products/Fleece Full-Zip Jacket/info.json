@@ -3,6 +3,7 @@
     "price": 49.90,
     "description": "The Fleece Full-Zip Jacket is a lightweight essential.",
     "categories": ["Casacas", "Hombres"],
+    "tags": ["Algodón", "Otoño", "Casual"],
     "variants": [
         {
             "color": "Oliva",
