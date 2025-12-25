@@ -26,6 +26,7 @@ class SiteController extends Controller
     public function productDetails(Product $product): View
     {
         $product->load([
+            'categories',
             'variants' => function($query) {
                 $query->where('is_visible', true)
                       ->with(['media', 'options.option', 'options']);

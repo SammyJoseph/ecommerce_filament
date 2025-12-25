@@ -309,7 +309,12 @@
                         {{-- Category & Tag --}}
                         <div class="product-details-meta">
                             <ul>
-                                <li><span>Categories:</span> <a href="#">{{ $product->category->name }}</a></li>
+                                <li>
+                                    <span>Categories:</span>
+                                    @foreach ($product->categories as $category)
+                                        <a href="#">{{ $category->name }}</a>{{ $loop->last ? '' : ', ' }}
+                                    @endforeach
+                                </li>
                                 <li><span>Tag: </span> <a href="#">Fashion,</a> <a href="#">Mentone</a> , <a href="#">Texas</a></li>
                             </ul>
                         </div>
