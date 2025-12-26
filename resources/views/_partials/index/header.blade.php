@@ -83,7 +83,7 @@
                                 <a href="{{ route('user.my-account') }}">
                                     <i class="icon-user"></i>
                                     @auth
-                                        <span class="tw-absolute -tw-top-2 -tw-right-1 tw-block tw-h-3 tw-w-3 tw-rounded-full tw-bg-green-400 tw-ring-2 tw-ring-white"></span>
+                                        <span class="tw-absolute -tw-top-1 -tw-right-1 tw-block tw-h-2 tw-w-2 tw-rounded-full tw-bg-green-400 tw-ring-2 tw-ring-white"></span>
                                     @endauth
                                 </a>
                             </div>
@@ -119,7 +119,7 @@
                             <a href="{{ route('user.my-account') }}">
                                 <i class="icon-user"></i>
                                 @auth
-                                    <span class="tw-absolute -tw-top-2 -tw-right-1 tw-block tw-h-3 tw-w-3 tw-rounded-full tw-bg-green-400 tw-ring-2 tw-ring-white"></span>
+                                    <span class="tw-absolute -tw-top-1 -tw-right-1 tw-block tw-h-2 tw-w-2 tw-rounded-full tw-bg-green-400 tw-ring-2 tw-ring-white"></span>
                                 @endauth
                             </a>
                         </div>

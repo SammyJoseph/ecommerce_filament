@@ -15,17 +15,3 @@
 {{-- <script src="{{ asset('assets/js/plugins/scrollup.js') }}"></script> --}}
 <script src="{{ asset('assets/js/plugins/ajax-mail.js') }}"></script>
 <script src="{{ asset('assets/js/main.js?v=0.03') }}"></script>
-
-<script>
-    document.addEventListener('livewire:initialized', () => {
-        Livewire.on('open-side-cart', () => {
-            $('.sidebar-cart-active').addClass('inside');
-            $('.main-wrapper').addClass('overlay-active');
-        });
-
-        Livewire.on('close-side-cart', () => {
-            $('.sidebar-cart-active').removeClass('inside');
-            $('.main-wrapper').removeClass('overlay-active');
-        });
-    });
-</script>

@@ -327,8 +327,7 @@ class Checkout extends Component
         $user = User::where('email', $this->email)->first();
 
         if ($user) {
-            auth()->login($user);
-            return $user->id;
+            return $user->id; // no auto-logueamos
         }
 
         $user = User::create([
@@ -354,8 +353,9 @@ class Checkout extends Component
                 ->firstOrFail();
             return $shippingAddress->id;
         } else {
-            $shippingAddress = UserAddress::create([
-                'user_id' => $userId,
+            $shippingAddress = new UserAddress();
+            $shippingAddress->user_id = $userId;
+            $shippingAddress->fill([
                 'department' => $this->department,
                 'province' => $this->province,
                 'district' => $this->district,
@@ -364,6 +364,8 @@ class Checkout extends Component
                 'address_type' => $this->address_type,
                 'is_default' => true,
             ]);
+            $shippingAddress->skipLimitCheck = true; 
+            $shippingAddress->save();
             return $shippingAddress->id;
         }
     }

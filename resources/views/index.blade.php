@@ -3,6 +3,37 @@
 
 @section('main-wrapper-attrs')
     x-data="{
+        modalOpen: false,
+        init() {
+            this.$nextTick(() => {
+                const modalEl = document.getElementById('exampleModal');
+                if (modalEl) {
+                    modalEl.addEventListener('shown.bs.modal', () => {
+                        this.modalOpen = true;
+                        history.pushState({ modalOpen: true }, '', window.location.href);
+                    });
+
+                    modalEl.addEventListener('hidden.bs.modal', () => {
+                        this.modalOpen = false;
+                        if (history.state && history.state.modalOpen) {
+                            history.back();
+                        }
+                    });
+                }
+            });
+
+            window.addEventListener('popstate', (event) => {
+                if (this.modalOpen) {
+                    const modalEl = document.getElementById('exampleModal');
+                    if (modalEl) {
+                         const closeBtn = modalEl.querySelector('.btn-close');
+                         if (closeBtn) {
+                             closeBtn.click();
+                         }
+                    }
+                }
+            });
+        },
         product: {},
         activeImage: '',
         activeThumbIndex: 0,

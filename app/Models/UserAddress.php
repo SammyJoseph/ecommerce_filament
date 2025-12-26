@@ -39,16 +39,19 @@ class UserAddress extends Model
 
     /**
      * Boot the model.
-     */
-    protected static function boot()
+    */
+    public $skipLimitCheck = false;
+    protected static function booted()
     {
-        parent::boot();
-
-        // Before creating, validate max 5 addresses per user
+        // Before creating, validate max 4 addresses per user
         static::creating(function ($address) {
+            if ($address->skipLimitCheck) {
+                return;
+            }
+
             $count = self::where('user_id', $address->user_id)->count();
-            if ($count >= 5) {
-                throw new \Exception('Maximum 5 addresses allowed per user');
+            if ($count >= 4) {
+                throw new \Exception('Maximum 4 addresses allowed per user');
             }
         });
 

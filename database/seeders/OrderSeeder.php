@@ -25,7 +25,7 @@ class OrderSeeder extends Seeder
 
         foreach ($users as $user) {
             $currentCount = UserAddress::where('user_id', $user->id)->count();
-            $limit = 5;
+            $limit = 4;
             
             if ($currentCount >= $limit) {
                 continue;
