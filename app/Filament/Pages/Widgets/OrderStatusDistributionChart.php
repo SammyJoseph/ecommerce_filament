@@ -24,11 +24,12 @@ class OrderStatusDistributionChart extends ChartWidget
         $data = $statusCounts->pluck('count')->toArray();
 
         $colors = [
-            'completed' => ['rgba(34, 197, 94, 0.9)', 'rgb(34, 197, 94)'],
-            'pending' => ['rgba(251, 191, 36, 0.9)', 'rgb(251, 191, 36)'],
+            'delivered' => ['rgba(34, 197, 94, 0.9)', 'rgb(34, 197, 94)'],
+            'pending_payment' => ['rgba(156, 163, 175, 0.9)', 'rgb(156, 163, 175)'],
             'cancelled' => ['rgba(239, 68, 68, 0.9)', 'rgb(239, 68, 68)'],
-            'processing' => ['rgba(59, 130, 246, 0.9)', 'rgb(59, 130, 246)'],
-            'shipped' => ['rgba(139, 92, 246, 0.9)', 'rgb(139, 92, 246)'],
+            'processing' => ['rgba(251, 191, 36, 0.9)', 'rgb(251, 191, 36)'],
+            'shipped' => ['rgba(59, 130, 246, 0.9)', 'rgb(59, 130, 246)'],
+            'payment_confirmed' => ['rgba(14, 165, 233, 0.9)', 'rgb(14, 165, 233)'],
         ];
 
         $backgroundColors = [];

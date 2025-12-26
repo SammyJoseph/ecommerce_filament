@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('total_amount', 10, 2)->nullable();
             $table->decimal('shipping_amount', 10, 2)->default(0);
             $table->decimal('discount_amount', 10, 2)->default(0);
-            $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending_payment', 'payment_confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending_payment');
             $table->string('currency')->default('pen');
             $table->foreignId('shipping_address_id')->nullable()->constrained('user_addresses')->onDelete('set null');
             $table->text('notes')->nullable();

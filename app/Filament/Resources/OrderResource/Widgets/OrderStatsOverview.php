@@ -23,7 +23,7 @@ class OrderStatsOverview extends BaseWidget
             Stat::make('Orders', Order::count())
                 ->description('Total orders')
                 ->chart(array_values($monthlyOrders)),
-            Stat::make('Open Orders', Order::where('status', 'pending')->count())
+            Stat::make('Open Orders', Order::where('status', 'pending_payment')->count())
                 ->description('Orders awaiting processing'),
             Stat::make('Average Price', number_format(Order::avg('total_amount'), 2))
                 ->description('Average order value'),

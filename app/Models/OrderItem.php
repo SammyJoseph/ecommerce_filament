@@ -12,10 +12,12 @@ class OrderItem extends Model
         'product_id',
         'quantity',
         'price',
+        'options',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'options' => 'array',
     ];
 
     public function order(): BelongsTo

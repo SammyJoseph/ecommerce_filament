@@ -21,22 +21,11 @@
                         <td><a href="{{ route('user.order.details', $listOrder) }}">{{ $listOrder->number }}</a></td>
                         <td>{{ $listOrder->created_at->format('M d, Y') }} <span class="tw-opacity-70">{{ $listOrder->created_at->format('g:i A') }}</span></td>
                         <td>
-                            @php
-                                $status = $listOrder->status;
-                                $config = match($status) {
-                                    'pending' => ['class' => 'text-info', 'icon' => 'heroicon-m-sparkles'],
-                                    'processing' => ['class' => 'text-warning', 'icon' => 'heroicon-m-arrow-path'],
-                                    'shipped' => ['class' => 'text-success', 'icon' => 'heroicon-m-truck'],
-                                    'delivered' => ['class' => 'text-success', 'icon' => 'heroicon-m-check-badge'],
-                                    'cancelled' => ['class' => 'text-danger', 'icon' => 'heroicon-m-x-circle'],
-                                    default => ['class' => 'text-secondary', 'icon' => null],
-                                };
-                            @endphp
-                            <span class="{{ $config['class'] }}" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
-                                @if($config['icon'])
-                                    @svg($config['icon'], ['style' => 'width: 18px; height: 18px;'])
+                            <span class="{{ $listOrder->status_color_class }}" style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                                @if($listOrder->status_icon)
+                                    @svg($listOrder->status_icon, ['style' => 'width: 18px; height: 18px;'])
                                 @endif
-                                {{ ucfirst($status) }}
+                                {{ $listOrder->status_label }}
                             </span>
                         </td>
                         <td>${{ $listOrder->total_amount }}</td>

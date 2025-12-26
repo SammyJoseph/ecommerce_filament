@@ -42,22 +42,28 @@ class LatestOrdersTable extends BaseWidget
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Status')
                     ->colors([
-                        'primary' => 'pending',
+                        'gray' => 'pending_payment',
+                        'info' => 'payment_confirmed',
                         'warning' => 'processing',
-                        'success' => 'shipped',
+                        'primary' => 'shipped',
+                        'success' => 'delivered',
                         'danger' => 'cancelled',
                     ])
                     ->icons([
-                        'heroicon-o-clock' => 'pending',
-                        'heroicon-o-arrow-path' => 'processing',
-                        'heroicon-o-truck' => 'shipped',
-                        'heroicon-o-x-circle' => 'cancelled',
+                        'heroicon-m-banknotes' => 'pending_payment',
+                        'heroicon-m-check-circle' => 'payment_confirmed',
+                        'heroicon-m-arrow-path' => 'processing',
+                        'heroicon-m-truck' => 'shipped',
+                        'heroicon-m-check-badge' => 'delivered',
+                        'heroicon-m-x-circle' => 'cancelled',
                     ])
                     ->formatStateUsing(fn ($state) => match($state) {
-                        'pending' => 'New',
-                        'processing' => 'Processing',
-                        'shipped' => 'Shipped',
-                        'cancelled' => 'Cancelled',
+                        'pending_payment' => 'Pendiente de Pago',
+                        'payment_confirmed' => 'Pago Confirmado',
+                        'processing' => 'En Preparación',
+                        'shipped' => 'En Camino',
+                        'delivered' => 'Completado',
+                        'cancelled' => 'Cancelado',
                         default => ucfirst($state),
                     }),
                 

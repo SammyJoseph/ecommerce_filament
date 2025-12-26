@@ -54,8 +54,8 @@ class SalesReports extends Page implements HasForms
                             ->label('Status')
                             ->options([
                                 'all' => 'All',
-                                'completed' => 'Completed',
-                                'pending' => 'Pending',
+                                'delivered' => 'Completed',
+                                'pending_payment' => 'Pending Payment',
                                 'cancelled' => 'Cancelled',
                             ])
                             ->default('completed'),

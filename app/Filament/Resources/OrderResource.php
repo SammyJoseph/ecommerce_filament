@@ -34,142 +34,81 @@ class OrderResource extends Resource
                     ->schema([
                         Forms\Components\Section::make()
                             ->schema([
-                                Forms\Components\TextInput::make('number')
-                                    ->default('OR-' . random_int(100000, 999999))
-                                    ->disabled()
-                                    ->dehydrated()
-                                    ->required()
-                                    ->maxLength(32)
-                                    ->unique(Order::class, 'number', ignoreRecord: true),
-
-                                Forms\Components\Select::make('user_id')
-                                    ->label('Customer')
-                                    ->relationship('user', 'name')
-                                    ->searchable()
-                                    ->preload()
-                                    ->required(),
+                                Forms\Components\Placeholder::make('number')
+                                    ->label('Order Number')
+                                    ->content(fn (?Order $record): ?string => $record?->number),
 
                                 Forms\Components\ToggleButtons::make('status')
                                     ->inline()
                                     ->options([
-                                        'pending' => 'New',
-                                        'processing' => 'Processing',
-                                        'shipped' => 'Shipped',
-                                        'delivered' => 'Delivered',
-                                        'cancelled' => 'Cancelled',
+                                        'pending_payment' => 'Pendiente de Pago',
+                                        'payment_confirmed' => 'Pago Confirmado',
+                                        'processing' => 'En Preparación',
+                                        'shipped' => 'En Camino',
+                                        'delivered' => 'Completado',
+                                        'cancelled' => 'Cancelado',
                                     ])
                                     ->colors([
-                                        'pending' => 'info',
+                                        'pending_payment' => 'gray',
+                                        'payment_confirmed' => 'info',
                                         'processing' => 'warning',
-                                        'shipped' => 'success',
+                                        'shipped' => 'primary',
                                         'delivered' => 'success',
                                         'cancelled' => 'danger',
                                     ])
                                     ->icons([
-                                        'pending' => 'heroicon-m-sparkles',
+                                        'pending_payment' => 'heroicon-m-banknotes',
+                                        'payment_confirmed' => 'heroicon-m-check-circle',
                                         'processing' => 'heroicon-m-arrow-path',
                                         'shipped' => 'heroicon-m-truck',
                                         'delivered' => 'heroicon-m-check-badge',
                                         'cancelled' => 'heroicon-m-x-circle',
                                     ])
-                                    ->required(),
-
-                                Forms\Components\Select::make('currency')
-                                    ->options([
-                                        'usd' => 'USD',
-                                        'eur' => 'EUR',
-                                        'gmd' => 'GMD',
-                                    ])
-                                    ->default('usd')
                                     ->required()
-                                    ->native(false),
-
-                                Forms\Components\MarkdownEditor::make('notes')
                                     ->columnSpanFull(),
+
+                                Forms\Components\Placeholder::make('currency')
+                                    ->label('Currency')
+                                    ->content(fn (?Order $record): ?string => strtoupper($record?->currency ?? '')),
+
+                                Forms\Components\Placeholder::make('notes')
+                                    ->label('Notes')
+                                    ->columnSpanFull()
+                                    ->content(fn (?Order $record): ?string => $record?->notes),
                             ])
                             ->columns(2),
 
-                        Forms\Components\Section::make('Address')
+                        Forms\Components\Section::make('Shipping Details')
                             ->schema([
-                                Forms\Components\TextInput::make('shipping_street')
-                                    ->label('Street address')
-                                    ->columnSpanFull(),
+                                Forms\Components\Placeholder::make('customer_name')
+                                    ->label('Customer Name')
+                                    ->content(fn (Order $record): ?string => $record->user?->name . ' ' . $record->user?->last_name),
 
-                                Forms\Components\TextInput::make('shipping_city')
-                                    ->label('City'),
+                                Forms\Components\Placeholder::make('customer_email')
+                                    ->label('Customer Email')
+                                    ->content(fn (Order $record): ?string => $record->user?->email),
 
-                                Forms\Components\TextInput::make('shipping_state')
-                                    ->label('State / Province'),
+                                Forms\Components\Placeholder::make('customer_phone')
+                                    ->label('Phone')
+                                    ->content(fn (Order $record): ?string => $record->user?->phone_number),
 
-                                Forms\Components\TextInput::make('shipping_zip')
-                                    ->label('Zip / Postal code'),
+                                Forms\Components\Placeholder::make('shipping_address')
+                                    ->label('Address')
+                                    ->content(fn (Order $record): ?string => $record->shippingAddress?->address),
 
-                                Forms\Components\TextInput::make('shipping_country')
-                                    ->label('Country'),
+                                Forms\Components\Placeholder::make('location')
+                                    ->label('Location')
+                                    ->content(fn (Order $record): ?string => implode(', ', array_filter([
+                                        $record->shippingAddress?->district,
+                                        $record->shippingAddress?->province,
+                                        $record->shippingAddress?->department
+                                    ]))),
+
+                                Forms\Components\Placeholder::make('reference')
+                                    ->label('Reference')
+                                    ->content(fn (Order $record): ?string => $record->shippingAddress?->reference),
                             ])
                             ->columns(2),
-
-                        Forms\Components\Section::make('Order items')
-                            ->headerActions([
-                                Forms\Components\Actions\Action::make('reset')
-                                    ->modalHeading('Are you sure?')
-                                    ->modalDescription('All existing items will be removed from the order.')
-                                    ->requiresConfirmation()
-                                    ->color('danger')
-                                    ->action(fn (Forms\Set $set) => $set('orderItems', [])),
-                            ])
-                            ->schema([
-                                Forms\Components\Repeater::make('orderItems')
-                                    ->relationship()
-                                    ->schema([
-                                        Forms\Components\Select::make('product_id')
-                                            ->label('Product')
-                                            ->options(\App\Models\Product::query()->pluck('name', 'id'))
-                                            ->required()
-                                            ->reactive()
-                                            ->afterStateUpdated(fn ($state, Forms\Set $set) => $set('price', \App\Models\Product::find($state)?->price ?? 0))
-                                            ->distinct()
-                                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                                            ->columnSpan([
-                                                'md' => 5,
-                                            ])
-                                            ->searchable(),
-
-                                        Forms\Components\TextInput::make('quantity')
-                                            ->label('Quantity')
-                                            ->numeric()
-                                            ->default(1)
-                                            ->columnSpan([
-                                                'md' => 2,
-                                            ])
-                                            ->required(),
-
-                                        Forms\Components\TextInput::make('price')
-                                            ->label('Unit Price')
-                                            ->disabled()
-                                            ->dehydrated()
-                                            ->numeric()
-                                            ->required()
-                                            ->columnSpan([
-                                                'md' => 3,
-                                            ]),
-                                    ])
-                                    ->extraItemActions([
-                                        Forms\Components\Actions\Action::make('openProduct')
-                                            ->tooltip('Open product')
-                                            ->icon('heroicon-m-arrow-top-right-on-square')
-                                            ->url(fn ($record): ?string => $record?->product_id ? route('filament.admin.resources.products.edit', $record->product_id) : null)
-                                            ->openUrlInNewTab()
-                                            ->visible(fn ($record): bool => $record !== null),
-                                    ])
-                                    ->reorderable()
-                                    ->defaultItems(1)
-                                    ->hiddenLabel()
-                                    ->columns([
-                                        'md' => 10,
-                                    ])
-                                    ->required(),
-                            ]),
                     ])
                     ->columnSpan(['lg' => 2]),
 
@@ -194,7 +133,7 @@ class OrderResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordUrl(null)
+            // ->recordUrl(null) // para que la fila no sea clickeable (edit)
             ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('number')
@@ -222,11 +161,21 @@ class OrderResource extends Resource
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'pending' => 'gray',
+                        'pending_payment' => 'gray',
+                        'payment_confirmed' => 'info',
                         'processing' => 'warning',
-                        'shipped' => 'success',
+                        'shipped' => 'primary',
                         'delivered' => 'success',
                         'cancelled' => 'danger',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'pending_payment' => 'Pendiente de Pago',
+                        'payment_confirmed' => 'Pago Confirmado',
+                        'processing' => 'En Preparación',
+                        'shipped' => 'En Camino',
+                        'delivered' => 'Completado',
+                        'cancelled' => 'Cancelado',
+                        default => $state,
                     }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Sale Date')
@@ -236,11 +185,12 @@ class OrderResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
-                        'pending' => 'Pending',
-                        'processing' => 'Processing',
-                        'shipped' => 'Shipped',
-                        'delivered' => 'Delivered',
-                        'cancelled' => 'Cancelled',
+                        'pending_payment' => 'Pendiente de Pago',
+                        'payment_confirmed' => 'Pago Confirmado',
+                        'processing' => 'En Preparación',
+                        'shipped' => 'En Camino',
+                        'delivered' => 'Completado',
+                        'cancelled' => 'Cancelado',
                     ]),
                 Tables\Filters\Filter::make('created_at')
                     ->form([

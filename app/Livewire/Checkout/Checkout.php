@@ -204,8 +204,6 @@ class Checkout extends Component
 
     private function createOrder()
     {
-        $contactInfo = "Cliente: {$this->firstName} {$this->lastName} | Tel: {$this->phone}";
-
         $userId = $this->resolveUserId();
         $shippingAddressId = $this->resolveAddressId($userId);
 
@@ -215,10 +213,10 @@ class Checkout extends Component
             'total_amount' => $this->calculateTotal() - $this->shipping,
             'shipping_amount' => $this->shipping,
             'discount_amount' => $this->discount,
-            'status' => 'pending',
+            'status' => 'pending_payment',
             'currency' => 'PEN',
             'shipping_address_id' => $shippingAddressId,
-            'notes' => $contactInfo . " | Notas: " . $this->notes,
+            'notes' => "Notas: " . $this->notes,
         ]);
 
         $cartItems = Cart::instance('shopping')->content();
@@ -228,8 +226,8 @@ class Checkout extends Component
                 'product_id' => $item->options->product_id ?? $item->id,
                 'quantity' => $item->qty,
                 'price' => (float) $item->price,
+                'options' => $item->options->toArray(),
             ]);
-
         }
 
         return $order;

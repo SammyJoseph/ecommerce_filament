@@ -77,10 +77,11 @@ class OrderSeeder extends Seeder
 
             // 80% completed, 15% pending, 5% cancelled for realistic distribution
             $statusWeights = [
-                'delivered' => 50,
+                'delivered' => 45,
                 'shipped' => 20,
                 'processing' => 10,
-                'pending' => 15,
+                'payment_confirmed' => 10,
+                'pending_payment' => 10,
                 'cancelled' => 5,
             ];
             $status = $this->getRandomWeighted($statusWeights);

@@ -63,9 +63,9 @@ class ListOrders extends ListRecords
             'all' => Tab::make('All')
                 ->modifyQueryUsing($queryModifier),
             'pending' => Tab::make('Pending')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'pending')->when($createdFrom, fn ($q) => $q->whereDate('created_at', '>=', $createdFrom))->when($createdUntil, fn ($q) => $q->whereDate('created_at', '<=', $createdUntil))),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'pending_payment')->when($createdFrom, fn ($q) => $q->whereDate('created_at', '>=', $createdFrom))->when($createdUntil, fn ($q) => $q->whereDate('created_at', '<=', $createdUntil))),
             'completed' => Tab::make('Completed')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'completed')->when($createdFrom, fn ($q) => $q->whereDate('created_at', '>=', $createdFrom))->when($createdUntil, fn ($q) => $q->whereDate('created_at', '<=', $createdUntil))),
+                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'delivered')->when($createdFrom, fn ($q) => $q->whereDate('created_at', '>=', $createdFrom))->when($createdUntil, fn ($q) => $q->whereDate('created_at', '<=', $createdUntil))),
             'cancelled' => Tab::make('Cancelled')
                 ->modifyQueryUsing(fn (Builder $query) => $query->where('status', 'cancelled')->when($createdFrom, fn ($q) => $q->whereDate('created_at', '>=', $createdFrom))->when($createdUntil, fn ($q) => $q->whereDate('created_at', '<=', $createdUntil))),
         ];
