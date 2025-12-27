@@ -36,7 +36,9 @@
 
         @yield('content')
 
-        @include('_partials.index.subscribe-area')
+        @if(!auth()->check() || !auth()->user()->is_subscribed)
+            @livewire('subscribe-user')
+        @endif
 
         @include('_partials.index.footer')
 

@@ -14577,7 +14577,8 @@ textarea:focus {
   transform: translateY(-50%);
 }
 
-.subscribe-form .subscribe-form-style .mc-form .clear input {
+.subscribe-form .subscribe-form-style .mc-form .clear input,
+.subscribe-form .subscribe-form-style .mc-form .clear button {
   width: auto;
   border: none;
   font-weight: bold;
@@ -14589,7 +14590,8 @@ textarea:focus {
   padding: 0;
 }
 
-.subscribe-form .subscribe-form-style .mc-form .clear input:hover {
+.subscribe-form .subscribe-form-style .mc-form .clear input:hover,
+.subscribe-form .subscribe-form-style .mc-form .clear button:hover {
   color: #ff2f2f;
 }
 
