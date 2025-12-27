@@ -191,6 +191,8 @@
                                     'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                     'categories' => $product->categories->map(fn($c) => ['name' => $c->name, 'slug' => $c->slug])->values()->all(),
                                     'tags' => $product->tags->map(fn($t) => ['name' => $t->name, 'slug' => $t->slug])->values()->all(),
+                                    'average_rating' => $product->reviews_avg_rating ?? 0,
+                                    'review_count' => $product->reviews_count ?? 0,
                                 ]);
                             @endphp
                         <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12">

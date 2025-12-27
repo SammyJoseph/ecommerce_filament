@@ -11,9 +11,16 @@ class SiteController extends Controller
     public function index(): View
     {
         $categories = Category::with(['products' => function($query) {
-            $query->take(10)->with(['tags', 'variants' => function($q) {
-                $q->where('is_visible', true)->with(['color', 'sizes.size', 'media']);
-            }]);
+            $query->take(10)
+                ->with(['tags', 'variants' => function($q) {
+                    $q->where('is_visible', true)->with(['color', 'sizes.size', 'media']);
+                }])
+                ->withCount(['reviews' => function ($q) {
+                    $q->where('is_visible', true);
+                }])
+                ->withAvg(['reviews' => function ($q) {
+                    $q->where('is_visible', true);
+                }], 'rating');
         }])->take(5)->get();
 
         $settings = app(\App\Settings\HomePageSettings::class);
@@ -33,8 +40,15 @@ class SiteController extends Controller
             },
             'options.values.variants' => function($query) {
                 $query->where('is_visible', true);
+            },
+            'reviews' => function($query) {
+                $query->where('is_visible', true);
             }
         ]);
+
+        // Calculate average rating and review count
+        $averageRating = $product->reviews->avg('rating') ?? 0;
+        $reviewCount = $product->reviews->count();
 
         // Get variant combinations for interactive selection
         $variantCombinations = $product->getVariantCombinations();
@@ -49,7 +63,7 @@ class SiteController extends Controller
             ->limit(4)
             ->get();
 
-        return view('product.product-details', compact('product', 'variantCombinations', 'relatedProducts'));
+        return view('product.product-details', compact('product', 'variantCombinations', 'relatedProducts', 'averageRating', 'reviewCount'));
     }    
 
     public function wishlist(): View

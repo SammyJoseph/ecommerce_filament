@@ -91,4 +91,14 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasRole('admin') || $this->hasRole('super_admin');
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

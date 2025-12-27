@@ -199,19 +199,39 @@
                         <div class="product-ratting-review-wrap">
                             <div class="product-ratting-digit-wrap">
                                 <div class="product-ratting">
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
-                                    <i class="icon_star"></i>
+                                    @php
+                                        $fullStars = floor($averageRating);
+                                        $hasHalfStar = ($averageRating - $fullStars) >= 0.5;
+                                        $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0);
+                                    @endphp
+                                    @if ($reviewCount > 0)
+                                        {{-- Filled stars --}}
+                                        @for ($i = 0; $i < $fullStars; $i++)
+                                            <i class="icon_star"></i>
+                                        @endfor
+                                        {{-- Half star --}}
+                                        @if ($hasHalfStar)
+                                            <i class="icon_star-half_alt"></i>
+                                        @endif
+                                        {{-- Empty stars --}}
+                                        @for ($i = 0; $i < $emptyStars; $i++)
+                                            <i class="icon_star_alt" style="color: #ccc;"></i>
+                                        @endfor
+                                    @else
+                                        {{-- No reviews - gray stars --}}
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <i class="icon_star" style="color: #ccc;"></i>
+                                        @endfor
+                                    @endif
                                 </div>
-                                <div class="product-digit">
-                                    <span>5.0</span>
-                                </div>
+                                @if ($reviewCount > 0)
+                                    <div class="product-digit">
+                                        <span>{{ number_format($averageRating, 1) }}</span>
+                                    </div>
+                                @endif
                             </div>
                             <div class="product-review-order">
-                                <span>62 Reviews</span>
-                                <span>242 orders</span>
+                                <span>{{ $reviewCount }} {{ $reviewCount === 1 ? 'Review' : 'Reviews' }}</span>
                             </div>
                         </div>
                         <p>{!! $product->description !!}</p>

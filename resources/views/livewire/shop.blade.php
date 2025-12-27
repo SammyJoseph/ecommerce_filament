@@ -167,6 +167,8 @@
                                         'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                         'categories' => $product->categories->map(fn($c) => ['name' => $c->name, 'slug' => $c->slug])->values()->all(),
                                         'tags' => $product->tags->map(fn($t) => ['name' => $t->name, 'slug' => $t->slug])->values()->all(),
+                                        'average_rating' => $product->reviews_avg_rating ?? 0,
+                                        'review_count' => $product->reviews_count ?? 0,
                                     ]);
                                 @endphp
                                 <div wire:key="product-grid-{{ $product->id }}">
@@ -188,13 +190,24 @@
                                         <div class="product-content-wrap-2 text-center">
                                             <div class="product-rating-wrap">
                                                 <div class="product-rating">
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
+                                                    @php
+                                                        $avgRating = $product->reviews_avg_rating ?? 0;
+                                                        $reviewCount = $product->reviews_count ?? 0;
+                                                        $fullStars = floor($avgRating);
+                                                        $hasHalf = ($avgRating - $fullStars) >= 0.5;
+                                                        $emptyStars = 5 - $fullStars - ($hasHalf ? 1 : 0);
+                                                    @endphp
+                                                    @if($reviewCount > 0)
+                                                        @for($i = 0; $i < $fullStars; $i++)<i class="icon_star"></i>@endfor
+                                                        @if($hasHalf)<i class="icon_star-half_alt"></i>@endif
+                                                        @for($i = 0; $i < $emptyStars; $i++)<i class="icon_star_alt" style="color: #ccc;"></i>@endfor
+                                                    @else
+                                                        @for($i = 0; $i < 5; $i++)<i class="icon_star" style="color: #ccc;"></i>@endfor
+                                                    @endif
                                                 </div>
-                                                <span>(5)</span>
+                                                @if($reviewCount > 0)
+                                                    <span>({{ number_format($avgRating, 1) }})</span>
+                                                @endif
                                             </div>
                                             <h3><a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a></h3>
                                             <div class="product-price-2">
@@ -211,13 +224,17 @@
                                         <div class="product-content-wrap-2 product-content-position text-center">
                                             <div class="product-rating-wrap">
                                                 <div class="product-rating">
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
+                                                    @if($reviewCount > 0)
+                                                        @for($i = 0; $i < $fullStars; $i++)<i class="icon_star"></i>@endfor
+                                                        @if($hasHalf)<i class="icon_star-half_alt"></i>@endif
+                                                        @for($i = 0; $i < $emptyStars; $i++)<i class="icon_star_alt" style="color: #ccc;"></i>@endfor
+                                                    @else
+                                                        @for($i = 0; $i < 5; $i++)<i class="icon_star" style="color: #ccc;"></i>@endfor
+                                                    @endif
                                                 </div>
-                                                <span>(5)</span>
+                                                @if($reviewCount > 0)
+                                                    <span>({{ number_format($avgRating, 1) }})</span>
+                                                @endif
                                             </div>
                                             <h3><a href="{{ route('product.show', $product->slug) }}" class="tw-block tw-truncate">{{ $product->name }}</a></h3>
                                             <div class="product-price-2">
@@ -265,6 +282,8 @@
                                     'variant_combinations' => $product->has_variants ? $product->getVariantCombinations() : [],
                                     'categories' => $product->categories->map(fn($c) => ['name' => $c->name, 'slug' => $c->slug])->values()->all(),
                                     'tags' => $product->tags->map(fn($t) => ['name' => $t->name, 'slug' => $t->slug])->values()->all(),
+                                    'average_rating' => $product->reviews_avg_rating ?? 0,
+                                    'review_count' => $product->reviews_count ?? 0,
                                 ]);
                             @endphp
                             <div class="shop-list-wrap mb-30" wire:key="{{ $loopKey }}">
@@ -294,13 +313,24 @@
                                             </div>
                                             <div class="product-list-rating-wrap">
                                                 <div class="product-list-rating">
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
-                                                    <i class="icon_star"></i>
+                                                    @php
+                                                        $avgRating = $product->reviews_avg_rating ?? 0;
+                                                        $reviewCount = $product->reviews_count ?? 0;
+                                                        $fullStars = floor($avgRating);
+                                                        $hasHalf = ($avgRating - $fullStars) >= 0.5;
+                                                        $emptyStars = 5 - $fullStars - ($hasHalf ? 1 : 0);
+                                                    @endphp
+                                                    @if($reviewCount > 0)
+                                                        @for($i = 0; $i < $fullStars; $i++)<i class="icon_star"></i>@endfor
+                                                        @if($hasHalf)<i class="icon_star-half_alt"></i>@endif
+                                                        @for($i = 0; $i < $emptyStars; $i++)<i class="icon_star_alt" style="color: #ccc;"></i>@endfor
+                                                    @else
+                                                        @for($i = 0; $i < 5; $i++)<i class="icon_star" style="color: #ccc;"></i>@endfor
+                                                    @endif
                                                 </div>
-                                                <span>(5)</span>
+                                                @if($reviewCount > 0)
+                                                    <span>({{ number_format($avgRating, 1) }})</span>
+                                                @endif
                                             </div>
                                             <p>{{ $product->description }}</p>
                                             <div class="product-list-action">

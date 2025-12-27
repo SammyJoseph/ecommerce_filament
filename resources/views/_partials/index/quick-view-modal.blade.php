@@ -30,19 +30,29 @@
                             <div class="product-ratting-review-wrap">
                                 <div class="product-ratting-digit-wrap">
                                     <div class="product-ratting">
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
+                                        <template x-if="product.review_count > 0">
+                                            <template x-for="i in 5" :key="i">
+                                                <i :class="{
+                                                    'icon_star': i <= Math.floor(product.average_rating),
+                                                    'icon_star-half_alt': i === Math.ceil(product.average_rating) && product.average_rating % 1 >= 0.5,
+                                                    'icon_star_alt': i > Math.ceil(product.average_rating) || (i === Math.ceil(product.average_rating) && product.average_rating % 1 < 0.5 && i > Math.floor(product.average_rating))
+                                                }" :style="i > Math.floor(product.average_rating) && !(i === Math.ceil(product.average_rating) && product.average_rating % 1 >= 0.5) ? 'color: #ccc' : ''"></i>
+                                            </template>
+                                        </template>
+                                        <template x-if="!product.review_count || product.review_count === 0">
+                                            <template x-for="i in 5" :key="'empty-' + i">
+                                                <i class="icon_star" style="color: #ccc;"></i>
+                                            </template>
+                                        </template>
                                     </div>
-                                    <div class="product-digit">
-                                        <span>5.0</span>
-                                    </div>
+                                    <template x-if="product.review_count > 0">
+                                        <div class="product-digit">
+                                            <span x-text="parseFloat(product.average_rating).toFixed(1)"></span>
+                                        </div>
+                                    </template>
                                 </div>
                                 <div class="product-review-order">
-                                    <span>62 Reseñas</span>
-                                    <span>242 ordenes</span>
+                                    <span x-text="(product.review_count || 0) + ' ' + ((product.review_count === 1) ? 'Reseña' : 'Reseñas')"></span>
                                 </div>
                             </div>
                             <p x-html="product.description" class="tw-line-clamp-2"></p>
