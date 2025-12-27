@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Product;
 use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
+
 use Livewire\Component;
 
 class ProductReviews extends Component
@@ -12,6 +13,8 @@ class ProductReviews extends Component
     public Product $product;
     public $rating = 5;
     public $comment = '';
+    public $reviewSubmitted = false;
+    public $isEditing = false;
 
     protected $rules = [
         'rating' => 'required|integer|min:1|max:5',
@@ -23,21 +26,32 @@ class ProductReviews extends Component
         $this->product = $product;
     }
 
+    public function getHasReviewedProperty()
+    {
+        if ($this->reviewSubmitted) {
+            return true;
+        }
+
+        if (!Auth::check()) {
+            return false;
+        }
+
+        return $this->product->reviews()->where('user_id', Auth::id())->exists();
+    }
+
     public function getCanReviewProperty()
     {
         if (!Auth::check()) {
             return false;
         }
 
-        $user = Auth::user();
-
         // Check if user has already reviewed this product
-        if ($this->product->reviews()->where('user_id', $user->id)->exists()) {
+        if ($this->hasReviewed && !$this->isEditing) {
             return false;
         }
 
         // Check if user has purchased the product and order is delivered
-        return $user->orders()
+        return Auth::user()->orders()
             ->where('status', 'delivered')
             ->whereHas('orderItems', function ($query) {
                 $query->where('product_id', $this->product->id);
@@ -45,25 +59,48 @@ class ProductReviews extends Component
             ->exists();
     }
 
+    public function editReview($reviewId)
+    {
+        $review = $this->product->reviews()->where('id', $reviewId)->where('user_id', Auth::id())->first();
+
+        if ($review) {
+            $this->rating = $review->rating;
+            $this->comment = $review->comment;
+            $this->isEditing = true;
+            $this->reviewSubmitted = false;
+        }
+    }
+
     public function submitReview()
     {
-        if (!$this->canReview) {
+        if (!$this->isEditing && !$this->canReview) {
             return;
         }
-
         $this->validate();
 
-        $this->product->reviews()->create([
-            'user_id' => Auth::id(),
-            'rating' => $this->rating,
-            'comment' => $this->comment,
-            'is_visible' => true,
-        ]);
+        if ($this->isEditing) {
+            $this->product->reviews()
+                ->where('user_id', Auth::id())
+                ->update([
+                    'rating' => $this->rating,
+                    'comment' => $this->comment,
+                ]);
 
+            session()->flash('message', 'Tu reseña ha sido actualizada!');
+        } else {
+
+            $this->product->reviews()->create([
+                'user_id' => Auth::id(),
+                'rating' => $this->rating,
+                'comment' => $this->comment,
+                'is_visible' => true,
+            ]);
+            session()->flash('message', 'Gracias por tu reseña!');
+        }
+
+        $this->reviewSubmitted = true;
+        $this->isEditing = false;
         $this->reset(['rating', 'comment']);
-        
-        // Dispatch event for UI feedback (optional, handled by view logic)
-        session()->flash('message', 'Thank you for your review!');
     }
 
     public function render()
