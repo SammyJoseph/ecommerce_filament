@@ -46,7 +46,7 @@ class MPController extends Controller
             $client = new PaymentClient();
             $payment = $client->get($data['data']['id']);
 
-            if ($payment->status === 'approved') {
+            if ($payment->status === 'approved') { // estado de MP, no del modelo Order
                 Log::info('MP payment approved webhook received for payment ID: ' . $data['data']['id']);
                 
                 // Convert payment object to array and process order

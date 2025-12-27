@@ -34,7 +34,7 @@ class OrderService
 
             Log::info('OrderService: Order found', ['order_id' => $order->id]);
 
-            $order->status = 'processing';
+            $order->status = 'payment_confirmed';
             $order->shipping_amount = $paymentData['shipping_amount'] ?? 0;
             $order->total_amount = $this->calculateTotalAmount($paymentData);
             
