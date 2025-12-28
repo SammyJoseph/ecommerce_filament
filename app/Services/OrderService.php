@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderPaid;
 
 class OrderService
 {
@@ -52,10 +54,17 @@ class OrderService
             }
             
             $order->save();
-
             DB::commit();
-            return $order;
 
+            if (isset($user) && $user) {
+                try {
+                    Mail::to($user)->send(new OrderPaid($order));
+                } catch (\Exception $e) {
+                    Log::error('Error sending order confirmation email: ' . $e->getMessage());
+                }
+            }
+
+            return $order;
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Error processing order from webhook: ' . $e->getMessage());

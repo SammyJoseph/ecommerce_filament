@@ -66,3 +66,22 @@ Route::get('/blog/category/{category}', [BlogController::class, 'blogCategorySho
 Route::get('/demo', [DocumentationController::class, 'index'])->name('doc');
 Route::get('/demo/login/buyer', [DocumentationController::class, 'loginBuyer'])->name('doc.login.buyer');
 Route::get('/demo/login/admin', [DocumentationController::class, 'loginAdmin'])->name('doc.login.admin');
+
+Route::get('/email-order', function () {
+    $order = \App\Models\Order::with(['user', 'orderItems.product'])->latest()->first();
+    
+    if (!$order) {
+        return "No hay órdenes para mostrar.";
+    }
+
+    return new \App\Mail\OrderPaid($order);
+});
+Route::get('/email-welcome', function () {
+    $user = \App\Models\User::first();
+
+    if (!$user) {
+        return "No hay usuarios para mostrar.";
+    }
+
+    return new \App\Mail\WelcomeEmail($user);
+});
