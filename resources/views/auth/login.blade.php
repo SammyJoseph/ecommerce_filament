@@ -45,9 +45,18 @@
                                     <div class="login-register-form">
                                         <form action="{{ route('register') }}" method="post">
                                             @csrf
-                                            <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-                                            <input type="password" name="password" placeholder="New Password" required>
-                                            <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+                                            <div class="tw-grid tw-grid-cols-2 tw-gap-4">
+                                                <input type="text" name="name" placeholder="Name" value="{{ old('name') }}" required>
+                                                <input type="text" name="last_name" placeholder="Last Name" value="{{ old('last_name') }}" required>
+                                            </div>
+                                            <div class="tw-grid tw-grid-cols-2 tw-gap-4">
+                                                <input type="text" name="phone_number" placeholder="Phone Number" value="{{ old('phone_number') }}" required>
+                                                <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+                                            </div>
+                                            <div class="tw-grid sm:tw-grid-cols-2 sm:tw-gap-4 ">
+                                                <input type="password" name="password" placeholder="New Password" required>
+                                                <input type="password" name="password_confirmation" placeholder="Confirm Password" required>
+                                            </div>
                                             <div class="button-box">
                                                 <button type="submit">Register</button>
                                             </div>
