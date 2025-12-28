@@ -79,13 +79,36 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="same-style-2">
-                                <a href="{{ route('user.my-account') }}">
+                            <div class="same-style-2 tw-relative" x-data="{ open: false }" @mouseenter="open = true" @mouseleave="open = false" @click.outside="open = false">
+                                <a href="{{ route('user.my-account') }}" @auth @click.prevent="open = !open" @endauth>
                                     <i class="icon-user"></i>
                                     @auth
                                         <span class="tw-absolute -tw-top-1 -tw-right-1 tw-block tw-h-2 tw-w-2 tw-rounded-full tw-bg-green-400 tw-ring-2 tw-ring-white"></span>
                                     @endauth
                                 </a>
+                                @auth
+                                    <ul class="sub-menu-style tw-absolute tw-right-0 tw-top-full tw-bg-white tw-shadow-lg tw-z-50 tw-min-w-[150px] tw-p-3 tw-rounded-b-md tw-space-y-3" 
+                                        x-show="open"
+                                        x-transition:enter="tw-transition tw-ease-out tw-duration-200"
+                                        x-transition:enter-start="tw-opacity-0 tw-translate-y-2"
+                                        x-transition:enter-end="tw-opacity-100 tw-translate-y-0"
+                                        x-transition:leave="tw-transition tw-ease-in tw-duration-150"
+                                        x-transition:leave-start="tw-opacity-100 tw-translate-y-0"
+                                        x-transition:leave-end="tw-opacity-0 tw-translate-y-2"
+                                        style="display: none;">
+                                        <li><a class="!tw-text-xs" href="{{ route('user.my-account') }}">My Account</a></li>
+                                        <li><a class="!tw-text-xs" href="{{ route('user.orders') }}">My Orders</a></li>
+                                        <li>
+                                            <form method="POST" action="{{ route('logout') }}">
+                                                @csrf
+                                                <a class="!tw-text-xs" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
+                                                    Logout
+                                                    <svg class="tw-w-3 -tw-mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-84 31.5-156.5T197-763l56 56q-44 44-68.5 102T160-480q0 134 93 227t227 93q134 0 227-93t93-227q0-67-24.5-125T707-707l56-56q54 54 85.5 126.5T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-40-360v-440h80v440h-80Z"/></svg>
+                                                </a>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                @endauth
                             </div>
                             <div class="same-style-2">
                                 <a href="{{ route('wishlist') }}">
@@ -115,13 +138,36 @@
                 </div>
                 <div class="col-7">
                     <div class="header-action header-action-flex">
-                        <div class="same-style-2">
-                            <a href="{{ route('user.my-account') }}">
+                        <div class="same-style-2 tw-relative" x-data="{ open: false }" @click.outside="open = false">
+                            <a href="{{ route('user.my-account') }}" @auth @click.prevent="open = !open" @endauth>
                                 <i class="icon-user"></i>
                                 @auth
                                     <span class="tw-absolute -tw-top-1 -tw-right-1 tw-block tw-h-2 tw-w-2 tw-rounded-full tw-bg-green-400 tw-ring-2 tw-ring-white"></span>
                                 @endauth
                             </a>
+                            @auth
+                                <ul class="sub-menu-style tw-absolute tw-right-0 tw-top-full tw-bg-white tw-shadow-lg tw-z-50 tw-min-w-[150px] tw-p-3 tw-rounded-b-md tw-space-y-3" 
+                                    x-show="open"
+                                    x-transition:enter="tw-transition tw-ease-out tw-duration-200"
+                                    x-transition:enter-start="tw-opacity-0 tw-translate-y-2"
+                                    x-transition:enter-end="tw-opacity-100 tw-translate-y-0"
+                                    x-transition:leave="tw-transition tw-ease-in tw-duration-150"
+                                    x-transition:leave-start="tw-opacity-100 tw-translate-y-0"
+                                    x-transition:leave-end="tw-opacity-0 tw-translate-y-2"
+                                    style="display: none;">
+                                    <li><a class="!tw-text-xs" href="{{ route('user.my-account') }}">My Account</a></li>
+                                    <li><a class="!tw-text-xs" href="{{ route('user.orders') }}">My Orders</a></li>
+                                    <li>
+                                        <form method="POST" action="{{ route('logout') }}">
+                                            @csrf
+                                            <a class="!tw-text-xs" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
+                                                Logout
+                                                <svg class="tw-w-3 -tw-mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-84 31.5-156.5T197-763l56 56q-44 44-68.5 102T160-480q0 134 93 227t227 93q134 0 227-93t93-227q0-67-24.5-125T707-707l56-56q54 54 85.5 126.5T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm-40-360v-440h80v440h-80Z"/></svg>
+                                            </a>
+                                        </form>
+                                    </li>
+                                </ul>
+                            @endauth
                         </div>
                         <div class="same-style-2">
                             <a href="{{ route('wishlist') }}"><i class="icon-heart"></i><livewire:header.wishlist-count /></a>

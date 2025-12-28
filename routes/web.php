@@ -1,12 +1,11 @@
 <?php
 
 use App\Http\Controllers\Blog\BlogController;
-use App\Http\Controllers\Blog\BlogCategoryController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DocumentationController;
-use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Payment\MPController;
 use App\Http\Controllers\Product\CartController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +31,7 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart');
 Route::get('/raw-cart', function () {
     Cart::instance('shopping');
     $cart = Cart::content();
+
     return response()->json($cart);
 });
 
@@ -40,6 +40,7 @@ Route::get('/wishlist', [SiteController::class, 'wishlist'])->name('wishlist');
 Route::get('/raw-wishlist', function () {
     Cart::instance('wishlist');
     $cart = Cart::content();
+
     return response()->json($cart);
 });
 
@@ -62,6 +63,6 @@ Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/blog/categories', [BlogController::class, 'blogCategoryIndex'])->name('blog.category.index');
 Route::get('/blog/category/{category}', [BlogController::class, 'blogCategoryShow'])->name('blog.category.show');
 
-Route::get('/doc', [DocumentationController::class, 'index'])->name('doc');
-Route::get('/doc/login/buyer', [DocumentationController::class, 'loginBuyer'])->name('doc.login.buyer');
-Route::get('/doc/login/admin', [DocumentationController::class, 'loginAdmin'])->name('doc.login.admin');
+Route::get('/demo', [DocumentationController::class, 'index'])->name('doc');
+Route::get('/demo/login/buyer', [DocumentationController::class, 'loginBuyer'])->name('doc.login.buyer');
+Route::get('/demo/login/admin', [DocumentationController::class, 'loginAdmin'])->name('doc.login.admin');

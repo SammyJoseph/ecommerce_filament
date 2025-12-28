@@ -3,12 +3,11 @@
 namespace App\Listeners;
 
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Mail\WelcomeEmail;
 
-class SendWelcomeEmail implements ShouldQueue
+class SendWelcomeEmail
 {
     /**
      * Create the event listener.
@@ -23,6 +22,15 @@ class SendWelcomeEmail implements ShouldQueue
      */
     public function handle(Registered $event): void
     {
-        Mail::to($event->user)->send(new WelcomeEmail($event->user));
+        try {
+            Mail::to($event->user)->send(new WelcomeEmail($event->user));
+        } catch (\Exception $e) {
+            Log::error('[SendWelcomeEmail] Error al enviar email de bienvenida', [
+                'user_id' => $event->user->id ?? 'N/A',
+                'user_email' => $event->user->email ?? 'N/A',
+                'error_message' => $e->getMessage(),
+                'error_trace' => $e->getTraceAsString(),
+            ]);
+        }
     }
 }
