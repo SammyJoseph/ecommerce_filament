@@ -197,16 +197,60 @@
                     <!-- Status Section -->
                     <tr>
                         <td class="status-section">
-                            <!-- Cambia la clase del icono según el estado: received, processing, shipped, delivered, cancelled -->
-                            <div class="status-icon received">✔️</div>
+                            @php
+                                $statusCfig = [
+                                    'pending_payment' => [
+                                        'class' => 'processing',
+                                        'icon' => '📄',
+                                        'title' => 'Pedido Recibido',
+                                        'message' => 'Hemos recibido tu pedido correctamente. Estamos a la espera de la confirmación del pago.',
+                                    ],
+                                    'payment_confirmed' => [
+                                        'class' => 'received',
+                                        'icon' => '✔️',
+                                        'title' => '¡Gracias por tu compra!',
+                                        'message' => 'Hemos recibido correctamente tu pago y tu pedido está siendo procesado.',
+                                    ],
+                                    'processing' => [
+                                        'class' => 'processing',
+                                        'icon' => '📦',
+                                        'title' => 'En Preparación',
+                                        'message' => 'Estamos preparando tu pedido para enviarlo lo antes posible.',
+                                    ],
+                                    'shipped' => [
+                                        'class' => 'shipped',
+                                        'icon' => '🚚',
+                                        'title' => '¡En Camino!',
+                                        'message' => 'Tu pedido ha salido de nuestro almacén y está en camino a tu dirección.',
+                                    ],
+                                    'delivered' => [
+                                        'class' => 'delivered',
+                                        'icon' => '🏠',
+                                        'title' => '¡Pedido Entregado!',
+                                        'message' => 'Esperamos que disfrutes tu compra. Gracias por confiar en nosotros.',
+                                    ],
+                                    'cancelled' => [
+                                        'class' => 'cancelled',
+                                        'icon' => '❌',
+                                        'title' => 'Pedido Cancelado',
+                                        'message' => 'Tu pedido ha sido cancelado. Si tienes dudas, contáctanos.',
+                                    ],
+                                ];
+                                
+                                $currentStatus = $statusCfig[$order->status] ?? $statusCfig['processing'];
+                            @endphp
+
+                            <!-- Status Icon -->
+                            <div class="status-icon {{ $currentStatus['class'] }}">
+                                {{ $currentStatus['icon'] }}
+                            </div>
                             
-                            <!-- Cambia el título según el estado -->
-                            <h2 class="status-title">¡Gracias por tu compra!</h2>
+                            <!-- Status Title -->
+                            <h2 class="status-title">{{ $currentStatus['title'] }}</h2>
                             
-                            <!-- Cambia el mensaje según el estado -->
+                            <!-- Status Message -->
                             <p class="status-text">
-                                {{ $order->user->name }}, hemos recibido correctamente tu pago y tu pedido está siendo procesado.
-                                Te notificaremos cuando el envío salga de nuestro almacén.
+                                {{ $order->user->name }}, {{ $currentStatus['message'] }}
                             </p>
                         </td>
                     </tr>                    
@@ -218,7 +262,25 @@
                                 <h3 style="margin-top: 0; margin-bottom: 15px; color: #2c3e50; font-size: 18px;">Resumen del Pedido</h3>
                                 @foreach($order->orderItems as $item)
                                 <div class="order-item" style="overflow: hidden; padding: 10px 0; border-bottom: 1px solid #ecf0f1;">
-                                    <span style="float: left; color: #2c3e50; font-size: 14px;">{{ $item->product->name ?? 'Producto' }} <span style="color: #7f8c8d; font-size: 12px;">(x{{ $item->quantity }})</span></span>
+                                    <span style="float: left; color: #2c3e50; font-size: 14px;">
+                                        {{ $item->product->name ?? 'Producto' }} <span style="color: #7f8c8d;">x{{ $item->quantity }}</span>
+                                        @php
+                                            $parts = [];
+                                            $options = $item->options ?? [];
+                                            
+                                            if (is_string($options)) {
+                                                $options = json_decode($options, true);
+                                            }
+
+                                            if (is_array($options)) {
+                                                if (isset($options['color'])) $parts[] = 'Color: ' . $options['color'];
+                                                if (isset($options['size'])) $parts[] = 'Talla: ' . $options['size'];
+                                            }
+                                        @endphp
+                                        @if(!empty($parts))
+                                            <br><span style="color: #7f8c8d; font-size: 12px;">{{ implode(', ', $parts) }}</span>
+                                        @endif
+                                    </span>
                                     <span style="float: right; color: #2c3e50; font-weight: 600;">S/ {{ number_format($item->price * $item->quantity, 2) }}</span>
                                 </div>
                                 @endforeach

@@ -379,7 +379,7 @@
                                     @endphp
                                     <li>
                                         <a href="#" wire:click.prevent="filterByCategory('{{ $category->slug }}')" class="{{ $isActive ? '!tw-text-red-500 !tw-flex tw-justify-between tw-items-center' : '' }}">
-                                            {{ $category->name }}
+                                            <span>{{ $category->name }} <span class="tw-text-gray-500 tw-text-xs">{{ $category->products_count }}</span></span>
                                             @if($isActive)
                                                 <i class="icon-close"></i>
                                             @endif

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Auth\Events\Registered;
 
 class Checkout extends Component
 {
@@ -324,7 +325,6 @@ class Checkout extends Component
         }
 
         $user = User::where('email', $this->email)->first();
-
         if ($user) {
             return $user->id; // no auto-logueamos
         }
@@ -336,9 +336,8 @@ class Checkout extends Component
             'phone_number' => $this->phone,
             'password' => bcrypt(uniqid()),
         ]);
-
+        event(new Registered($user)); // el listener enviará el correo de bienvenida
         $user->assignRole('user');
-
         auth()->login($user);
 
         return $user->id;

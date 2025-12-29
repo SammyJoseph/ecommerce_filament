@@ -74,7 +74,7 @@ Route::get('/email-order', function () {
         return "No hay órdenes para mostrar.";
     }
 
-    return new \App\Mail\OrderPaid($order);
+    return new \App\Mail\OrderStatusChanged($order);
 });
 Route::get('/email-welcome', function () {
     $user = \App\Models\User::first();

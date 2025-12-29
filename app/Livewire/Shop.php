@@ -134,7 +134,9 @@ class Shop extends Component
 
     public function render()
     {
-        $categories = Category::withCount('products')->get();
+        $categories = Category::withCount(['products' => function ($query) {
+            $query->where('is_visible', true);
+        }])->get();
 
         $on_sale_count = Product::query()->where('is_visible', true)
             ->where('sale_price', '>', 0)

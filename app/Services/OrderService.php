@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\OrderPaid;
+use App\Mail\OrderStatusChanged;
 
 class OrderService
 {
@@ -37,8 +37,15 @@ class OrderService
             Log::info('OrderService: Order found', ['order_id' => $order->id]);
 
             $order->status = 'payment_confirmed';
-            $order->shipping_price = $paymentData['shipping_amount'] ?? 0;
-            $order->grand_total = $this->calculateTotalAmount($paymentData);
+            $paidAmount = $this->calculateTotalAmount($paymentData);
+            if (abs($order->grand_total - $paidAmount) > 1.00) { // Tolerance of 1.00 due to potential currency differences or minor rounding
+                Log::warning('OrderService: Price mismatch detected', [
+                    'order_id' => $order->id,
+                    'expected' => $order->grand_total,
+                    'paid' => $paidAmount,
+                    'difference' => $order->grand_total - $paidAmount
+                ]);
+            }
             
             if (!$order->user_id) {
                 $userId = $this->getUserIdFromPayment($paymentData);
@@ -58,7 +65,7 @@ class OrderService
 
             if (isset($user) && $user) {
                 try {
-                    Mail::to($user)->send(new OrderPaid($order));
+                    Mail::to($user)->send(new OrderStatusChanged($order));
                 } catch (\Exception $e) {
                     Log::error('Error sending order confirmation email: ' . $e->getMessage());
                 }
@@ -74,7 +81,10 @@ class OrderService
 
     private function calculateTotalAmount(array $paymentData): float
     {
-        return isset($paymentData['transaction_amount']) ? (float) $paymentData['transaction_amount'] : 0.00;
+        $transactionAmount = isset($paymentData['transaction_amount']) ? (float) $paymentData['transaction_amount'] : 0.00;
+        $shippingAmount = isset($paymentData['shipping_amount']) ? (float) $paymentData['shipping_amount'] : 0.00;
+
+        return $transactionAmount + $shippingAmount;
     }
     
     private function getUserIdFromPayment(array $paymentData): ?int
