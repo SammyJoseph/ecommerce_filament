@@ -86,12 +86,18 @@ class OrderSeeder extends Seeder
             ];
             $status = $this->getRandomWeighted($statusWeights);
 
+            $subtotal = $total;
+            $discount = (rand(0, 1) === 1) ? $subtotal * (rand(5, 15) / 100) : 0;
+            $shipping = fake()->randomFloat(2, 10, 20);
+            $grandTotal = $subtotal + $shipping - $discount;
+
             $order = Order::create([
                 'user_id' => $user->id,
                 'number' => 'OR-' . str_pad($i + 1, 6, '0', STR_PAD_LEFT),
-                'total_amount' => $total,
-                'discount_amount' => (rand(0, 1) === 1) ? $total * (rand(5, 15) / 100) : 0,
-                'shipping_amount' => fake()->randomFloat(2, 10, 20),
+                'subtotal' => $subtotal,
+                'discount' => $discount,
+                'shipping_price' => $shipping,
+                'grand_total' => $grandTotal,
                 'status' => $status,
                 'currency' => 'pen',
                 'shipping_address_id' => $shippingAddress->id,

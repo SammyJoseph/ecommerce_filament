@@ -210,9 +210,10 @@ class Checkout extends Component
         $order = Order::create([
             'user_id' => $userId,
             'number' => 'ORD-' . strtoupper(Str::random(5)),
-            'total_amount' => $this->calculateTotal() - $this->shipping,
-            'shipping_amount' => $this->shipping,
-            'discount_amount' => $this->discount,
+            'subtotal' => $this->subtotal,
+            'shipping_price' => $this->shipping,
+            'discount' => $this->discount,
+            'grand_total' => $this->calculateTotal(),
             'status' => 'pending_payment',
             'currency' => 'PEN',
             'shipping_address_id' => $shippingAddressId,

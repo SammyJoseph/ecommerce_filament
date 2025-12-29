@@ -17,7 +17,7 @@ class SalesStatsOverview extends BaseWidget
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
 
-        $totalSales = Order::where('status', 'completed')->sum('total_amount');
+        $totalSales = Order::where('status', 'completed')->sum('grand_total');
         $totalOrders = Order::where('status', 'completed')->count();
         $totalItems = OrderItem::count();
         $avgOrderValue = $totalOrders > 0 ? $totalSales / $totalOrders : 0;

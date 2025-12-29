@@ -22,7 +22,7 @@ class SalesOverTimeChart extends ChartWidget
             ->whereBetween('created_at', [$startDate, $endDate])
             ->select(
                 DB::raw('DATE(created_at) as date'),
-                DB::raw('SUM(total_amount) as total')
+                DB::raw('SUM(grand_total) as total')
             )
             ->groupBy('date')
             ->orderBy('date')

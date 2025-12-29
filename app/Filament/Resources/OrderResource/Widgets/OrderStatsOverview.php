@@ -15,7 +15,7 @@ class OrderStatsOverview extends BaseWidget
         $endOfMonth = Carbon::now()->endOfMonth();
 
         $monthlyOrders = Order::whereBetween('created_at', [$startOfMonth, $endOfMonth])
-            ->pluck('total_amount', 'created_at')
+            ->pluck('grand_total', 'created_at')
             ->mapWithKeys(fn ($amount, $date) => [$date instanceof Carbon ? $date->format('Y-m-d') : $date => $amount])
             ->all();
 
@@ -25,7 +25,7 @@ class OrderStatsOverview extends BaseWidget
                 ->chart(array_values($monthlyOrders)),
             Stat::make('Open Orders', Order::where('status', 'pending_payment')->count())
                 ->description('Orders awaiting processing'),
-            Stat::make('Average Price', number_format(Order::avg('total_amount'), 2))
+            Stat::make('Average Price', number_format(Order::avg('grand_total'), 2))
                 ->description('Average order value'),
         ];
     }

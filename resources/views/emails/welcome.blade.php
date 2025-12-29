@@ -74,7 +74,7 @@
             margin: 0;
         }
         .discount-box {
-            background-color: #f3f4f6;
+            background-color: #f8f9fa;
             border-radius: 8px;
             padding: 25px;
             margin: 0 40px 30px;
@@ -181,7 +181,7 @@
                             <h2 class="welcome-title">¡Bienvenido, {{ $user->name }}!</h2>
                             <p class="welcome-text">
                                 Gracias por unirte a nuestra comunidad. Estamos emocionados<br>
-                                de tenerte con nosotros y ayudarte a encontrar productos de alta calidad.
+                                de tenerte con nosotros y ofrecerte productos de alta calidad.
                             </p>
                         </td>
                     </tr>

@@ -24,9 +24,9 @@ class StatsOverviewWidget extends BaseWidget
 
         // Revenue calculations
         $currentRevenue = Order::whereBetween('created_at', [$startOfMonth, $endOfMonth])
-            ->sum('total_amount');
+            ->sum('grand_total');
         $previousRevenue = Order::whereBetween('created_at', [$startOfPreviousMonth, $endOfPreviousMonth])
-            ->sum('total_amount');
+            ->sum('grand_total');
         $revenueChange = $previousRevenue > 0 
             ? round((($currentRevenue - $previousRevenue) / $previousRevenue) * 100, 1)
             : 0;
@@ -55,7 +55,7 @@ class StatsOverviewWidget extends BaseWidget
         $ordersChart = $this->getChartData('orders');
 
         return [
-            Stat::make('Revenue', '$' . number_format($currentRevenue, 2))
+            Stat::make('Revenue', 'S/. ' . number_format($currentRevenue, 2))
                 ->description(abs($revenueChange) . '% ' . ($revenueChange >= 0 ? 'increase' : 'decrease'))
                 ->descriptionIcon($revenueChange >= 0 ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->chart($revenueChart)
@@ -86,7 +86,7 @@ class StatsOverviewWidget extends BaseWidget
             switch ($type) {
                 case 'revenue':
                     $value = Order::whereDate('created_at', $date->format('Y-m-d'))
-                        ->sum('total_amount');
+                        ->sum('grand_total');
                     $data[] = round($value / 100, 2);
                     break;
                 case 'customers':

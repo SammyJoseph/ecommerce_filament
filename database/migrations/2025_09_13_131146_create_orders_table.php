@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('number', 32)->unique()->nullable();
-            $table->decimal('total_amount', 10, 2)->nullable();
-            $table->decimal('shipping_amount', 10, 2)->default(0);
-            $table->decimal('discount_amount', 10, 2)->default(0);
+            $table->decimal('subtotal', 10, 2)->nullable();
+            $table->decimal('shipping_price', 10, 2)->default(0);
+            $table->decimal('discount', 10, 2)->default(0);
+            $table->decimal('grand_total', 10, 2)->nullable();
             $table->enum('status', ['pending_payment', 'payment_confirmed', 'processing', 'shipped', 'delivered', 'cancelled'])->default('pending_payment');
             $table->string('currency')->default('pen');
             $table->foreignId('shipping_address_id')->nullable()->constrained('user_addresses')->onDelete('set null');

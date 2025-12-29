@@ -11,9 +11,10 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'number',
-        'total_amount',
-        'shipping_amount',
-        'discount_amount',
+        'subtotal',
+        'shipping_price',
+        'discount',
+        'grand_total',
         'status',
         'currency',
         'shipping_address_id',
@@ -21,7 +22,10 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'total_amount' => 'decimal:2',
+        'subtotal' => 'decimal:2',
+        'shipping_price' => 'decimal:2',
+        'discount' => 'decimal:2',
+        'grand_total' => 'decimal:2',
     ];
 
     public function user(): BelongsTo

@@ -37,8 +37,8 @@ class OrderService
             Log::info('OrderService: Order found', ['order_id' => $order->id]);
 
             $order->status = 'payment_confirmed';
-            $order->shipping_amount = $paymentData['shipping_amount'] ?? 0;
-            $order->total_amount = $this->calculateTotalAmount($paymentData);
+            $order->shipping_price = $paymentData['shipping_amount'] ?? 0;
+            $order->grand_total = $this->calculateTotalAmount($paymentData);
             
             if (!$order->user_id) {
                 $userId = $this->getUserIdFromPayment($paymentData);

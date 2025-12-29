@@ -62,15 +62,21 @@
                 @endforeach
                 <tr>
                     <td colspan="4" class="text-right">Subtotal</td>
-                    <td>${{ number_format($order->total_amount, 2) }}</td>
+                    <td>S/ {{ number_format($order->subtotal, 2) }}</td>
                 </tr>
+                @if($order->discount > 0)
                 <tr>
-                    <td colspan="4" class="text-right">Shipping</td>
-                    <td>${{ number_format($order->shipping_amount, 2) }}</td>
+                    <td colspan="4" class="text-right">Descuento</td>
+                    <td>- S/ {{ number_format($order->discount, 2) }}</td>
+                </tr>
+                @endif
+                <tr>
+                    <td colspan="4" class="text-right">Envío</td>
+                    <td>S/ {{ number_format($order->shipping_price, 2) }}</td>
                 </tr>
                 <tr class="tw-bg-gray-50">
                     <td colspan="4" class="text-right"><strong>Total</strong></td>
-                    <td><strong>${{ $order->total_amount + $order->shipping_amount }}</strong></td>
+                    <td><strong>S/ {{ number_format($order->grand_total, 2) }}</strong></td>
                 </tr>
             </tbody>
         </table>

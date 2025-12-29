@@ -144,18 +144,18 @@ class OrderResource extends Resource
                     ->formatStateUsing(fn ($state, $record) => $record->user->name . ' ' . $record->user->last_name)
                     ->searchable(['name', 'last_name'])
                     ->sortable(),
-                Tables\Columns\TextColumn::make('total_with_shipping')
-                    ->label('Paid')
-                    ->state(fn (Order $record): string => 'S/.' . number_format($record->total_amount + $record->shipping_amount, 2))
+                Tables\Columns\TextColumn::make('grand_total')
+                    ->label('Total')
+                    ->money('S/.')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('total_amount')
+                Tables\Columns\TextColumn::make('subtotal')
                     ->label('Subtotal')
                     ->money('S/.')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('discount_amount')
+                Tables\Columns\TextColumn::make('discount')
                     ->label('Discount')
                     ->money('S/.'),
-                Tables\Columns\TextColumn::make('shipping_amount')
+                Tables\Columns\TextColumn::make('shipping_price')
                     ->label('Shipping')
                     ->money('S/.'),
                 Tables\Columns\TextColumn::make('status')

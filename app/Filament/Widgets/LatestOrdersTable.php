@@ -72,14 +72,14 @@ class LatestOrdersTable extends BaseWidget
                     ->default('Mexican Peso')
                     ->toggleable(),
                 
-                Tables\Columns\TextColumn::make('total_amount')
+                Tables\Columns\TextColumn::make('grand_total')
                     ->label('Total price')
-                    ->money('usd')
+                    ->money('S/.')
                     ->sortable(),
                 
-                Tables\Columns\TextColumn::make('shipping_cost')
+                Tables\Columns\TextColumn::make('shipping_price')
                     ->label('Shipping price')
-                    ->money('usd')
+                    ->money('S/.')
                     ->default(0)
                     ->sortable(),
             ])

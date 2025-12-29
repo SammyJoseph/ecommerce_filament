@@ -1,112 +1,303 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado de tu Pedido - NORDA</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            line-height: 1.6;
             margin: 0;
             padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
+        }
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+        img {
+            border: 0;
+            display: block;
+        }
+        .wrapper {
+            width: 100%;
+            background-color: #f5f5f5;
+            padding: 20px 0;
         }
         .container {
-            width: 100%;
             max-width: 600px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 20px;
+            margin: 0 auto;
+            background-color: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
         .header {
-            background: #111827;
-            color: #fff;
-            padding: 20px;
+            background-color: #ffffff;
+            padding: 30px 40px 20px;
             text-align: center;
-            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid #ecf0f1;
         }
-        .header h1 {
-            margin: 0;
+        .logo {
+            color: #2c3e50;
             font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin: 0;
         }
-        .content {
-            padding: 20px;
+        .status-section {
+            padding: 50px 40px 40px;
+            text-align: center;
+            background-color: #ffffff;
+        }
+        .status-icon {
+            width: 80px;
+            height: 80px;
+            background-color: #e8f5e9;
+            border-radius: 50%;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        /* Variantes de color para diferentes estados */
+        .status-icon.received { background-color: #0cc65f29; }
+        .status-icon.processing { background-color: #fff3e0; }
+        .status-icon.shipped { background-color: #f3e5f5; }
+        .status-icon.delivered { background-color: #e8f5e9; }
+        .status-icon.cancelled { background-color: #ffebee; }
+        
+        .status-title {
+            font-size: 28px;
+            color: #2c3e50;
+            margin: 0 0 15px;
+            font-weight: 700;
+        }
+        .status-text {
+            font-size: 15px;
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin: 0;
         }
         .order-details {
-            margin-top: 20px;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 0 40px 30px;
         }
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #f9f9f9;
-            padding-bottom: 10px;
+        .detail-row {
+            padding: 10px 0;
+            border-bottom: 1px solid #ecf0f1;
         }
-        .total-section {
-            margin-top: 20px;
-            text-align: right;
-            font-weight: bold;
-            font-size: 1.2em;
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-size: 13px;
+            color: #95a5a6;
+            margin: 0 0 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .detail-value {
+            font-size: 16px;
+            color: #2c3e50;
+            margin: 0;
+            font-weight: 600;
+        }
+        .button-container {
+            text-align: center;
+            padding: 0 40px 40px;
+        }
+        .button {
+            display: inline-block;
+            padding: 14px 35px;
+            background-color: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 3px;
+            text-transform: uppercase;
+        }
+        .button-secondary {
+            background-color: transparent;
+            color: #2c3e50;
+            border: 2px solid #2c3e50;
+            margin-left: 10px;
+        }
+        .info-section {
+            padding: 30px 40px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ecf0f1;
+        }
+        .info-text {
+            font-size: 14px;
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin: 0;
+            text-align: center;
         }
         .footer {
+            background-color: #2c3e50;
+            padding: 30px 40px;
             text-align: center;
-            padding: 20px;
-            font-size: 0.8em;
-            color: #777;
-            background-color: #f9f9f9;
-            border-radius: 0 0 8px 8px;
         }
-        .btn {
-            display: inline-block;
-            background-color: #111827;
-            color: #ffffff;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
+        .footer-text {
+            font-size: 12px;
+            color: #bdc3c7;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .footer-link {
+            color: #bdc3c7;
+            text-decoration: underline;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                width: 100% !important;
+                border-radius: 0 !important;
+            }
+            .header, .status-section, .button-container, .info-section, .footer {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+            .order-details {
+                margin-left: 20px !important;
+                margin-right: 20px !important;
+                padding: 20px !important;
+            }
+            .status-title {
+                font-size: 24px !important;
+            }
+            .button {
+                display: block !important;
+                margin: 0 0 10px !important;
+            }
+            .button-secondary {
+                margin-left: 0 !important;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>¡Gracias por tu compra!</h1>
-        </div>
-        <div class="content">
-            <p>Hola {{ $order->user->name }},</p>
-            <p>Hemos recibido correctamente tu pago. Tu orden <strong>{{ $order->number }}</strong> ha sido confirmada y está siendo procesada.</p>
-            
-            <div class="order-details">
-                <h3>Resumen del Pedido</h3>
-                @foreach($order->orderItems as $item)
-                <div class="order-item" style="overflow: hidden;">
-                    <span style="float: left;">{{ $item->product->name ?? 'Producto' }} (x{{ $item->quantity }})</span>
-                    <span style="float: right;">S/ {{ number_format($item->price * $item->quantity, 2) }}</span>
-                </div>
-                @endforeach
-                
-                @if($order->shipping_amount > 0)
-                <div class="order-item" style="overflow: hidden;">
-                    <span style="float: left;">Envío</span>
-                    <span style="float: right;">S/ {{ number_format($order->shipping_amount, 2) }}</span>
-                </div>
-                @endif
-                
-                <div class="total-section">
-                    Total: S/ {{ number_format($order->total_amount, 2) }}
-                </div>
-            </div>
+    <table class="wrapper" width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="center">
+                <table class="container" width="600" cellpadding="0" cellspacing="0">
+                    <!-- Header -->
+                    <tr>
+                        <td class="header">
+                            <h1 class="logo">NORDA</h1>
+                        </td>
+                    </tr>
 
-            <p style="text-align: center;">
-                <a href="{{ route('user.orders') }}" class="btn">Ver Mis Pedidos</a>
-            </p>
-        </div>
-        <div class="footer">
-            &copy; {{ date('Y') }} {{ config('app.name') }}. Todos los derechos reservados.
-        </div>
-    </div>
+                    <!-- Status Section -->
+                    <tr>
+                        <td class="status-section">
+                            <!-- Cambia la clase del icono según el estado: received, processing, shipped, delivered, cancelled -->
+                            <div class="status-icon received">✔️</div>
+                            
+                            <!-- Cambia el título según el estado -->
+                            <h2 class="status-title">¡Gracias por tu compra!</h2>
+                            
+                            <!-- Cambia el mensaje según el estado -->
+                            <p class="status-text">
+                                {{ $order->user->name }}, hemos recibido correctamente tu pago y tu pedido está siendo procesado.
+                                Te notificaremos cuando el envío salga de nuestro almacén.
+                            </p>
+                        </td>
+                    </tr>                    
+
+                    <!-- Order Details -->
+                    <tr>
+                        <td>
+                            <div class="order-details">
+                                <h3 style="margin-top: 0; margin-bottom: 15px; color: #2c3e50; font-size: 18px;">Resumen del Pedido</h3>
+                                @foreach($order->orderItems as $item)
+                                <div class="order-item" style="overflow: hidden; padding: 10px 0; border-bottom: 1px solid #ecf0f1;">
+                                    <span style="float: left; color: #2c3e50; font-size: 14px;">{{ $item->product->name ?? 'Producto' }} <span style="color: #7f8c8d; font-size: 12px;">(x{{ $item->quantity }})</span></span>
+                                    <span style="float: right; color: #2c3e50; font-weight: 600;">S/ {{ number_format($item->price * $item->quantity, 2) }}</span>
+                                </div>
+                                @endforeach
+
+                                @if($order->shipping_price > 0)
+                                <div class="order-item" style="overflow: hidden; padding: 10px 0; border-bottom: 1px solid #ecf0f1;">
+                                    <span style="float: left; color: #2c3e50; font-size: 14px;">Envío</span>
+                                    <span style="float: right; color: #2c3e50; font-weight: 600;">S/ {{ number_format($order->shipping_price, 2) }}</span>
+                                </div>
+                                @endif
+
+                                @if($order->discount > 0)
+                                <div class="order-item" style="overflow: hidden; padding: 10px 0; border-bottom: 1px solid #ecf0f1;">
+                                    <span style="float: left; color: #2c3e50; font-size: 14px;">Descuento</span>
+                                    <span style="float: right; color: #2c3e50; font-weight: 600;">- S/ {{ number_format($order->discount, 2) }}</span>
+                                </div>
+                                @endif
+
+                                <div class="total-section" style="overflow: hidden; padding-top: 15px;">
+                                    <span style="float: right; color: #2c3e50; font-weight: 700; font-size: 18px;">Total: S/ {{ number_format($order->grand_total, 2) }}</span>
+                                </div>
+                                <div style="margin-bottom: 20px;"></div>
+
+                                <table width="100%" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td class="detail-row">
+                                            <p class="detail-label">Número de Pedido</p>
+                                            <p class="detail-value">{{ $order->number }}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="detail-row">
+                                            <p class="detail-label">Fecha del Pedido</p>
+                                            <p class="detail-value">{{ $order->created_at->format('d F, Y') }}</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="detail-row">
+                                            <p class="detail-label">Entrega Estimada</p>
+                                            <p class="detail-value">{{ $order->created_at->addDays(3)->format('d F, Y') }}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- CTA Buttons -->
+                    <tr>
+                        <td class="button-container">
+                            <a href="{{ route('user.orders') }}" class="button">Ver mis pedidos</a>
+                            <a href="#" class="button button-secondary">Contactar asesor</a>
+                        </td>
+                    </tr>
+
+                    <!-- Info Section -->
+                    <tr>
+                        <td class="info-section">
+                            <p class="info-text">
+                                ¿Necesitas ayuda? Contáctanos en <strong>hello@norda.com</strong><br>
+                                o llámanos al <strong>(+99) 052 158 2398</strong>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td class="footer">
+                            <p class="footer-text">
+                                © 2025 NORDA. Todos los derechos reservados.<br>
+                                8801 Glenmont Village Apt. 845, Moodybury, USA<br><br>
+                                <a href="#" class="footer-link">Ver mi cuenta</a> • 
+                                <a href="#" class="footer-link">Centro de ayuda</a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
