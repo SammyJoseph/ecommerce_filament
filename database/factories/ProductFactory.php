@@ -145,6 +145,20 @@ class ProductFactory extends Factory
                 'is_featured' => false,
             ];
         })->afterCreating(function (Product $product) use ($data, $basePath) {
+            // Handle Additional Product Images (General/Gallery)
+            if (isset($data['images']) && is_array($data['images'])) {
+                foreach ($data['images'] as $image) {
+                    $imagePath = $basePath . '/' . $image;
+                    if (file_exists($imagePath)) {
+                        $product->addMedia($imagePath)
+                            ->preservingOriginal()
+                            ->toMediaCollection('product_images');
+                    } else {
+                        Log::warning("Additional image not found: $imagePath");
+                    }
+                }
+            }
+
             // Create options
             $colorOption = ProductOption::create([
                 'product_id' => $product->id,

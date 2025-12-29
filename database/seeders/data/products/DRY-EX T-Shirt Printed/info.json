@@ -1,0 +1,43 @@
+{
+    "name": "DRY-EX T-Shirt | Printed",
+    "price": 24.90,
+    "description": "High-performance T-shirt for active or everyday wear.",
+    "categories": ["Polos", "Hombres"],
+    "tags": ["Poliéster", "Primavera", "Casual"],
+    "images": [
+        "collection.jpg"
+    ],
+    "variants": [
+        {
+            "color": "Negro",
+            "hex": "#31363c",
+            "sku": "476141-black",
+            "image": "black-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "476141-black-S", "stock": 5, "price": 29.70 },
+                { "size": "M", "sku": "476141-black-M", "stock": 10, "price": 29.90 },
+                { "size": "L", "sku": "476141-black-L", "stock": 8, "price": 24.90 }
+            ]
+        },
+        {
+            "color": "Navy",
+            "hex": "#33516d",
+            "sku": "476141-navy",          
+            "image": "navy-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "476141-navy-S", "stock": 5, "price": 22.90 },
+                { "size": "L", "sku": "476141-navy-L", "stock": 8, "price": 27.90 }
+            ]
+        },
+        {
+            "color": "Gris Claro",
+            "hex": "#c6ceda",
+            "sku": "476141-light-gray",
+            "image": "light-gray-variant.jpg",
+            "sizes": [
+                { "size": "M", "sku": "476141-light-gray-M", "stock": 10, "price": 25.90 },
+                { "size": "L", "sku": "476141-light-gray-L", "stock": 8, "price": 29.90 }
+            ]
+        }
+    ]
+}

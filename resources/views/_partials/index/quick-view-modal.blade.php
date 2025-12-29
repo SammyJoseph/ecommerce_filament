@@ -26,7 +26,10 @@
                     </div>
                     <div class="col-lg-7 col-md-6 col-12 col-sm-12">
                         <div class="product-details-content quickview-content">
-                            <h2 x-text="product.name"></h2>
+                            <a :href="'{{ route('product.show', 'slug_url_placeholder') }}'.replace('slug_url_placeholder', product.slug)"
+                                class="hover:tw-underline !tw-decoration-black">
+                                <h2 x-text="product.name"></h2>
+                            </a>
                             <div class="product-ratting-review-wrap">
                                 <div class="product-ratting-digit-wrap">
                                     <div class="product-ratting">

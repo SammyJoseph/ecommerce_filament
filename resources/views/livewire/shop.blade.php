@@ -115,6 +115,7 @@
     }">
     <div class="container">
         <div class="row flex-row-reverse">
+            {{-- Productos --}}
             <div class="col-lg-9">
                 <div class="shop-topbar-wrapper tw-flex tw-space-x-2 tw-py-4 md:tw-py-4">
                     <div class="shop-topbar-left tw-flex tw-items-center md:tw-block">
@@ -349,8 +350,10 @@
                     {{ $products->links('livewire.pagination') }}
                 </div>
             </div>
+            {{-- Filtros --}}
             <div class="col-lg-3">
                 <div class="sidebar-wrapper sidebar-wrapper-mrg-right">
+                    {{-- Búsqueda --}}
                     <div class="sidebar-widget mb-40">
                         <h4 class="sidebar-widget-title">Search </h4>
                         <div class="sidebar-search">
@@ -368,6 +371,7 @@
                             </form>
                         </div>
                     </div>
+                    {{-- Categorias --}}
                     <div class="sidebar-widget shop-sidebar-border mb-35 pt-40">
                         <h4 class="sidebar-widget-title">Categories </h4>
                         <div class="shop-catigory">
@@ -389,6 +393,7 @@
                             </ul>
                         </div>
                     </div>
+                    {{-- Rango de precios --}}
                     <div class="sidebar-widget shop-sidebar-border mb-40 pt-40">
                         <h4 class="sidebar-widget-title">Price Filter </h4>
                         <div class="price-filter">
@@ -402,6 +407,7 @@
                             </div>
                         </div>
                     </div>
+                    {{-- Especiales --}}
                     <div class="sidebar-widget shop-sidebar-border mb-40 pt-40">
                         <h4 class="sidebar-widget-title">Refine By </h4>
                         <div class="sidebar-widget-list">
@@ -423,6 +429,7 @@
                             </ul>
                         </div>
                     </div>
+                    {{-- Etiquetas --}}
                     <div class="sidebar-widget shop-sidebar-border pt-40">
                         <h4 class="sidebar-widget-title">Popular Tags</h4>
                         <div class="tag-wrap sidebar-widget-tag">

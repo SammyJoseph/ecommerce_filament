@@ -1,0 +1,50 @@
+{
+    "name": "Ribbed High Neck T-Shirt",
+    "price": 14.90,
+    "description": "Made from soft ribbed fabric, this Women’s Ribbed High Neck T-Shirt offers a sleek, flattering fit with a touch of texture for added style.",
+    "categories": ["Polos", "Mujeres"],
+    "tags": ["Algodón", "Otoño", "Casual"],
+    "variants": [
+        {
+            "color": "Negro",
+            "hex": "#333237",
+            "sku": "479588-black",
+            "image": "black-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "479588-black-S", "stock": 5, "price": 19.70 },
+                { "size": "M", "sku": "479588-black-M", "stock": 10, "price": 19.90 },
+                { "size": "L", "sku": "479588-black-L", "stock": 8, "price": 14.90 }
+            ]
+        },
+        {
+            "color": "Rojo",
+            "hex": "#a63736",
+            "sku": "479588-red",          
+            "image": "red-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "479588-red-S", "stock": 5, "price": 12.90 },
+                { "size": "L", "sku": "479588-red-L", "stock": 8, "price": 17.90 }
+            ]
+        },
+        {
+            "color": "Azul",
+            "hex": "#315682",
+            "sku": "479588-blue",
+            "image": "blue-variant.jpg",
+            "sizes": [
+                { "size": "M", "sku": "479588-blue-M", "stock": 10, "price": 15.90 },
+                { "size": "L", "sku": "479588-blue-L", "stock": 8, "price": 19.90 }
+            ]
+        },
+        {
+            "color": "Gris",
+            "hex": "#cdcfd0",
+            "sku": "479588-gray",
+            "image": "gray-variant.jpg",
+            "sizes": [
+                { "size": "M", "sku": "479588-gray-M", "stock": 10, "price": 15.90 },
+                { "size": "L", "sku": "479588-gray-L", "stock": 8, "price": 19.90 }
+            ]
+        }
+    ]
+}

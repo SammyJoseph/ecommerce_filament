@@ -1,0 +1,40 @@
+{
+    "name": "DRY-EX Polo Shirt | Pattern",
+    "price": 29.90,
+    "description": "Body: 65% Polyester, 35% Nylon ( 65% Uses Recycled Polyester Fiber )/ Rib: 93% Polyester, 7% Spandex ( 93% Uses Recycled Polyester Fiber )",
+    "categories": ["Polos", "Hombres"],
+    "tags": ["Poliéster", "Primavera", "Casual"],
+    "variants": [
+        {
+            "color": "Negro",
+            "hex": "#333237",
+            "sku": "483972-black",
+            "image": "black-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "483972-black-S", "stock": 5, "price": 29.70 },
+                { "size": "M", "sku": "483972-black-M", "stock": 10, "price": 29.90 },
+                { "size": "L", "sku": "483972-black-L", "stock": 8, "price": 24.90 }
+            ]
+        },
+        {
+            "color": "Rojo",
+            "hex": "#a63736",
+            "sku": "483972-red",          
+            "image": "red-variant.jpg",
+            "sizes": [
+                { "size": "S", "sku": "483972-red-S", "stock": 5, "price": 22.90 },
+                { "size": "L", "sku": "483972-red-L", "stock": 8, "price": 27.90 }
+            ]
+        },
+        {
+            "color": "Azul",
+            "hex": "#315682",
+            "sku": "483972-blue",
+            "image": "blue-variant.jpg",
+            "sizes": [
+                { "size": "M", "sku": "483972-blue-M", "stock": 10, "price": 25.90 },
+                { "size": "L", "sku": "483972-blue-L", "stock": 8, "price": 29.90 }
+            ]
+        }
+    ]
+}

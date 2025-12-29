@@ -89,15 +89,12 @@ class Shop extends Component
 
     public function filterByCategory($slug)
     {
-        $current = $this->category_slugs ? explode(',', $this->category_slugs) : [];
-        
-        if (in_array($slug, $current)) {
-            $current = array_values(array_diff($current, [$slug]));
+        if ($this->category_slugs == $slug) {
+            $this->category_slugs = '';
         } else {
-            $current[] = $slug;
+            $this->category_slugs = $slug;
         }
         
-        $this->category_slugs = implode(',', $current);
         $this->resetPage();
     }
 
