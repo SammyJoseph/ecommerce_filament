@@ -20,6 +20,7 @@ class HeroSlideResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'Site Settings';
     protected static ?string $navigationLabel = 'Hero Slides';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

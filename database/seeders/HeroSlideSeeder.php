@@ -14,20 +14,20 @@ class HeroSlideSeeder extends Seeder
     {
         $slides = [
             [
-                'title' => 'Leather Simple Backpacks',
-                'subtitle' => 'New Arrivals',
-                'description' => 'Discover our collection with leather simple backpacks. Less is more never out trend.',
-                'button_text' => 'Explore Now',
+                'title' => 'Moda esencial para cada día',
+                'subtitle' => 'Nueva colección',
+                'description' => 'Descubre polos, camisas y pantalones diseñados para combinar comodidad, estilo y calidad en cada ocasión.',
+                'button_text' => 'Ver colección',
                 'button_link' => '#',
                 'sort_order' => 1,
                 'is_active' => true,
                 'image_path' => public_path('assets/images/slider/hm-1-slider-1.png'),
             ],
             [
-                'title' => 'Leather Simple Backpacks',
-                'subtitle' => 'New Arrivals',
-                'description' => 'Discover our collection with leather simple backpacks. Less is more never out trend.',
-                'button_text' => 'Explore Now',
+                'title' => 'Estilo que se adapta a ti',
+                'subtitle' => 'Lo último en tendencias',
+                'description' => 'Prendas versátiles y modernas que elevan tu look, perfectas para el día a día o momentos especiales.',
+                'button_text' => 'Descubrir ahora',
                 'button_link' => '#',
                 'sort_order' => 2,
                 'is_active' => true,

@@ -15,6 +15,7 @@ class HomePageSettings extends Settings
     public string $instagram_hashtag;
     public array $instagram_items;
     public array $brand_logos;
+    public array $features;
 
     public static function group(): string
     {

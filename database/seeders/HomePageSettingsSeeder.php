@@ -155,6 +155,35 @@ class HomePageSettingsSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'group' => 'home_page',
+                'name' => 'features',
+                'locked' => 0,
+                'payload' => json_encode([
+                    [
+                        'icon' => 'icon-cursor',
+                        'title' => 'Free Shipping',
+                        'subtitle' => 'Orders over $100',
+                    ],
+                    [
+                        'icon' => 'icon-reload',
+                        'title' => 'Free Returns',
+                        'subtitle' => 'Within 30 days',
+                    ],
+                    [
+                        'icon' => 'icon-lock',
+                        'title' => '100% Secure',
+                        'subtitle' => 'Payment Online',
+                    ],
+                    [
+                        'icon' => 'icon-tag',
+                        'title' => 'Best Price',
+                        'subtitle' => 'Guaranteed',
+                    ],
+                ]),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

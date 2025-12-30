@@ -82,12 +82,12 @@ class ProductSeeder extends Seeder
         // We ensure each category has at least a few products, mimicking previous logic but adapted
         foreach ($categories as $category) {
             // Check if category already has enough products (from manual load)
-            if ($category->products()->count() >= 4) {
+            if ($category->products()->count() >= 1) { // 4 but 1 for faster testing
                 continue;
             }
 
             // Create remaining needed products
-            $productsToCreate = 4 - $category->products()->count();
+            $productsToCreate = 1 - $category->products()->count(); // 4 but 1 for faster testing
 
             for ($i = 0; $i < $productsToCreate; $i++) {
                 $factory = Product::factory();

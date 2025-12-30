@@ -10,10 +10,9 @@ use Filament\Pages\SettingsPage;
 class ManageHeader extends SettingsPage
 {
     protected static ?string $navigationIcon = 'heroicon-o-bars-3';
-
     protected static ?string $navigationGroup = 'Site Settings';
-
-    protected static ?string $navigationLabel = 'Header';
+    protected static ?string $navigationLabel = 'Top Bar';
+    protected static ?int $navigationSort = 1;
 
     protected static string $settings = HeaderSettings::class;
 

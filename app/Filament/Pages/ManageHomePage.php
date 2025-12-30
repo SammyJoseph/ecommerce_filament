@@ -12,6 +12,7 @@ class ManageHomePage extends SettingsPage
     protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
     protected static ?string $navigationGroup = 'Site Settings';
     protected static ?string $navigationLabel = 'Static Content';
+    protected static ?int $navigationSort = 3;
 
     protected static string $settings = HomePageSettings::class;
 
@@ -104,6 +105,20 @@ class ManageHomePage extends SettingsPage
                                             ->validationAttribute('image'),
                                     ])
                                     ->grid(5)
+                            ]),
+                        Forms\Components\Tabs\Tab::make('Features')
+                            ->schema([
+                                Forms\Components\Repeater::make('features')
+                                    ->schema([
+                                        Forms\Components\TextInput::make('icon')
+                                            ->label('Icon Class (e.g. icon-cursor)')
+                                            ->required(),
+                                        Forms\Components\TextInput::make('title')
+                                            ->required(),
+                                        Forms\Components\TextInput::make('subtitle')
+                                            ->required(),
+                                    ])
+                                    ->columns(3)
                             ]),
                     ])->columnSpanFull()
             ]);
