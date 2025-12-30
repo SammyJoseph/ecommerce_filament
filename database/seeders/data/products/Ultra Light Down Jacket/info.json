@@ -2,7 +2,10 @@
     "name": "Ultra Light Down Jacket",
     "price": 79.90,
     "description": "Regular fit makes a great outer or middle layer.",
-    "categories": ["Casacas", "Hombres"],
+    "categories": [
+        "Hombres",
+        "Hombres > Casacas"
+    ],
     "tags": ["Algodón", "Otoño", "Casual"],
     "variants": [
         {

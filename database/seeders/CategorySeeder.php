@@ -16,62 +16,50 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $categories = [
-            [
-                'name'          => 'Casacas',
-                'description'   => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                'is_visible'    => true,
+        $structure = [
+            'Hombres' => [
+                'Camisas',
+                'Polos',
+                'Pantalones',
+                'Casacas',
             ],
-            [
-                'name'          => 'Polos',
-                'description'   => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                'is_visible'    => true,
+            'Mujeres' => [
+                'Vestidos',
+                'Blusas',
+                'Faldas',
+                'Polos',
             ],
-            [
-                'name'          => 'Hombres',
-                'description'   => 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                'is_visible'    => true,
+            'Niños' => [
+                'Polos',
+                'Pantalones',
+                'Conjuntos',
+                'Pijamas',
             ],
-            [
-                'name'          => 'Mujeres',
-                'description'   => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
-                'is_visible'    => true,
-            ],
-            [
-                'name'          => 'Niños',
-                'description'   => 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.',
-                'is_visible'    => true,
-            ],
-            [
-                'name'          => 'Pantalones',
-                'description'   => 'Jeans, chinos y pantalones de vestir.',
-                'is_visible'    => true,
-            ],
-            [
-                'name'          => 'Zapatos',
-                'description'   => 'Calzado para toda ocasión.',
-                'is_visible'    => true,
-            ],
-            [
-                'name'          => 'Accesorios',
-                'description'   => 'Cinturones, gorras, bufandas y más.',
-                'is_visible'    => true,
-            ],
-            [
-                'name'          => 'Vestidos',
-                'description'   => 'Elegancia y frescura en cada diseño.',
-                'is_visible'    => true,
-            ],
-            [
-                'name'          => 'Novedades',
-                'description'   => 'Lo último de la temporada.',
-                'is_visible'    => true,
+            'Bebés' => [
+                'Bodies',
+                'Enterizos',
+                'Mantas',
+                'Gorros',
             ],
         ];
 
-        foreach ($categories as $category) {
-            $category['slug'] = Str::slug($category['name']);
-            Category::create($category);
+        foreach ($structure as $parentName => $children) {
+            $parent = Category::create([
+                'name'        => $parentName,
+                'slug'        => Str::slug($parentName),
+                'description' => 'Categoría principal para ' . $parentName,
+                'is_visible'  => true,
+            ]);
+
+            foreach ($children as $childName) {
+                Category::create([
+                    'name'        => $childName,
+                    'slug'        => Str::slug($childName),
+                    'description' => $childName . ' para ' . $parentName,
+                    'parent_id'   => $parent->id,
+                    'is_visible'  => true,
+                ]);
+            }
         }
     }
 }

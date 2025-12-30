@@ -2,7 +2,10 @@
     "name": "DRY-EX T-Shirt | Printed",
     "price": 24.90,
     "description": "High-performance T-shirt for active or everyday wear.",
-    "categories": ["Polos", "Hombres"],
+    "categories": [
+        "Hombres",
+        "Hombres > Polos"
+    ],
     "tags": ["Poliéster", "Primavera", "Casual"],
     "images": [
         "collection.jpg"

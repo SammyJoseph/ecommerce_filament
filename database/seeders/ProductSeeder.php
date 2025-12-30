@@ -26,9 +26,49 @@ class ProductSeeder extends Seeder
                 ->create(); // category_id is removed from fillable, so we don't pass it here
 
             // Attach Categories
+            // Attach Categories
             if (isset($data['categories']) && is_array($data['categories'])) {
-                $categoryIds = Category::whereIn('name', $data['categories'])->pluck('id');
-                $product->categories()->attach($categoryIds);
+                $categoryIds = [];
+
+                foreach ($data['categories'] as $categoryName) {
+                    // Check for hierarchy separator "Parent > Child"
+                    if (str_contains($categoryName, '>')) {
+                        $parts = array_map('trim', explode('>', $categoryName));
+                        
+                        if (count($parts) === 2) {
+                            $parentName = $parts[0];
+                            $childName = $parts[1];
+
+                            // Find Parent
+                            $parent = Category::where('name', $parentName)
+                                ->whereNull('parent_id')
+                                ->first();
+
+                            if ($parent) {
+                                // Find Child belonging to this Parent
+                                $child = Category::where('name', $childName)
+                                    ->where('parent_id', $parent->id)
+                                    ->first();
+
+                                if ($child) {
+                                    $categoryIds[] = $child->id;
+                                    // Optionally also attach the parent if desired (usually yes for filtering)
+                                    // $categoryIds[] = $parent->id; 
+                                }
+                            }
+                        }
+                    } else {
+                        // It's a root category or loose match (e.g. "Hombres")
+                        $cat = Category::where('name', $categoryName)->first();
+                        if ($cat) {
+                            $categoryIds[] = $cat->id;
+                        }
+                    }
+                }
+                
+                if (!empty($categoryIds)) {
+                    $product->categories()->attach(array_unique($categoryIds));
+                }
             }
 
             // Attach Tags

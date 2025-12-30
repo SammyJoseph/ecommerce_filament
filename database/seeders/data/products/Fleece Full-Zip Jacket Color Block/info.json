@@ -2,7 +2,10 @@
     "name": "Fleece Full-Zip Jacket Color Block",
     "price": 49.90,
     "description": "Distinctive tonal bicolor design.",
-    "categories": ["Casacas", "Hombres"],
+    "categories": [
+        "Hombres",
+        "Hombres > Casacas"
+    ],
     "tags": ["Algodón", "Invierno", "Casual"],
     "variants": [
         {

@@ -2,7 +2,10 @@
     "name": "Ribbed High Neck T-Shirt",
     "price": 14.90,
     "description": "Made from soft ribbed fabric, this Women’s Ribbed High Neck T-Shirt offers a sleek, flattering fit with a touch of texture for added style.",
-    "categories": ["Polos", "Mujeres"],
+    "categories": [
+        "Mujeres",
+        "Mujeres > Polos"
+    ],
     "tags": ["Algodón", "Otoño", "Casual"],
     "variants": [
         {

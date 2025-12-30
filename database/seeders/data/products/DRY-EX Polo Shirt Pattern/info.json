@@ -2,7 +2,10 @@
     "name": "DRY-EX Polo Shirt | Pattern",
     "price": 29.90,
     "description": "Body: 65% Polyester, 35% Nylon ( 65% Uses Recycled Polyester Fiber )/ Rib: 93% Polyester, 7% Spandex ( 93% Uses Recycled Polyester Fiber )",
-    "categories": ["Polos", "Hombres"],
+    "categories": [
+        "Hombres",
+        "Hombres > Polos"
+    ],
     "tags": ["Poliéster", "Primavera", "Casual"],
     "variants": [
         {
