@@ -63,6 +63,8 @@ Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
 Route::get('/blog/categories', [BlogController::class, 'blogCategoryIndex'])->name('blog.category.index');
 Route::get('/blog/category/{category}', [BlogController::class, 'blogCategoryShow'])->name('blog.category.show');
 
+Route::get('/buscar', [SiteController::class, 'search'])->name('search');
+
 Route::get('/demo', [DocumentationController::class, 'index'])->name('doc');
 Route::get('/demo/login/buyer', [DocumentationController::class, 'loginBuyer'])->name('doc.login.buyer');
 Route::get('/demo/login/admin', [DocumentationController::class, 'loginAdmin'])->name('doc.login.admin');

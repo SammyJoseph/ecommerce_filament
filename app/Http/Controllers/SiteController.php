@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 
 class SiteController extends Controller
 {    
@@ -84,5 +85,29 @@ class SiteController extends Controller
     public function contact(): View
     {
         return view('contact');
+    }
+    public function search(Request $request): View
+    {
+        $query = $request->input('q');
+        
+        $products = Product::where('is_visible', true)
+            ->where(function($q) use ($query) {
+                $q->where('name', 'like', "%{$query}%")
+                  ->orWhere('description', 'like', "%{$query}%");
+            })
+            ->latest()
+            ->get();
+
+        $categories = Category::where('is_visible', true)
+            ->where('name', 'like', "%{$query}%")
+            ->latest()
+            ->get();
+
+        $blogs = \App\Models\Blog::where('is_visible', true)
+            ->where('title', 'like', "%{$query}%")
+            ->latest()
+            ->get();
+
+        return view('site.search', compact('products', 'categories', 'blogs', 'query'));
     }
 }

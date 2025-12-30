@@ -73,9 +73,15 @@
                                     <i class="icon_close s-close"></i>
                                 </a>
                                 <div class="search-wrap-1">
-                                    <form action="#">
-                                        <input placeholder="Search products…" type="text">
-                                        <button class="button-search"><i class="icon-magnifier"></i></button>
+                                    <form action="{{ route('search') }}" method="GET" x-data="{ loading: false }" @submit="loading = true">
+                                        <input placeholder="Buscar…" type="text" name="q" value="{{ request('q') }}">
+                                        <button class="button-search" :disabled="loading" type="submit">
+                                            <i class="icon-magnifier" x-show="!loading"></i>
+                                            <svg x-show="loading" class="tw-animate-spin tw-w-4 tw-text-gray-500 tw-inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style="display: none;">
+                                                <circle class="tw-opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="tw-opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        </button>
                                     </form>
                                 </div>
                             </div>
