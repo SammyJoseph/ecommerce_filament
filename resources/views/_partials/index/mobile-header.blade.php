@@ -1,13 +1,14 @@
+@inject('headerSettings', 'App\Settings\HeaderSettings')
 <div class="mobile-header-active mobile-header-wrapper-style">
     <div class="clickalbe-sidebar-wrap">
         <a class="sidebar-close"><i class="icon_close"></i></a>
         <div class="mobile-header-content-area">
             <div class="header-offer-wrap mobile-header-padding-border-4">
-                <p><i class="icon-paper-plane"></i> FREE SHIPPING world wide for all orders over <span>$199</span></p>
+                <p><i class="icon-paper-plane"></i> {{ $headerSettings->top_message_text }} <span>{{ $headerSettings->top_message_amount }}</span></p>
             </div>
             <div class="mobile-search mobile-header-padding-border-1">
                 <form class="search-form" action="#">
-                    <input type="text" placeholder="Search here…">
+                    <input type="text" placeholder="Buscar…">
                     <button class="button-search"><i class="icon-magnifier"></i></button>
                 </form>
             </div>
@@ -24,27 +25,25 @@
             </div>
             <div class="mobile-header-info-wrap mobile-header-padding-border-3">
                 <div class="single-mobile-header-info">
-                    <a href="order-tracking.html"><i class="lastudioicon-pin-3-2"></i> Track Your Order </a>
+                    <a href="{{ $headerSettings->track_order_url }}"><i class="lastudioicon-pin-3-2"></i> {{ $headerSettings->track_order_text }} </a>
                 </div>
                 <div class="single-mobile-header-info">
-                    <a class="mobile-language-active" href="#">Language <span><i class="icon-arrow-down"></i></span></a>
+                    <a class="mobile-language-active" href="#">{{ $headerSettings->languages[0]['name'] ?? 'Language' }} <span><i class="icon-arrow-down"></i></span></a>
                     <div class="lang-curr-dropdown lang-dropdown-active">
                         <ul>
-                            <li><a href="#">English</a></li>
-                            <li><a href="#">French</a></li>
-                            <li><a href="#">German</a></li>
-                            <li><a href="#">Spanish</a></li>
+                            @foreach($headerSettings->languages as $language)
+                                <li><a href="{{ $language['url'] }}">{{ $language['name'] }}</a></li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
                 <div class="single-mobile-header-info">
-                    <a class="mobile-currency-active" href="#">Currency <span><i class="icon-arrow-down"></i></span></a>
+                    <a class="mobile-currency-active" href="#">{{ $headerSettings->currencies[0]['name'] ?? 'Currency' }} <span><i class="icon-arrow-down"></i></span></a>
                     <div class="lang-curr-dropdown curr-dropdown-active">
                         <ul>
-                            <li><a href="#">USD</a></li>
-                            <li><a href="#">EUR</a></li>
-                            <li><a href="#">Real</a></li>
-                            <li><a href="#">BDT</a></li>
+                            @foreach($headerSettings->currencies as $currency)
+                                <li><a href="{{ $currency['url'] }}">{{ $currency['name'] }}</a></li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
@@ -57,10 +56,11 @@
                 </ul>
             </div>
             <div class="mobile-social-icon">
-                <a class="facebook" href="#"><i class="icon-social-facebook"></i></a>
-                <a class="twitter" href="#"><i class="icon-social-twitter"></i></a>
-                <a class="pinterest" href="#"><i class="icon-social-pinterest"></i></a>
-                <a class="instagram" href="#"><i class="icon-social-instagram"></i></a>
+                @foreach($headerSettings->social_links as $social)
+                    <a class="{{ str($social['icon'])->afterLast('-') }}" href="{{ $social['url'] }}">
+                        <i class="{{ $social['icon'] }}"></i>
+                    </a>
+                @endforeach
             </div>
         </div>
     </div>

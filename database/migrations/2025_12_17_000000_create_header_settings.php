@@ -6,21 +6,19 @@ return new class extends SettingsMigration
 {
     public function up(): void
     {
-        $this->migrator->add('header.top_message_text', 'FREE SHIPPING world wide for all orders over');
-        $this->migrator->add('header.top_message_amount', '$199');
-        $this->migrator->add('header.track_order_text', 'Track Your Order');
-        $this->migrator->add('header.track_order_url', 'order-tracking.html');
+        $this->migrator->add('header.top_message_text', 'ENVÍO GRATIS para compras mayores a');
+        $this->migrator->add('header.top_message_amount', 'S/199');
+        $this->migrator->add('header.track_order_text', 'Rastrea tu pedido');
+        $this->migrator->add('header.track_order_url', '#');
         $this->migrator->add('header.languages', [
+            ['name' => 'Español', 'url' => '#'],
             ['name' => 'English', 'url' => '#'],
-            ['name' => 'French', 'url' => '#'],
-            ['name' => 'German', 'url' => '#'],
-            ['name' => 'Spanish', 'url' => '#'],
+            ['name' => 'Français', 'url' => '#'],
         ]);
         $this->migrator->add('header.currencies', [
+            ['name' => 'PEN', 'url' => '#'],
             ['name' => 'USD', 'url' => '#'],
             ['name' => 'EUR', 'url' => '#'],
-            ['name' => 'Real', 'url' => '#'],
-            ['name' => 'BDT', 'url' => '#'],
         ]);
         $this->migrator->add('header.social_links', [
             ['icon' => 'icon-social-twitter', 'url' => '#'],

@@ -10,7 +10,7 @@ use App\Http\Controllers\UserController;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/product/{product}', [SiteController::class, 'productDetails'])->name('product.show');
+Route::get('/producto/{product}', [SiteController::class, 'productDetails'])->name('product.show');
 
 Route::get('/', [SiteController::class, 'index'])->name('index');
 
@@ -19,15 +19,15 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/my-account', [UserController::class, 'accountDetails'])->name('user.my-account');
-    Route::post('/my-account/update', [UserController::class, 'updateAccountDetails'])->name('user.update-account');
-    Route::get('/my-account/orders', [UserController::class, 'orders'])->name('user.orders');
-    Route::get('/my-account/order/{order}', [UserController::class, 'orderDetails'])->name('user.order.details');
-    Route::get('/my-account/address', [UserController::class, 'address'])->name('user.address');
-    Route::get('/my-account/payment-method', [UserController::class, 'paymentMethod'])->name('user.payment-method');
+    Route::get('/mi-cuenta', [UserController::class, 'accountDetails'])->name('user.my-account');
+    Route::post('/mi-cuenta/update', [UserController::class, 'updateAccountDetails'])->name('user.update-account');
+    Route::get('/mi-cuenta/pedidos', [UserController::class, 'orders'])->name('user.orders');
+    Route::get('/mi-cuenta/pedidos/{order}', [UserController::class, 'orderDetails'])->name('user.order.details');
+    Route::get('/mi-cuenta/direcciones', [UserController::class, 'address'])->name('user.address');
+    Route::get('/mi-cuenta/metodos-de-pago', [UserController::class, 'paymentMethod'])->name('user.payment-method');
 });
 
-Route::get('/cart', [CartController::class, 'index'])->name('cart');
+Route::get('/carrito', [CartController::class, 'index'])->name('cart');
 Route::get('/raw-cart', function () {
     Cart::instance('shopping');
     $cart = Cart::content();
@@ -35,8 +35,8 @@ Route::get('/raw-cart', function () {
     return response()->json($cart);
 });
 
-Route::get('/shop', [SiteController::class, 'shop'])->name('shop');
-Route::get('/wishlist', [SiteController::class, 'wishlist'])->name('wishlist');
+Route::get('/tienda', [SiteController::class, 'shop'])->name('shop');
+Route::get('/lista-de-deseos', [SiteController::class, 'wishlist'])->name('wishlist');
 Route::get('/raw-wishlist', function () {
     Cart::instance('wishlist');
     $cart = Cart::content();
@@ -44,9 +44,9 @@ Route::get('/raw-wishlist', function () {
     return response()->json($cart);
 });
 
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/checkout/process_payment', [CheckoutController::class, 'process']);
-Route::get('/thank-you', [CheckoutController::class, 'thanks'])->name('checkout.thanks');
+Route::get('/pagar', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/pagar/process_payment', [CheckoutController::class, 'process']);
+Route::get('/gracias', [CheckoutController::class, 'thanks'])->name('checkout.thanks');
 
 Route::get('/payment/success', [MPController::class, 'success'])->name('payment.success');
 Route::get('/payment/failure', [MPController::class, 'failure'])->name('payment.failure');
@@ -54,8 +54,8 @@ Route::get('/payment/pending', [MPController::class, 'pending'])->name('payment.
 
 Route::post('/mp/webhook', [MPController::class, 'webhook'])->name('mp.webhook');
 
-Route::get('/about', [SiteController::class, 'about'])->name('about');
-Route::get('/contact', [SiteController::class, 'contact'])->name('contact');
+Route::get('/nosotros', [SiteController::class, 'about'])->name('about');
+Route::get('/contacto', [SiteController::class, 'contact'])->name('contact');
 
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/preview/{token}', [BlogController::class, 'preview'])->name('blog.preview');

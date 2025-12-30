@@ -5490,6 +5490,16 @@ textarea:focus {
   background-color: transparent;
 }
 
+.mobile-header-active .clickalbe-sidebar-wrap .mobile-header-content-area .mobile-social-icon a.youtube {
+  background-color: #e62117;
+  border: 1px solid #e62117;
+}
+
+.mobile-header-active .clickalbe-sidebar-wrap .mobile-header-content-area .mobile-social-icon a.youtube:hover {
+  color: #e62117;
+  background-color: transparent;
+}
+
 .categori-hide-2 {
   display: none;
   padding-top: 20px;
