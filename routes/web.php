@@ -36,7 +36,7 @@ Route::get('/raw-cart', function () {
 });
 
 Route::get('/tienda', [SiteController::class, 'shop'])->name('shop');
-Route::get('/lista-de-deseos', [SiteController::class, 'wishlist'])->name('wishlist');
+Route::get('/favoritos', [SiteController::class, 'wishlist'])->name('wishlist');
 Route::get('/raw-wishlist', function () {
     Cart::instance('wishlist');
     $cart = Cart::content();

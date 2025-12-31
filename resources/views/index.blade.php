@@ -154,14 +154,14 @@
 
 @section('content')        
     @include('_partials.index.slider-area')
-    @include('_partials.index.service-area')
+    @include('_partials.index.features-area')
     @include('_partials.index.about-us-area')
     
     <div id="featured-products" class="product-area section-padding-1 pt-115 pb-75">
         <div class="container">
             <div class="section-title-tab-wrap mb-45">
                 <div class="section-title">
-                    <h2>Featured Products</h2>
+                    <h2>Productos Destacados</h2>
                 </div>
                 <div class="tab-style-1 nav">
                     @foreach ($categories->take(4) as $category)
@@ -207,7 +207,7 @@
                                                 <button title="Add to Cart" class="tw-flex tw-items-center tw-gap-2"
                                                     x-on:click="updateProductData({{ $productData }})"
                                                     data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                    <i class="icon-basket-loaded !-tw-top-px"></i><span>Add to cart</span>
+                                                    <i class="icon-basket-loaded !-tw-top-px"></i><span>Agregar</span>
                                                 </button>
                                             @else
                                                 @livewire('product.add-to-cart', ['product' => $product, 'classes' => 'tw-flex tw-items-center'])
@@ -227,7 +227,7 @@
                                         <h4><a href="{{ route('product.show', $product) }}">{{ Str::limit($product->name, 27) }}</a></h4>
                                         <div class="product-price">
                                             @if($product->has_variants)
-                                                <span class="regular-price">Desde ${{ number_format($product->min_variant_price, 2, '.', '') }}</span>
+                                                <span class="regular-price"><span class="!tw-text-gray-500">Desde </span>${{ number_format($product->min_variant_price, 2, '.', '') }}</span>
                                             @elseif (!empty($product->sale_price) && $product->sale_price > 0)
                                                 <span class="sale-price">${{ $product->sale_price }}</span>
                                                 <span class="old-price">${{ $product->price }}</span>

@@ -2,10 +2,10 @@
     <div class="container">
         <div class="section-title-tag-wrap mb-45">
             <div class="section-title">
-                <h2>{{ $settings->instagram_title ?? 'Our Instagram' }}</h2>
+                <h2>{{ $settings->instagram_title ?? 'Instagram' }}</h2>
             </div>
             <div class="instagram-tag">
-                <span>{{ $settings->instagram_hashtag ?? '#monkeylover' }}</span>
+                <span>{{ $settings->instagram_hashtag ?? '#tendencias' }}</span>
             </div>
         </div>
         <div class="row g-0">

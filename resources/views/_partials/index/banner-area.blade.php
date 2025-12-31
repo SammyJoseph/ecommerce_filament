@@ -5,7 +5,7 @@
 <div class="banner-area pb-85">
     <div class="container">
         <div class="section-title mb-45">
-            <h2>Our Collections</h2>
+            <h2>Destacados</h2>
         </div>
         <div class="row">
             @if(isset($banners[0]))
@@ -20,7 +20,7 @@
                         <h2>{!! nl2br(e($banners[0]['title'] ?? '')) !!}</h2>
                         <p>{{ $banners[0]['description'] ?? '' }}</p>
                         <div class="btn-style-1">
-                            <a class="animated btn-1-padding-2" href="{{ $banners[0]['link'] ?? '#' }}">Shop Now</a>
+                            <a class="animated btn-1-padding-2" href="{{ $banners[0]['link'] ?? '#' }}">Ver ahora</a>
                         </div>
                     </div>
                 </div>

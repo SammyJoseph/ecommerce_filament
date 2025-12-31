@@ -2,7 +2,7 @@
     <div class="sidebar-cart-all">
         <a class="cart-close" href="#"><i class="icon_close"></i></a>
         <div class="cart-content">
-            <h3>Shopping Cart</h3>
+            <h3>Carrito de compras</h3>
             <ul>
                 @forelse ($productsInCart as $product)
                     <li class="single-product-cart">
@@ -21,7 +21,7 @@
                     </li>                    
                 @empty
                     <li class="text-center py-4">
-                        <p>No products in cart</p>
+                        <p>No hay productos en el carrito</p>
                     </li>
                 @endforelse
             </ul>
@@ -32,8 +32,8 @@
                 <h4>Subtotal: <span>${{ $subtotal }}</span></h4>
             </div>
             <div class="cart-checkout-btn">
-                <a class="btn-hover cart-btn-style" href="{{ route('cart') }}">view cart</a>
-                <a class="no-mrg btn-hover cart-btn-style" href="{{ route('checkout.index') }}">checkout</a>
+                <a class="btn-hover cart-btn-style" href="{{ route('cart') }}">Ver carrito</a>
+                <a class="no-mrg btn-hover cart-btn-style" href="{{ route('checkout.index') }}">Ir a pagar</a>
             </div>
         </div>
     </div>

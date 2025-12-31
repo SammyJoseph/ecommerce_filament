@@ -13,8 +13,8 @@
                 }
                 $wire.addToCart(product.id, parseInt(document.getElementById('quick-view-quantity').value), variantData);
            ">
-           <span wire:loading.remove wire:target="addToCart">Add to cart</span>
-           <span wire:loading wire:target="addToCart">Adding...</span>
+           <span wire:loading.remove wire:target="addToCart">Agregar</span>
+           <span wire:loading wire:target="addToCart">Agregando...</span>
         </a>
     </div>
     <div class="pro-details-action tw-inline-block">

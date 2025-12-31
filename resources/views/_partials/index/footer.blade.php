@@ -7,12 +7,12 @@
                         <a href="#"><img src="{{ asset('assets/images/logo/logo.png') }}"></a>
                     </div>
                     <div class="single-contact-info">
-                        <span>Our Location</span>
-                        <p>869 General Village Apt. 645, Moorebury, USA</p>
+                        <span>Dirección</span>
+                        <p>Av. Lima 123, Perú</p>
                     </div>
                     <div class="single-contact-info">
-                        <span>24/7 hotline:</span>
-                        <p>(+99) 052 128 2399</p>
+                        <span>Teléfono:</span>
+                        <p>(+51) 987654321</p>
                     </div>
                 </div>
             </div>
@@ -21,11 +21,11 @@
                     <div class="footer-menu">
                         <nav>
                             <ul>
-                                <li><a href="index.html">home</a></li>
-                                <li><a href="shop.html">Shop</a></li>
-                                <li><a href="shop.html">Product </a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                                <li><a href="blog.html">Blog.</a></li>
+                                <li><a href="{{ route('index') }}">Inicio</a></li>
+                                <li><a href="{{ route('shop') }}">Tienda</a></li>
+                                <li><a href="{{ route('about') }}">Nosotros</a></li>
+                                <li><a href="{{ route('blog.index') }}">Blog</a></li>
+                                <li><a href="{{ route('contact') }}">Contacto</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -37,7 +37,7 @@
                         <a href="#"><i class="social_youtube"></i></a>
                     </div>
                     <div class="copyright">
-                        <p>Copyright © 2022 HasThemes | <a href="https://hasthemes.com/">Built with <span>Norda</span> by HasThemes</a>.</p>
+                        <p>© {{ date('Y') }} <a target="_blank" href="https://artisam.dev">Desarrollado por <span>Artisam Web</span></a></p>
                     </div>
                 </div>
             </div>
