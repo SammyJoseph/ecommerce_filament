@@ -227,12 +227,12 @@
                                         <h4><a href="{{ route('product.show', $product) }}">{{ Str::limit($product->name, 27) }}</a></h4>
                                         <div class="product-price">
                                             @if($product->has_variants)
-                                                <span class="regular-price"><span class="!tw-text-gray-500">Desde </span>${{ number_format($product->min_variant_price, 2, '.', '') }}</span>
+                                                <span class="regular-price"><span class="!tw-text-gray-500">Desde </span>S/{{ number_format($product->min_variant_price, 2, '.', '') }}</span>
                                             @elseif (!empty($product->sale_price) && $product->sale_price > 0)
-                                                <span class="sale-price">${{ $product->sale_price }}</span>
-                                                <span class="old-price">${{ $product->price }}</span>
+                                                <span class="sale-price">S/{{ $product->sale_price }}</span>
+                                                <span class="old-price">S/{{ $product->price }}</span>
                                             @else
-                                                <span class="regular-price">${{ $product->price }}</span>
+                                                <span class="regular-price">S/{{ $product->price }}</span>
                                             @endif
                                         </div>
                                     </div>

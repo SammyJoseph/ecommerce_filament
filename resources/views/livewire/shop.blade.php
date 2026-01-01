@@ -123,11 +123,11 @@
                             <a class="active" href="#shop-1" data-bs-toggle="tab"><i class="icon-grid"></i></a>
                             <a href="#shop-2" data-bs-toggle="tab"><i class="icon-menu"></i></a>
                         </div>
-                        <p class="tw-mb-0 tw-whitespace-nowrap !tw-hidden sm:!tw-inline-block"><span class="tw-hidden md:tw-inline-block tw-mr-1">Showing</span>{{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }} of {{ $products->total() }}<span class="tw-hidden md:tw-inline-block tw-ml-1">results</span></p>
+                        <p class="tw-mb-0 tw-whitespace-nowrap !tw-hidden sm:!tw-inline-block"><span class="tw-hidden md:tw-inline-block tw-mr-1">Mostrando</span>{{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }} de {{ $products->total() }}<span class="tw-hidden md:tw-inline-block tw-ml-1">resultados</span></p>
                     </div>
                     <div class="product-sorting-wrapper !tw-flex tw-justify-end tw-items-center tw-gap-2">
                         <div class="product-shorting shorting-style !tw-my-0">
-                            <label class="tw-hidden md:tw-inline-block">View :</label>
+                            <label class="tw-hidden md:tw-inline-block">Ver :</label>
                             <select class="!tw-w-20" wire:model.live="per_page">
                                 <option value="6"> 6</option>
                                 <option value="12"> 12</option>
@@ -136,11 +136,11 @@
                             </select>
                         </div>
                         <div class="product-show shorting-style !tw-my-0">
-                            <label class="tw-hidden md:tw-inline-block">Sort by :</label>
+                            <label class="tw-hidden md:tw-inline-block">Ordenar :</label>
                             <select class="!tw-w-24" wire:model.live="sort_by">
                                 <option value="">Default</option>
-                                <option value="price_low">Lowest Price</option>
-                                <option value="price_high">Highest Price</option>
+                                <option value="price_low">Precio más bajo</option>
+                                <option value="price_high">Precio más alto</option>
                             </select>
                         </div>
                     </div>
@@ -213,12 +213,12 @@
                                             <h3><a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a></h3>
                                             <div class="product-price-2">
                                                 @if($product->has_variants)
-                                                    <span>Desde ${{ number_format($product->min_variant_price, 2) }}</span>
+                                                    <span class="!tw-text-gray-500">Desde </span><span>S/{{ number_format($product->min_variant_price, 2) }}</span>
                                                 @elseif($product->sale_price && $product->sale_price < $product->price)
-                                                    <span class="new-price">${{ number_format($product->sale_price, 2) }}</span>
-                                                    <span class="old-price">${{ number_format($product->price, 2) }}</span>
+                                                    <span class="new-price">S/{{ number_format($product->sale_price, 2) }}</span>
+                                                    <span class="old-price">S/{{ number_format($product->price, 2) }}</span>
                                                 @else
-                                                    <span>${{ number_format($product->price, 2) }}</span>
+                                                    <span>S/{{ number_format($product->price, 2) }}</span>
                                                 @endif
                                             </div>
                                         </div>
@@ -240,12 +240,12 @@
                                             <h3><a href="{{ route('product.show', $product->slug) }}" class="tw-block tw-truncate">{{ $product->name }}</a></h3>
                                             <div class="product-price-2">
                                                 @if($product->has_variants)
-                                                    <span>Desde ${{ number_format($product->min_variant_price, 2) }}</span>
+                                                    <span class="!tw-text-gray-500">Desde </span><span>S/{{ number_format($product->min_variant_price, 2) }}</span>
                                                 @elseif($product->sale_price && $product->sale_price < $product->price)
-                                                    <span class="new-price">${{ number_format($product->sale_price, 2) }}</span>
-                                                    <span class="old-price">${{ number_format($product->price, 2) }}</span>
+                                                    <span class="new-price">S/{{ number_format($product->sale_price, 2) }}</span>
+                                                    <span class="old-price">S/{{ number_format($product->price, 2) }}</span>
                                                 @else
-                                                    <span>${{ number_format($product->price, 2) }}</span>
+                                                    <span>S/{{ number_format($product->price, 2) }}</span>
                                                 @endif
                                             </div>
                                             <div class="pro-add-to-cart">
@@ -304,12 +304,12 @@
                                             <h3><a href="{{ route('product.show', $product->slug) }}">{{ $product->name }}</a></h3>
                                             <div class="pro-list-price">
                                                 @if($product->has_variants)
-                                                    <span class="new-price">Desde ${{ number_format($product->min_variant_price, 2) }}</span>
+                                                    <span class="new-price">Desde S/{{ number_format($product->min_variant_price, 2) }}</span>
                                                 @elseif($product->sale_price && $product->sale_price < $product->price)
-                                                    <span class="new-price">${{ number_format($product->sale_price, 2) }}</span>
-                                                    <span class="old-price">${{ number_format($product->price, 2) }}</span>
+                                                    <span class="new-price">S/{{ number_format($product->sale_price, 2) }}</span>
+                                                    <span class="old-price">S/{{ number_format($product->price, 2) }}</span>
                                                 @else
-                                                    <span class="new-price">${{ number_format($product->price, 2) }}</span>
+                                                    <span class="new-price">S/{{ number_format($product->price, 2) }}</span>
                                                 @endif
                                             </div>
                                             <div class="product-list-rating-wrap">
@@ -355,10 +355,10 @@
                 <div class="sidebar-wrapper sidebar-wrapper-mrg-right">
                     {{-- Búsqueda --}}
                     <div class="sidebar-widget mb-40">
-                        <h4 class="sidebar-widget-title">Search </h4>
+                        <h4 class="sidebar-widget-title">Buscar </h4>
                         <div class="sidebar-search">
                             <form class="sidebar-search-form" wire:submit.prevent>
-                                <input type="text" wire:model.live.debounce.500ms="search" placeholder="Search here...">
+                                <input type="text" wire:model.live.debounce.500ms="search" placeholder="Buscar aquí...">
                                 @if(!empty($search))
                                     <button type="button" wire:click="clearSearch">
                                         <i class="icon-close"></i>
@@ -373,7 +373,7 @@
                     </div>
                     {{-- Categorias --}}
                     <div class="sidebar-widget shop-sidebar-border mb-35 pt-40">
-                        <h4 class="sidebar-widget-title">Categories </h4>
+                        <h4 class="sidebar-widget-title">Categorías </h4>
                         <div class="shop-catigory">
                             <ul>
                                 @foreach($categories as $category)
@@ -395,9 +395,9 @@
                     </div>
                     {{-- Rango de precios --}}
                     <div class="sidebar-widget shop-sidebar-border mb-40 pt-40">
-                        <h4 class="sidebar-widget-title">Price Filter </h4>
+                        <h4 class="sidebar-widget-title">Filtro de precios </h4>
                         <div class="price-filter">
-                            <span>Range:  ${{ number_format($min_price, 2) }} - {{ number_format($max_price, 2) }} </span>
+                            <span>Rango:  S/{{ number_format($min_price, 2) }} - {{ number_format($max_price, 2) }} </span>
                             <div id="shop-slider-range" wire:ignore></div>
                             <div class="price-slider-amount">
                                 <div class="label-input">
@@ -409,20 +409,20 @@
                     </div>
                     {{-- Especiales --}}
                     <div class="sidebar-widget shop-sidebar-border mb-40 pt-40">
-                        <h4 class="sidebar-widget-title">Refine By </h4>
+                        <h4 class="sidebar-widget-title">Ajustar </h4>
                         <div class="sidebar-widget-list">
                             <ul>
                                 <li>
                                     <div class="sidebar-widget-list-left">
                                         <input type="checkbox" wire:model.live="on_sale"> 
-                                        <a href="#" wire:click.prevent="$toggle('on_sale')">On Sale <span>{{ $on_sale_count }}</span> </a>
+                                        <a href="#" wire:click.prevent="$toggle('on_sale')">Oferta <span>{{ $on_sale_count }}</span> </a>
                                         <span class="checkmark"></span>
                                     </div>
                                 </li>
                                 <li>
                                     <div class="sidebar-widget-list-left">
                                         <input type="checkbox" wire:model.live="is_new"> 
-                                        <a href="#" wire:click.prevent="$toggle('is_new')">New <span>{{ $is_new_count }}</span></a>
+                                        <a href="#" wire:click.prevent="$toggle('is_new')">Nuevos <span>{{ $is_new_count }}</span></a>
                                         <span class="checkmark"></span>
                                     </div>
                                 </li>
@@ -431,7 +431,7 @@
                     </div>
                     {{-- Etiquetas --}}
                     <div class="sidebar-widget shop-sidebar-border pt-40">
-                        <h4 class="sidebar-widget-title">Popular Tags</h4>
+                        <h4 class="sidebar-widget-title">Etiquetas</h4>
                         <div class="tag-wrap sidebar-widget-tag">
                             <a href="#">Clothing</a>
                             <a href="#">Accessories</a>
