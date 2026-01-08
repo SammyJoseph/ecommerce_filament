@@ -59,7 +59,7 @@
                                     <li><a href="{{ route('index') }}" @class(['!tw-text-red-500' => request()->routeIs('index')])>Inicio</a></li>
                                     <li><a href="{{ route('shop') }}" @class(['!tw-text-red-500' => request()->routeIs('shop')])>Tienda</a></li>
                                     <li><a href="{{ route('about') }}" @class(['!tw-text-red-500' => request()->routeIs('about')])>Nosotros</a></li>
-                                    <li><a href="{{ route('blog.index') }}" @class(['!tw-text-red-500' => request()->routeIs('blog.index')])>Blog</a></li>
+                                    <li><a href="{{ route('blog.index') }}" @class(['!tw-text-red-500' => request()->routeIs('blog.*')])>Blog</a></li>
                                     <li><a href="{{ route('contact') }}" @class(['!tw-text-red-500' => request()->routeIs('contact')])>Contacto</a></li>
                                 </ul>
                             </nav>

@@ -5,7 +5,7 @@
 @section('container-class', 'container')
 
 @section('breadcrumbs')
-    <li class="active">Blog details</li>
+    <li class="active"><a href="{{ route('blog.index') }}">Blog</a></li>
 @endsection
 
 @section('content')
