@@ -1,5 +1,5 @@
 @extends('layouts.site')
-@section('title', 'Wishlist | Norda - Minimal eCommerce HTML Template')
+@section('title', 'Wishlist | Norda - Minimal eCommerce')
 
 @section('header-extra-classes', '') 
 @section('container-class', 'container')

@@ -1,5 +1,5 @@
 @extends('layouts.site')
-@section('title', 'Norda - Minimal eCommerce HTML Template')
+@section('title', 'Norda - Minimal eCommerce')
 
 @section('main-wrapper-attrs')
     x-data="{

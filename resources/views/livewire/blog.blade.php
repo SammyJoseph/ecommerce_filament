@@ -20,7 +20,7 @@
                                             <a href="{{ route('blog.category.show', $category->slug) }}">{{ $category->name }}</a>@if (!$loop->last), @endif
                                             @endforeach
                                         </li>
-                                        <li>{{ $blog->published_at->format('F j, Y') }}</li>
+                                        <li>{{ $blog->published_at->translatedFormat('j \d\e F, Y') }}</li>
                                     </ul>
                                 </div>
                                 <h1><a href="{{ route('blog.show', $blog->slug) }}">{{ $blog->title }}</a></h1>
@@ -34,10 +34,10 @@
             <div class="col-lg-3">
                 <div class="sidebar-wrapper sidebar-wrapper-mrg-right">
                     <div class="sidebar-widget mb-40">
-                        <h4 class="sidebar-widget-title">Search </h4>
+                        <h4 class="sidebar-widget-title">Buscar </h4>
                         <div class="sidebar-search">
                             <form class="sidebar-search-form" action="#" wire:submit.prevent>
-                                <input type="text" wire:model.live.debounce.500ms="search" placeholder="Search Post">
+                                <input type="text" wire:model.live.debounce.500ms="search" placeholder="Buscar Post">
                                 @if(!empty($search))
                                     <button type="button" wire:click="clearSearch">
                                         <i class="icon-close"></i>
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="sidebar-widget shop-sidebar-border mb-35 pt-40">
-                        <h4 class="sidebar-widget-title">Categories </h4>
+                        <h4 class="sidebar-widget-title">Categorías </h4>
                         <div class="shop-catigory">
                             <ul>
                                 @foreach ($categories as $category)
@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div class="sidebar-widget shop-sidebar-border mb-40 pt-40">
-                        <h4 class="sidebar-widget-title">Recent Posts </h4>
+                        <h4 class="sidebar-widget-title">Posts Recientes </h4>
                         <div class="recent-post">
                             <div class="single-sidebar-blog">
                                 <div class="sidebar-blog-img">
@@ -99,19 +99,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="sidebar-widget shop-sidebar-border mb-40 pt-40">
-                        <h4 class="sidebar-widget-title">Archives </h4>
-                        <div class="archives-wrap">
-                            <select>
-                                <option>Select Month</option>
-                                <option> January 2022 </option>
-                                <option> December 2022 </option>
-                                <option> November 2022 </option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="sidebar-widget shop-sidebar-border pt-40">
-                        <h4 class="sidebar-widget-title">Popular Tags</h4>
+                        <h4 class="sidebar-widget-title">Etiquetas</h4>
                         <div class="tag-wrap sidebar-widget-tag">
                             <a href="#">Clothing</a>
                             <a href="#">Accessories</a>

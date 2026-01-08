@@ -25,7 +25,7 @@
                     <div class="breadcrumb-content text-center">
                         <ul>
                             <li>
-                                <a href="{{ route('index') }}">Home</a>
+                                <a href="{{ route('index') }}">Inicio</a>
                             </li>
                             @yield('breadcrumbs')
                         </ul>
