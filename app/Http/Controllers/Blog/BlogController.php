@@ -15,7 +15,13 @@ class BlogController extends Controller
 
     public function show(Blog $blog)
     {
-        return view('blog.show', compact('blog'));
+        $categories = BlogCategory::withCount(['blogs' => function ($query) {
+            $query->visible();
+        }])->get();
+
+        $recentPosts = Blog::visible()->orderBy('published_at', 'desc')->take(3)->get();
+        
+        return view('blog.show', compact('blog', 'categories', 'recentPosts'));
     }
 
     public function preview($token)

@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-    <div class="blog-area tw-pt-0 sm:tw-pt-20 lg:tw-pt-24 pb-120">
+    <div class="blog-area tw-pt-6 sm:tw-pt-20 pb-120">
         <div class="container">
             <div class="row flex-row-reverse">
                 <div class="col-lg-9">
@@ -168,59 +168,29 @@
                             </div>
                         </div>
                         <div class="sidebar-widget shop-sidebar-border mb-35 pt-40">
-                            <h4 class="sidebar-widget-title">Categories </h4>
+                            <h4 class="sidebar-widget-title">Categorías </h4>
                             <div class="shop-catigory">
                                 <ul>
-                                    <li><a href="shop.html">T-Shirt</a></li>
-                                    <li><a href="shop.html">Shoes</a></li>
-                                    <li><a href="shop.html">Clothing </a></li>
-                                    <li><a href="shop.html">Women </a></li>
-                                    <li><a href="shop.html">Baby Boy </a></li>
-                                    <li><a href="shop.html">Accessories </a></li>
+                                    @foreach ($categories as $category)
+                                        <li><a href="#">{{ $category->name }} <span class="tw-text-xs tw-text-gray-400 tw-ml-1">{{ $category->blogs_count }}</span></a></li>
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
                         <div class="sidebar-widget shop-sidebar-border mb-40 pt-40">
-                            <h4 class="sidebar-widget-title">Recent Posts </h4>
+                            <h4 class="sidebar-widget-title">Posts Recientes </h4>
                             <div class="recent-post">
+                                @foreach ($recentPosts as $post)
                                 <div class="single-sidebar-blog">
                                     <div class="sidebar-blog-img">
-                                        <a href="blog-details.html"><img src="assets/images/blog/blog-4.jpg" alt=""></a>
+                                        <a href="{{ route('blog.show', $post->slug) }}"><img src="{{ Storage::url($post->image) }}" alt=""></a>
                                     </div>
                                     <div class="sidebar-blog-content">
-                                        <h5><a href="blog-details.html">Basic colord mixed</a></h5>
-                                        <span>Sep 5th, 2022</span>
+                                        <h5><a href="{{ route('blog.show', $post->slug) }}">{{ Str::words($post->title, 5) }}</a></h5>
+                                        <span>{{ $post->published_at->translatedFormat('j \d\e F, Y') }}</span>
                                     </div>
                                 </div>
-                                <div class="single-sidebar-blog">
-                                    <div class="sidebar-blog-img">
-                                        <a href="blog-details.html"><img src="assets/images/blog/blog-5.jpg" alt=""></a>
-                                    </div>
-                                    <div class="sidebar-blog-content">
-                                        <h5><a href="blog-details.html">Five things you only</a></h5>
-                                        <span>Sep 15th, 2022</span>
-                                    </div>
-                                </div>
-                                <div class="single-sidebar-blog">
-                                    <div class="sidebar-blog-img">
-                                        <a href="blog-details.html"><img src="assets/images/blog/blog-4.jpg" alt=""></a>
-                                    </div>
-                                    <div class="sidebar-blog-content">
-                                        <h5><a href="blog-details.html">Basic colord mixed</a></h5>
-                                        <span>Sep 5th, 2022</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sidebar-widget shop-sidebar-border mb-40 pt-40">
-                            <h4 class="sidebar-widget-title">Archives </h4>
-                            <div class="archives-wrap">
-                                <select>
-                                    <option>Select Month</option>
-                                    <option> January 2022 </option>
-                                    <option> December 2022 </option>
-                                    <option> November 2022 </option>
-                                </select>
+                                @endforeach
                             </div>
                         </div>
                         <div class="sidebar-widget shop-sidebar-border pt-40">

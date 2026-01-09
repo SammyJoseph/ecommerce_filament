@@ -55,13 +55,14 @@ class Blog extends Component
                 $q->where('slug', $this->categorySlug);
             });
         }
-
-        $blogs = $query->paginate(6);
+        $posts = $query->paginate(6);
 
         $categories = BlogCategory::withCount(['blogs' => function ($query) {
             $query->visible();
         }])->get();
 
-        return view('livewire.blog', compact('blogs', 'categories'));
+        $recentPosts = ModelsBlog::visible()->orderBy('published_at', 'desc')->take(3)->get();
+
+        return view('livewire.blog', compact('posts', 'categories', 'recentPosts'));
     }
 }
