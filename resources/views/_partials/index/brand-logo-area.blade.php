@@ -65,7 +65,7 @@
             transform: translateX(0);
         }
         100% {
-            transform: translateX(-50%);
+            transform: translateX(calc(-100% / 6));
         }
     }
     
@@ -90,51 +90,29 @@
     <div class="container-fluid px-0">
         <div class="brand-slider-container">
             <div class="brand-slider-track">
-                {{-- First set of logos --}}
-                @forelse($brandLogos as $logo)
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('storage/'.$logo['image']) }}" alt="Brand Logo">
-                    </div>
-                @empty
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('assets/images/brand-logo/brand-logo-1.png') }}" alt="Brand Logo">
-                    </div>
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('assets/images/brand-logo/brand-logo-2.png') }}" alt="Brand Logo">
-                    </div>
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('assets/images/brand-logo/brand-logo-3.png') }}" alt="Brand Logo">
-                    </div>
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('assets/images/brand-logo/brand-logo-4.png') }}" alt="Brand Logo">
-                    </div>
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('assets/images/brand-logo/brand-logo-5.png') }}" alt="Brand Logo">
-                    </div>
-                @endforelse
-                
-                {{-- Duplicate set for seamless infinite loop --}}
-                @forelse($brandLogos as $logo)
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('storage/'.$logo['image']) }}" alt="Brand Logo">
-                    </div>
-                @empty
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('assets/images/brand-logo/brand-logo-1.png') }}" alt="Brand Logo">
-                    </div>
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('assets/images/brand-logo/brand-logo-2.png') }}" alt="Brand Logo">
-                    </div>
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('assets/images/brand-logo/brand-logo-3.png') }}" alt="Brand Logo">
-                    </div>
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('assets/images/brand-logo/brand-logo-4.png') }}" alt="Brand Logo">
-                    </div>
-                    <div class="brand-slide-item">
-                        <img src="{{ asset('assets/images/brand-logo/brand-logo-5.png') }}" alt="Brand Logo">
-                    </div>
-                @endforelse
+                @foreach(range(1, 6) as $i)
+                    @forelse($brandLogos as $logo)
+                        <div class="brand-slide-item">
+                            <img src="{{ asset('storage/'.$logo['image']) }}" alt="Brand Logo">
+                        </div>
+                    @empty
+                        <div class="brand-slide-item">
+                            <img src="{{ asset('assets/images/brand-logo/brand-logo-1.png') }}" alt="Brand Logo">
+                        </div>
+                        <div class="brand-slide-item">
+                            <img src="{{ asset('assets/images/brand-logo/brand-logo-2.png') }}" alt="Brand Logo">
+                        </div>
+                        <div class="brand-slide-item">
+                            <img src="{{ asset('assets/images/brand-logo/brand-logo-3.png') }}" alt="Brand Logo">
+                        </div>
+                        <div class="brand-slide-item">
+                            <img src="{{ asset('assets/images/brand-logo/brand-logo-4.png') }}" alt="Brand Logo">
+                        </div>
+                        <div class="brand-slide-item">
+                            <img src="{{ asset('assets/images/brand-logo/brand-logo-5.png') }}" alt="Brand Logo">
+                        </div>
+                    @endforelse
+                @endforeach
             </div>
         </div>
     </div>
