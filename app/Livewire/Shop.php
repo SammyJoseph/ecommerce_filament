@@ -49,9 +49,9 @@ class Shop extends Component
     public function toggleWishlist($productId)
     {
         $product = Product::findOrFail($productId);
-    
+
         $cartItem = Cart::instance('wishlist')->content()->firstWhere('id', $productId);
-        
+
         if ($cartItem) {
             Cart::instance('wishlist')->remove($cartItem->rowId);
         } else {
@@ -76,7 +76,7 @@ class Shop extends Component
         if (Auth::check()) {
             Cart::instance('wishlist')->restore(Auth::id());
         }
-        
+
         $this->wishlistProductIds = Cart::instance('wishlist')->content()->pluck('id')->toArray();
     }
 
@@ -94,7 +94,7 @@ class Shop extends Component
         } else {
             $this->category_slugs = $slug;
         }
-        
+
         $this->resetPage();
     }
 
@@ -166,7 +166,7 @@ class Shop extends Component
             })
             ->when($this->on_sale, function (Builder $query) {
                 $query->where('sale_price', '>', 0)
-                      ->whereColumn('sale_price', '<', 'price');
+                    ->whereColumn('sale_price', '<', 'price');
             })
             ->when($this->is_new, function (Builder $query) {
                 $query->where('created_at', '>=', now()->subDays(30));
@@ -186,21 +186,21 @@ class Shop extends Component
                         })->whereBetween('price', [$this->min_price, $this->max_price]);
                     });
                 })
-                // Filter products with variants
-                ->orWhereHas('variants', function (Builder $variantQ) {
-                    $variantQ->where('is_visible', true)
-                        ->whereHas('sizes', function (Builder $sizeQ) {
-                            $sizeQ->where(function (Builder $saleQ) {
-                                $saleQ->where('sale_price', '>', 0)
-                                    ->whereBetween('sale_price', [$this->min_price, $this->max_price]);
-                            })->orWhere(function (Builder $regularQ) {
-                                $regularQ->where(function (Builder $check) {
-                                    $check->where('sale_price', '<=', 0)
-                                        ->orWhereNull('sale_price');
-                                })->whereBetween('price', [$this->min_price, $this->max_price]);
+                    // Filter products with variants
+                    ->orWhereHas('variants', function (Builder $variantQ) {
+                        $variantQ->where('is_visible', true)
+                            ->whereHas('sizes', function (Builder $sizeQ) {
+                                $sizeQ->where(function (Builder $saleQ) {
+                                    $saleQ->where('sale_price', '>', 0)
+                                        ->whereBetween('sale_price', [$this->min_price, $this->max_price]);
+                                })->orWhere(function (Builder $regularQ) {
+                                    $regularQ->where(function (Builder $check) {
+                                        $check->where('sale_price', '<=', 0)
+                                            ->orWhereNull('sale_price');
+                                    })->whereBetween('price', [$this->min_price, $this->max_price]);
+                                });
                             });
-                        });
-                });
+                    });
             })
             ->when($this->sort_by, function (Builder $query) {
                 switch ($this->sort_by) {

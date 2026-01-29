@@ -22,7 +22,7 @@
                         <nav>
                             <ul>
                                 <li><a href="{{ route('index') }}">Inicio</a></li>
-                                <li><a href="{{ route('shop') }}">Tienda</a></li>
+                                <li><a href="{{ route('shop.index') }}">Tienda</a></li>
                                 <li><a href="{{ route('about') }}">Nosotros</a></li>
                                 <li><a href="{{ route('blog.index') }}">Blog</a></li>
                                 <li><a href="{{ route('contact') }}">Contacto</a></li>

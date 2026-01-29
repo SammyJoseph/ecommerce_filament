@@ -22,7 +22,7 @@
                 <nav>
                     <ul class="mobile-menu">
                         <li class="menu-item-has-children"><a href="{{ route('index') }}">Inicio</a></li>
-                        <li class="menu-item-has-children "><a href="{{ route('shop') }}">Tienda</a></li>
+                        <li class="menu-item-has-children "><a href="{{ route('shop.index') }}">Tienda</a></li>
                         <li class="menu-item-has-children "><a href="{{ route('about') }}">Nosotros</a></li>
                         <li class="menu-item-has-children "><a href="{{ route('blog.index') }}">Blog</a></li>
                         <li><a href="{{ route('contact') }}">Contacto</a></li>

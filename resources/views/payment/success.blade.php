@@ -16,7 +16,7 @@
                     <h3 class="cart-page-title">Payment Successful!</h3>
                     <p>Thank you for your purchase. Your order has been successfully placed.</p>
                     <div class="btn-hover text-center mt-30">
-                        <a class="btn-style-2" href="{{ route('shop') }}">Continue Shopping</a>
+                        <a class="btn-style-2" href="{{ route('shop.index') }}">Continue Shopping</a>
                     </div>
                 </div>
             </div>

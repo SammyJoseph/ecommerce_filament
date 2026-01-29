@@ -23,6 +23,6 @@ class DocumentationController extends Controller
     {
         Auth::logout();
         Auth::loginUsingId(3);
-        return redirect()->route('shop');
-    }    
+        return redirect()->route('shop.index');
+    }
 }

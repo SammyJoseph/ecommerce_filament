@@ -16,7 +16,7 @@
                     <h3 class="cart-page-title">Payment Pending</h3>
                     <p>Your payment is currently being processed. We will notify you once it's confirmed.</p>
                     <div class="btn-hover text-center mt-30">
-                        <a class="btn-style-2" href="{{ route('shop') }}">Return to Shop</a>
+                        <a class="btn-style-2" href="{{ route('shop.index') }}">Return to Shop</a>
                     </div>
                 </div>
             </div>

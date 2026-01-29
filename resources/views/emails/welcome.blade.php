@@ -202,7 +202,7 @@
                     <!-- CTA Button -->
                     <tr>
                         <td class="button-container">
-                            <a href="{{ route('shop') }}" class="button">Comenzar a Comprar</a>
+                            <a href="{{ route('shop.index') }}" class="button">Comenzar a Comprar</a>
                         </td>
                     </tr>
 

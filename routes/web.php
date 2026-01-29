@@ -35,7 +35,9 @@ Route::get('/raw-cart', function () {
     return response()->json($cart);
 });
 
-Route::get('/tienda', [SiteController::class, 'shop'])->name('shop');
+Route::get('/tienda', [SiteController::class, 'shop'])->name('shop.index');
+Route::get('/tienda/{category}', [SiteController::class, 'shopCategory'])->name('shop.category');
+
 Route::get('/favoritos', [SiteController::class, 'wishlist'])->name('wishlist');
 Route::get('/raw-wishlist', function () {
     Cart::instance('wishlist');
@@ -71,7 +73,7 @@ Route::get('/demo/login/admin', [DocumentationController::class, 'loginAdmin'])-
 
 Route::get('/email-order', function () {
     $order = \App\Models\Order::with(['user', 'orderItems.product'])->latest()->first();
-    
+
     if (!$order) {
         return "No hay órdenes para mostrar.";
     }

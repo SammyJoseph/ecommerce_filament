@@ -181,7 +181,7 @@
                                                 <p>Start shopping now to add items to your wishlist.</p>
                                                 <div class="cart-shiping-update-wrapper">
                                                     <div class="cart-shiping-update">
-                                                        <a href="{{ route('shop') }}">Continue Shopping</a>
+                                                        <a href="{{ route('shop.index') }}">Continue Shopping</a>
                                                     </div>
                                                 </div>
                                             </div>

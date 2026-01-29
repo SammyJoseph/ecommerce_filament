@@ -64,7 +64,7 @@
             <div class="col-lg-12">
                 <div class="cart-shiping-update-wrapper">
                     <div class="cart-shiping-update">
-                        <a href="{{ route('shop') }}">Continue Shopping</a>
+                        <a href="{{ route('shop.index') }}">Continue Shopping</a>
                     </div>
                     <div class="cart-clear {{ $productsInCart->isEmpty() ? 'tw-hidden' : '' }}">
                         <button wire:click="clearCart" type="button">
