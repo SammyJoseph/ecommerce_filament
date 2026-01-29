@@ -27,6 +27,7 @@ class Shop extends Component
     public $on_sale = false;
     public $is_new = false;
     public $wishlistProductIds = [];
+    public $parent_category;
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -39,8 +40,9 @@ class Shop extends Component
         'is_new' => ['except' => false],
     ];
 
-    public function mount()
+    public function mount($parent_category = null)
     {
+        $this->parent_category = $parent_category;
         $this->price_range_max = ceil(Product::query()->max(DB::raw('CASE WHEN sale_price > 0 AND sale_price < price THEN sale_price ELSE price END')) ?? 1000);
         $this->max_price = request()->input('max_price', $this->price_range_max);
         $this->loadWishlist();
@@ -131,7 +133,13 @@ class Shop extends Component
 
     public function render()
     {
-        $categories = Category::withCount(['products' => function ($query) {
+        $categoriesQuery = Category::query();
+
+        if ($this->parent_category) {
+            $categoriesQuery->where('parent_id', $this->parent_category->id);
+        }
+
+        $categories = $categoriesQuery->withCount(['products' => function ($query) {
             $query->where('is_visible', true);
         }])->get();
 
@@ -155,6 +163,13 @@ class Shop extends Component
             ->where('is_visible', true)
             ->when($this->search, function (Builder $query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
+            })
+            ->when($this->parent_category, function (Builder $query) {
+                $childIds = $this->parent_category->children()->pluck('id');
+                $allIds = $childIds->push($this->parent_category->id);
+                $query->whereHas('categories', function (Builder $q) use ($allIds) {
+                    $q->whereIn('categories.id', $allIds);
+                });
             })
             ->when($this->category_slugs, function (Builder $query) {
                 $slugs = explode(',', $this->category_slugs);

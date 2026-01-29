@@ -9,5 +9,5 @@
 @endsection
 
 @section('content')
-    @livewire('shop')
+    @livewire('shop', ['parent_category' => $category])
 @endsection
