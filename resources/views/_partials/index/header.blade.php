@@ -1,7 +1,7 @@
 <header class="header-area @yield('header-extra-classes')">
     <div class="@yield('container-class', 'container')">
         <div class="header-large-device">
-@inject('headerSettings', 'App\Settings\HeaderSettings')
+            @inject('headerSettings', 'App\Settings\HeaderSettings')
             <div class="header-top header-top-ptb-1 border-bottom-1">
                 <div class="row">
                     <div class="col-xl-4 col-lg-5">
@@ -57,7 +57,41 @@
                             <nav>
                                 <ul class="tw-uppercase">
                                     <li><a href="{{ route('index') }}" @class(['!tw-text-red-500' => request()->routeIs('index')])>Inicio</a></li>
-                                    <li><a href="{{ route('shop.index') }}" @class(['!tw-text-red-500' => request()->routeIs('shop')])>Tienda</a></li>
+                                    <li><a href="{{ route('shop.index') }}" @class(['!tw-text-red-500' => request()->routeIs('shop')])>Tienda</a>
+                                        <ul class="mega-menu-style mega-menu-mrg-1">
+                                            <li>
+                                                <ul>
+                                                    <li>
+                                                        <a class="dropdown-title" href="#">Categorías</a>
+                                                        <ul>
+                                                            <li><a href="{{ route('shop.category', 'hombres') }}">Hombres</a></li>
+                                                            <li><a href="{{ route('shop.category', 'mujeres') }}">Mujeres</a></li>
+                                                            <li><a href="{{ route('shop.category', 'niños') }}">Niños</a></li>
+                                                            <li><a href="{{ route('shop.category', 'bebes') }}">Bebés</a></li>
+                                                            <li><a href="shop-list-no-sidebar.html">list no sidebar</a></li>
+                                                            <li><a href="shop-right-sidebar.html">shop right sidebar</a></li>
+                                                            <li><a href="store-location.html">store location</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-title" href="#">Etiquetas</a>
+                                                        <ul>
+                                                            <li><a href="product-details.html">tab style 1</a></li>
+                                                            <li><a href="product-details-2.html">tab style 2</a></li>
+                                                            <li><a href="product-details-sticky.html">sticky style</a></li>
+                                                            <li><a href="product-details-gallery.html">gallery style </a></li>
+                                                            <li><a href="product-details-affiliate.html">affiliate style</a></li>
+                                                            <li><a href="product-details-group.html">group style</a></li>
+                                                            <li><a href="product-details-fixed-img.html">fixed image style </a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a href="shop.html"><img src="{{ asset('assets/images/banner/banner-12.png') }}" alt=""></a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
                                     <li><a href="{{ route('about') }}" @class(['!tw-text-red-500' => request()->routeIs('about')])>Nosotros</a></li>
                                     <li><a href="{{ route('blog.index') }}" @class(['!tw-text-red-500' => request()->routeIs('blog.*')])>Blog</a></li>
                                     <li><a href="{{ route('contact') }}" @class(['!tw-text-red-500' => request()->routeIs('contact')])>Contacto</a></li>

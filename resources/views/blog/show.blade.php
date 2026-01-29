@@ -5,7 +5,8 @@
 @section('container-class', 'container')
 
 @section('breadcrumbs')
-    <li class="active"><a href="{{ route('blog.index') }}">Blog</a></li>
+    <li><a href="{{ route('blog.index') }}">Blog</a></li>
+    <li class="active">{{ $blog->title }}</li>
 @endsection
 
 @section('content')

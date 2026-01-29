@@ -5,7 +5,8 @@
 @section('container-class', 'container')
 
 @section('breadcrumbs')
-    <li class="active">Tienda</li>
+    <li><a href="{{ route('shop.index') }}">Tienda</a></li>
+    <li class="active">{{ $category->name }}</li>
 @endsection
 
 @section('content')
