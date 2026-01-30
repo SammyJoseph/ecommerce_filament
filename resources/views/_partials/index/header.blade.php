@@ -62,15 +62,12 @@
                                             <li>
                                                 <ul>
                                                     <li>
-                                                        <a class="dropdown-title" href="#">Categorías</a>
+                                                        <a class="dropdown-title tw-pointer-events-none" href="#">Categorías</a>
                                                         <ul>
                                                             <li><a href="{{ route('shop.category', 'hombres') }}">Hombres</a></li>
                                                             <li><a href="{{ route('shop.category', 'mujeres') }}">Mujeres</a></li>
                                                             <li><a href="{{ route('shop.category', 'niños') }}">Niños</a></li>
                                                             <li><a href="{{ route('shop.category', 'bebes') }}">Bebés</a></li>
-                                                            <li><a href="shop-list-no-sidebar.html">list no sidebar</a></li>
-                                                            <li><a href="shop-right-sidebar.html">shop right sidebar</a></li>
-                                                            <li><a href="store-location.html">store location</a></li>
                                                         </ul>
                                                     </li>
                                                     <li>
