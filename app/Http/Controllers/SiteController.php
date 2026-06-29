@@ -25,10 +25,11 @@ class SiteController extends Controller
         }])->take(5)->get();
 
         $settings = app(\App\Settings\HomePageSettings::class);
+        $generalSettings = app(\App\Settings\GeneralSettings::class);
         $instagramItems = $settings->instagram_items ?? [];
         $brandLogos = $settings->brand_logos ?? [];
 
-        return view('index', compact('categories', 'settings', 'instagramItems', 'brandLogos'));
+        return view('index', compact('categories', 'settings', 'generalSettings', 'instagramItems', 'brandLogos'));
     }
 
     public function productDetails(Product $product): View

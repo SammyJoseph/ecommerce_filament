@@ -21,6 +21,10 @@ class HeroSlideSeeder extends Seeder
                 'button_link' => '#',
                 'sort_order' => 1,
                 'is_active' => true,
+                'button_bg_color' => '#000000',
+                'button_hover_bg_color' => '#ff2f2f',
+                'button_text_color' => '#ffffff',
+                'button_hover_text_color' => '#ffffff',
                 'image_path' => public_path('assets/images/slider/hm-1-slider-1.png'),
             ],
             [
@@ -31,6 +35,10 @@ class HeroSlideSeeder extends Seeder
                 'button_link' => '#',
                 'sort_order' => 2,
                 'is_active' => true,
+                'button_bg_color' => '#000000',
+                'button_hover_bg_color' => '#ff2f2f',
+                'button_text_color' => '#ffffff',
+                'button_hover_text_color' => '#ffffff',
                 'image_path' => public_path('assets/images/slider/hm-1-slider-4.png'),
             ],
         ];

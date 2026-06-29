@@ -46,6 +46,23 @@ class HeroSlideResource extends Resource
                         Forms\Components\Toggle::make('is_active')
                             ->required()
                             ->default(true),
+                        
+                        Forms\Components\Section::make('Button Colors')
+                            ->description('Customize button styling for this slide')
+                            ->schema([
+                                Forms\Components\ColorPicker::make('button_bg_color')
+                                    ->label('Button Background Color')
+                                    ->placeholder('#000000 or rgba(...)'),
+                                Forms\Components\ColorPicker::make('button_hover_bg_color')
+                                    ->label('Button Hover Background Color')
+                                    ->placeholder('#ff2f2f'),
+                                Forms\Components\ColorPicker::make('button_text_color')
+                                    ->label('Button Text Color')
+                                    ->placeholder('#ffffff'),
+                                Forms\Components\ColorPicker::make('button_hover_text_color')
+                                    ->label('Button Hover Text Color')
+                                    ->placeholder('#ffffff'),
+                            ])->columns(2),
                     ])->columns(2),
                 
                 Forms\Components\Section::make('Image')

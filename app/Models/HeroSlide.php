@@ -20,6 +20,10 @@ class HeroSlide extends Model implements HasMedia
         'button_link',
         'is_active',
         'sort_order',
+        'button_bg_color',
+        'button_hover_bg_color',
+        'button_text_color',
+        'button_hover_text_color',
     ];
 
     protected $casts = [
