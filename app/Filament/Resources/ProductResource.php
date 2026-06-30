@@ -18,6 +18,8 @@ use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 
 class ProductResource extends Resource
 {
+    use \Filament\Resources\Concerns\Translatable;
+
     protected static ?string $model = Product::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-archive-box';

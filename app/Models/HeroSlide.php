@@ -3,14 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\Translatable\HasTranslations;
 
 class HeroSlide extends Model implements HasMedia
 {
-    use InteractsWithMedia;
+    use InteractsWithMedia, HasTranslations;
+
+    public $translatable = ['title', 'subtitle', 'description', 'button_text'];
 
     protected $fillable = [
         'title',

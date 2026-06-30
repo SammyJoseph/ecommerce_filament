@@ -14,10 +14,22 @@ class HeroSlideSeeder extends Seeder
     {
         $slides = [
             [
-                'title' => 'Moda esencial para cada día',
-                'subtitle' => 'Nueva colección',
-                'description' => 'Descubre polos, camisas y pantalones diseñados para combinar comodidad, estilo y calidad en cada ocasión.',
-                'button_text' => 'Ver colección',
+                'title' => [
+                    'es' => 'Moda esencial para cada día',
+                    'fr' => 'Mode essentielle pour chaque jour',
+                ],
+                'subtitle' => [
+                    'es' => 'Nueva colección',
+                    'fr' => 'Nouvelle collection',
+                ],
+                'description' => [
+                    'es' => 'Descubre polos, camisas y pantalones diseñados para combinar comodidad, estilo y calidad en cada ocasión.',
+                    'fr' => 'Découvrez des polos, des chemises et des pantalons conçus pour allier confort, style et qualité en toutes occasions.',
+                ],
+                'button_text' => [
+                    'es' => 'Ver colección',
+                    'fr' => 'Voir la collection',
+                ],
                 'button_link' => '#',
                 'sort_order' => 1,
                 'is_active' => true,
@@ -28,10 +40,22 @@ class HeroSlideSeeder extends Seeder
                 'image_path' => public_path('assets/images/slider/hm-1-slider-1.png'),
             ],
             [
-                'title' => 'Estilo que se adapta a ti',
-                'subtitle' => 'Lo último en tendencias',
-                'description' => 'Prendas versátiles y modernas que elevan tu look, perfectas para el día a día o momentos especiales.',
-                'button_text' => 'Descubrir ahora',
+                'title' => [
+                    'es' => 'Estilo que se adapta a ti',
+                    'fr' => 'Un style qui s\'adapte à vous',
+                ],
+                'subtitle' => [
+                    'es' => 'Lo último en tendencias',
+                    'fr' => 'Les dernières tendances',
+                ],
+                'description' => [
+                    'es' => 'Prendas versátiles y modernas que elevan tu look, perfectas para el día a día o momentos especiales.',
+                    'fr' => 'Des vêtements polyvalents et modernes qui rehaussent votre look, parfaits pour le quotidien ou les moments spéciaux.',
+                ],
+                'button_text' => [
+                    'es' => 'Descubrir ahora',
+                    'fr' => 'Découvrir maintenant',
+                ],
                 'button_link' => '#',
                 'sort_order' => 2,
                 'is_active' => true,

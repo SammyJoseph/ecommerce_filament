@@ -24,9 +24,18 @@ class ProductFactory extends Factory
         $description = $this->faker->paragraph;
 
         return [
-            'name' => ucfirst($name),
-            'slug' => Str::slug($name),
-            'description' => $description,
+            'name' => [
+                'es' => ucfirst($name),
+                'fr' => ucfirst($name) . ' (FR)',
+            ],
+            'slug' => [
+                'es' => Str::slug($name),
+                'fr' => Str::slug($name) . '-fr',
+            ],
+            'description' => [
+                'es' => $description,
+                'fr' => $description . ' (FR)',
+            ],
             'price' => $price,
             'sale_price' => $salePrice,
             'stock' => $stock,
@@ -136,9 +145,18 @@ class ProductFactory extends Factory
     {
         return $this->state(function (array $attributes) use ($data) {
             return [
-                'name' => $data['name'],
-                'slug' => Str::slug($data['name']),
-                'description' => $data['description'],
+                'name' => [
+                    'es' => $data['name'],
+                    'fr' => $data['name'] . ' (FR)',
+                ],
+                'slug' => [
+                    'es' => Str::slug($data['name']),
+                    'fr' => Str::slug($data['name']) . '-fr',
+                ],
+                'description' => [
+                    'es' => $data['description'],
+                    'fr' => $data['description'] . ' (FR)',
+                ],
                 'price' => $data['price'],
                 'stock' => 0, // Stock will be sum of variants
                 'is_visible' => true,

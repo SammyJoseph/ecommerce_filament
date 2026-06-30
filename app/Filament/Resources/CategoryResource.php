@@ -16,6 +16,8 @@ use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
+    use \Filament\Resources\Concerns\Translatable;
+
     protected static ?string $model = Category::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-folder-open';

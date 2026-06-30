@@ -18,6 +18,8 @@ use Filament\Forms\Set;
 
 class BlogResource extends Resource
 {
+    use \Filament\Resources\Concerns\Translatable;
+
     protected static ?string $model = Blog::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';

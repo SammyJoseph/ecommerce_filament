@@ -19,9 +19,18 @@ class BlogCategoryFactory extends Factory
     {
         $name = $this->faker->words(2, true);
         return [
-            'name' => $name,
-            'slug' => Str::slug($name),
-            'description' => $this->faker->sentence,
+            'name' => [
+                'es' => ucfirst($name),
+                'fr' => ucfirst($name) . ' (FR)',
+            ],
+            'slug' => [
+                'es' => Str::slug($name),
+                'fr' => Str::slug($name) . '-fr',
+            ],
+            'description' => [
+                'es' => $this->faker->sentence,
+                'fr' => $this->faker->sentence . ' (FR)',
+            ],
             'is_visible' => true,
         ];
     }

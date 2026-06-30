@@ -27,6 +27,7 @@ class ProductSeeder extends Seeder
 
             // Attach Categories
             // Attach Categories
+            // Attach Categories
             if (isset($data['categories']) && is_array($data['categories'])) {
                 $categoryIds = [];
 
@@ -40,13 +41,13 @@ class ProductSeeder extends Seeder
                             $childName = $parts[1];
 
                             // Find Parent
-                            $parent = Category::where('name', $parentName)
+                            $parent = Category::where('name->es', $parentName)
                                 ->whereNull('parent_id')
                                 ->first();
 
                             if ($parent) {
                                 // Find Child belonging to this Parent
-                                $child = Category::where('name', $childName)
+                                $child = Category::where('name->es', $childName)
                                     ->where('parent_id', $parent->id)
                                     ->first();
 
@@ -59,7 +60,7 @@ class ProductSeeder extends Seeder
                         }
                     } else {
                         // It's a root category or loose match (e.g. "Hombres")
-                        $cat = Category::where('name', $categoryName)->first();
+                        $cat = Category::where('name->es', $categoryName)->first();
                         if ($cat) {
                             $categoryIds[] = $cat->id;
                         }
@@ -73,7 +74,7 @@ class ProductSeeder extends Seeder
 
             // Attach Tags
             if (isset($data['tags']) && is_array($data['tags'])) {
-                $tagIds = \App\Models\Tag::whereIn('name', $data['tags'])->pluck('id');
+                $tagIds = \App\Models\Tag::whereIn('name->es', $data['tags'])->pluck('id');
                 $product->tags()->attach($tagIds);
             }
         }

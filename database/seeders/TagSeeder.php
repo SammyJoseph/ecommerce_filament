@@ -12,6 +12,19 @@ class TagSeeder extends Seeder
      */
     public function run(): void
     {
+        $translations = [
+            'Casual' => 'Casual',
+            'Algodón' => 'Coton',
+            'Verano' => 'Été',
+            'Invierno' => 'Hiver',
+            'Deportivo' => 'Sportif',
+            'Formal' => 'Formel',
+            'Básico' => 'Basique',
+            'Tendencia' => 'Tendance',
+            'Oferta' => 'Offre',
+            'Premium' => 'Premium',
+        ];
+
         $tags = [
             'Casual',
             'Algodón',
@@ -26,10 +39,17 @@ class TagSeeder extends Seeder
         ];
 
         foreach ($tags as $tagName) {
-            \App\Models\Tag::firstOrCreate(
-                ['slug' => \Illuminate\Support\Str::slug($tagName)],
-                ['name' => $tagName]
-            );
+            $frName = $translations[$tagName] ?? $tagName;
+            \App\Models\Tag::create([
+                'name' => [
+                    'es' => $tagName,
+                    'fr' => $frName,
+                ],
+                'slug' => [
+                    'es' => \Illuminate\Support\Str::slug($tagName),
+                    'fr' => \Illuminate\Support\Str::slug($frName),
+                ],
+            ]);
         }
     }
 }

@@ -9,83 +9,83 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\UserController;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-Route::get('/producto/{product}', [SiteController::class, 'productDetails'])->name('product.show');
-
-Route::get('/', [SiteController::class, 'index'])->name('index');
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/mi-cuenta', [UserController::class, 'accountDetails'])->name('user.my-account');
-    Route::post('/mi-cuenta/update', [UserController::class, 'updateAccountDetails'])->name('user.update-account');
-    Route::get('/mi-cuenta/pedidos', [UserController::class, 'orders'])->name('user.orders');
-    Route::get('/mi-cuenta/pedidos/{order}', [UserController::class, 'orderDetails'])->name('user.order.details');
-    Route::get('/mi-cuenta/direcciones', [UserController::class, 'address'])->name('user.address');
-    Route::get('/mi-cuenta/metodos-de-pago', [UserController::class, 'paymentMethod'])->name('user.payment-method');
-});
-
-Route::get('/carrito', [CartController::class, 'index'])->name('cart');
-Route::get('/raw-cart', function () {
-    Cart::instance('shopping');
-    $cart = Cart::content();
-
-    return response()->json($cart);
-});
-
-Route::get('/tienda', [SiteController::class, 'shop'])->name('shop.index');
-Route::get('/tienda/{category}', [SiteController::class, 'shopCategory'])->name('shop.category');
-
-Route::get('/favoritos', [SiteController::class, 'wishlist'])->name('wishlist');
-Route::get('/raw-wishlist', function () {
-    Cart::instance('wishlist');
-    $cart = Cart::content();
-
-    return response()->json($cart);
-});
-
-Route::get('/pagar', [CheckoutController::class, 'index'])->name('checkout.index');
-Route::post('/pagar/process_payment', [CheckoutController::class, 'process']);
-Route::get('/gracias', [CheckoutController::class, 'thanks'])->name('checkout.thanks');
-
+// Rutas externas y Webhooks (sin prefijo de idioma ni traducción)
+Route::post('/mp/webhook', [MPController::class, 'webhook'])->name('mp.webhook');
 Route::get('/payment/success', [MPController::class, 'success'])->name('payment.success');
 Route::get('/payment/failure', [MPController::class, 'failure'])->name('payment.failure');
 Route::get('/payment/pending', [MPController::class, 'pending'])->name('payment.pending');
 
-Route::post('/mp/webhook', [MPController::class, 'webhook'])->name('mp.webhook');
+// Rutas del Ecommerce Localizadas y Traducidas
+Route::group([
+    'prefix' => LaravelLocalization::setLocale(),
+    'middleware' => [ 'localeSessionRedirect', 'localizationRedirect', 'localeViewPath', 'localize' ]
+], function () {
 
-Route::get('/nosotros', [SiteController::class, 'about'])->name('about');
-Route::get('/contacto', [SiteController::class, 'contact'])->name('contact');
+    Route::get('/', [SiteController::class, 'index'])->name('index');
+    Route::get(LaravelLocalization::transRoute('routes.product_show'), [SiteController::class, 'productDetails'])->name('product.show');
+    Route::get(LaravelLocalization::transRoute('routes.shop_index'), [SiteController::class, 'shop'])->name('shop.index');
+    Route::get(LaravelLocalization::transRoute('routes.shop_category'), [SiteController::class, 'shopCategory'])->name('shop.category');
+    Route::get(LaravelLocalization::transRoute('routes.cart'), [CartController::class, 'index'])->name('cart');
+    Route::get(LaravelLocalization::transRoute('routes.wishlist'), [SiteController::class, 'wishlist'])->name('wishlist');
+    Route::get(LaravelLocalization::transRoute('routes.checkout_index'), [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post(LaravelLocalization::transRoute('routes.checkout_index') . '/process_payment', [CheckoutController::class, 'process']);
+    Route::get(LaravelLocalization::transRoute('routes.checkout_thanks'), [CheckoutController::class, 'thanks'])->name('checkout.thanks');
+    Route::get(LaravelLocalization::transRoute('routes.about'), [SiteController::class, 'about'])->name('about');
+    Route::get(LaravelLocalization::transRoute('routes.contact'), [SiteController::class, 'contact'])->name('contact');
+    Route::get(LaravelLocalization::transRoute('routes.search'), [SiteController::class, 'search'])->name('search');
 
-Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
-Route::get('/blog/preview/{token}', [BlogController::class, 'preview'])->name('blog.preview');
-Route::get('/blog/{blog}', [BlogController::class, 'show'])->name('blog.show');
-Route::get('/blog/categories', [BlogController::class, 'blogCategoryIndex'])->name('blog.category.index');
-Route::get('/blog/category/{category}', [BlogController::class, 'blogCategoryShow'])->name('blog.category.show');
+    // Rutas del Blog
+    Route::get(LaravelLocalization::transRoute('routes.blog_index'), [BlogController::class, 'index'])->name('blog.index');
+    Route::get('/blog/preview/{token}', [BlogController::class, 'preview'])->name('blog.preview');
+    Route::get(LaravelLocalization::transRoute('routes.blog_show'), [BlogController::class, 'show'])->name('blog.show');
+    Route::get(LaravelLocalization::transRoute('routes.blog_category_index'), [BlogController::class, 'blogCategoryIndex'])->name('blog.category.index');
+    Route::get(LaravelLocalization::transRoute('routes.blog_category_show'), [BlogController::class, 'blogCategoryShow'])->name('blog.category.show');
 
-Route::get('/buscar', [SiteController::class, 'search'])->name('search');
+    // Rutas de Usuario Autenticado
+    Route::middleware([
+        'auth:sanctum',
+        config('jetstream.auth_session'),
+        'verified',
+    ])->group(function () {
+        Route::get(LaravelLocalization::transRoute('routes.user_my_account'), [UserController::class, 'accountDetails'])->name('user.my-account');
+        Route::post(LaravelLocalization::transRoute('routes.user_my_account') . '/update', [UserController::class, 'updateAccountDetails'])->name('user.update-account');
+        Route::get(LaravelLocalization::transRoute('routes.user_orders'), [UserController::class, 'orders'])->name('user.orders');
+        Route::get(LaravelLocalization::transRoute('routes.user_order_details'), [UserController::class, 'orderDetails'])->name('user.order.details');
+        Route::get(LaravelLocalization::transRoute('routes.user_address'), [UserController::class, 'address'])->name('user.address');
+        Route::get(LaravelLocalization::transRoute('routes.user_payment_method'), [UserController::class, 'paymentMethod'])->name('user.payment-method');
+    });
 
-Route::get('/demo', [DocumentationController::class, 'index'])->name('doc');
-Route::get('/demo/login/buyer', [DocumentationController::class, 'loginBuyer'])->name('doc.login.buyer');
-Route::get('/demo/login/admin', [DocumentationController::class, 'loginAdmin'])->name('doc.login.admin');
+    // Rutas internas de utilidad (JSON)
+    Route::get('/raw-cart', function () {
+        Cart::instance('shopping');
+        $cart = Cart::content();
+        return response()->json($cart);
+    });
+    Route::get('/raw-wishlist', function () {
+        Cart::instance('wishlist');
+        $cart = Cart::content();
+        return response()->json($cart);
+    });
 
-Route::get('/email-order', function () {
-    $order = \App\Models\Order::with(['user', 'orderItems.product'])->latest()->first();
+    // Rutas de Demo/Doc
+    Route::get('/demo', [DocumentationController::class, 'index'])->name('doc');
+    Route::get('/demo/login/buyer', [DocumentationController::class, 'loginBuyer'])->name('doc.login.buyer');
+    Route::get('/demo/login/admin', [DocumentationController::class, 'loginAdmin'])->name('doc.login.admin');
 
-    if (!$order) {
-        return "No hay órdenes para mostrar.";
-    }
-
-    return new \App\Mail\OrderStatusChanged($order);
-});
-Route::get('/email-welcome', function () {
-    $user = \App\Models\User::first();
-
-    if (!$user) {
-        return "No hay usuarios para mostrar.";
-    }
-
-    return new \App\Mail\WelcomeEmail($user);
+    Route::get('/email-order', function () {
+        $order = \App\Models\Order::with(['user', 'orderItems.product'])->latest()->first();
+        if (!$order) {
+            return "No hay órdenes para mostrar.";
+        }
+        return new \App\Mail\OrderStatusChanged($order);
+    });
+    Route::get('/email-welcome', function () {
+        $user = \App\Models\User::first();
+        if (!$user) {
+            return "No hay usuarios para mostrar.";
+        }
+        return new \App\Mail\WelcomeEmail($user);
+    });
 });

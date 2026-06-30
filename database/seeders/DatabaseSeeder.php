@@ -44,6 +44,7 @@ class DatabaseSeeder extends Seeder
             $this->command->error("An unexpected error occurred while deleting media directories: " . $e->getMessage());
         }
 
+        $this->call(LanguageSeeder::class);
         $this->call(RolesPermissionsSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(CategorySeeder::class);

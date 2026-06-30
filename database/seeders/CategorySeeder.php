@@ -16,6 +16,26 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
+        $translations = [
+            'Hombres' => 'Hommes',
+            'Mujeres' => 'Femmes',
+            'Niños' => 'Enfants',
+            'Bebés' => 'Bébés',
+            'Camisas' => 'Chemises',
+            'Polos' => 'Polos',
+            'Pantalones' => 'Pantalons',
+            'Casacas' => 'Vestes',
+            'Vestidos' => 'Robes',
+            'Blusas' => 'Blouses',
+            'Faldas' => 'Jupes',
+            'Conjuntos' => 'Ensembles',
+            'Pijamas' => 'Pyjamas',
+            'Bodies' => 'Bodys',
+            'Enterizos' => 'Combinaisons',
+            'Mantas' => 'Couvertures',
+            'Gorros' => 'Bonnets',
+        ];
+
         $structure = [
             'Hombres' => [
                 'Camisas',
@@ -45,17 +65,35 @@ class CategorySeeder extends Seeder
 
         foreach ($structure as $parentName => $children) {
             $parent = Category::create([
-                'name'        => $parentName,
-                'slug'        => Str::slug($parentName),
-                'description' => 'Categoría principal para ' . $parentName,
+                'name'        => [
+                    'es' => $parentName,
+                    'fr' => $translations[$parentName] ?? $parentName,
+                ],
+                'slug'        => [
+                    'es' => Str::slug($parentName),
+                    'fr' => Str::slug($translations[$parentName] ?? $parentName),
+                ],
+                'description' => [
+                    'es' => 'Categoría principal para ' . $parentName,
+                    'fr' => 'Catégorie principale pour ' . ($translations[$parentName] ?? $parentName),
+                ],
                 'is_visible'  => true,
             ]);
 
             foreach ($children as $childName) {
                 Category::create([
-                    'name'        => $childName,
-                    'slug'        => Str::slug($childName),
-                    'description' => $childName . ' para ' . $parentName,
+                    'name'        => [
+                        'es' => $childName,
+                        'fr' => $translations[$childName] ?? $childName,
+                    ],
+                    'slug'        => [
+                        'es' => Str::slug($childName),
+                        'fr' => Str::slug($translations[$childName] ?? $childName),
+                    ],
+                    'description' => [
+                        'es' => $childName . ' para ' . $parentName,
+                        'fr' => ($translations[$childName] ?? $childName) . ' pour ' . ($translations[$parentName] ?? $parentName),
+                    ],
                     'parent_id'   => $parent->id,
                     'is_visible'  => true,
                 ]);

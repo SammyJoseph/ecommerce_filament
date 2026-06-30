@@ -16,11 +16,35 @@
                                     <a href="{{ $headerSettings->track_order_url }}">{{ $headerSettings->track_order_text }}</a>
                                 </div>
                                 <div class="same-style same-style-border language-wrap">
-                                    <a class="language-dropdown-active" href="#">{{ $headerSettings->languages[0]['name'] ?? 'Languages' }} <i class="icon-arrow-down"></i></a>
+                                    @php
+                                        $flagCodes = [
+                                            'es' => 'es',
+                                            'fr' => 'fr',
+                                            'en' => 'gb'
+                                        ];
+                                        $currentLocale = LaravelLocalization::getCurrentLocale();
+                                        $supportedLocales = LaravelLocalization::getSupportedLocales();
+                                        $currentLocaleProperties = $supportedLocales[$currentLocale] ?? null;
+                                    @endphp
+                                    <a class="language-dropdown-active" href="#">
+                                        <img src="https://flagcdn.com/16x12/{{ $flagCodes[$currentLocale] ?? $currentLocale }}.png" 
+                                             alt="{{ $currentLocale }}" 
+                                             style="display:inline-block; vertical-align:middle; margin-right:5px; margin-top:-2px; border: 1px solid #ddd; border-radius: 1px; width: 16px; height: 12px;">
+                                        {{ $currentLocaleProperties['native'] ?? 'Languages' }} <i class="icon-arrow-down"></i>
+                                    </a>
                                     <div class="language-dropdown">
                                         <ul>
-                                            @foreach($headerSettings->languages as $language)
-                                                <li><a href="{{ $language['url'] }}">{{ $language['name'] }}</a></li>
+                                            @foreach($supportedLocales as $localeCode => $properties)
+                                                @if($localeCode !== $currentLocale)
+                                                    <li>
+                                                        <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" style="display: flex !important; align-items: center; gap: 8px; justify-content: flex-start; text-align: left;">
+                                                            <img src="https://flagcdn.com/16x12/{{ $flagCodes[$localeCode] ?? $localeCode }}.png" 
+                                                                 alt="{{ $localeCode }}" 
+                                                                 style="display: inline-block !important; border: 1px solid #ddd; border-radius: 1px; width: 16px; height: 12px; margin: 0 !important; flex-shrink: 0;">
+                                                            <span>{{ $properties['native'] }}</span>
+                                                        </a>
+                                                    </li>
+                                                @endif
                                             @endforeach
                                         </ul>
                                     </div>

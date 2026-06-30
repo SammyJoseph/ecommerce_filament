@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('slug')->unique();
-            $table->longText('content')->nullable();
+            $table->json('title');
+            $table->json('slug');
+            $table->json('content')->nullable();
             $table->string('image')->nullable();
             $table->boolean('is_visible')->default(true);
             $table->timestamp('published_at')->nullable();

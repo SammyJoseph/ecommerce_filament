@@ -9,11 +9,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Translatable\HasTranslations;
 
 class Product extends Model implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\ProductFactory> */
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, HasTranslations;
+
+    public $translatable = ['name', 'slug', 'description'];
 
     protected $fillable = [
 
@@ -204,5 +207,19 @@ class Product extends Model implements HasMedia
     {
         $this->addMediaCollection('product_images')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        $field = $field ?? $this->getRouteKeyName();
+        
+        if ($field === 'slug' && method_exists($this, 'getTranslatableAttributes') && in_array('slug', $this->getTranslatableAttributes())) {
+            $locale = app()->getLocale();
+            return $this->where("slug->{$locale}", $value)
+                ->orWhere("slug->es", $value)
+                ->first() ?? parent::resolveRouteBinding($value, $field);
+        }
+
+        return parent::resolveRouteBinding($value, $field);
     }
 }

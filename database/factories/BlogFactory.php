@@ -16,43 +16,65 @@ class BlogFactory extends Factory
      */
     public function definition(): array
     {
+        $title = $this->faker->sentence;
+        $slug = \Illuminate\Support\Str::slug($title);
+
+        $esBlocks = [
+            [
+                'type' => 'paragraph',
+                'data' => [
+                    'text' => '<p>' . $this->faker->paragraph() . '</p>',
+                ],
+            ],
+            [
+                'type' => 'quote',
+                'data' => [
+                    'text' => $this->faker->sentence(),
+                    'author' => $this->faker->name(),
+                ],
+            ],
+            [
+                'type' => 'paragraph',
+                'data' => [
+                    'text' => '<p>' . $this->faker->paragraph() . '</p>',
+                ],
+            ],
+        ];
+
+        $frBlocks = [
+            [
+                'type' => 'paragraph',
+                'data' => [
+                    'text' => '<p>' . $this->faker->paragraph() . ' (FR)</p>',
+                ],
+            ],
+            [
+                'type' => 'quote',
+                'data' => [
+                    'text' => $this->faker->sentence() . ' (FR)',
+                    'author' => $this->faker->name(),
+                ],
+            ],
+            [
+                'type' => 'paragraph',
+                'data' => [
+                    'text' => '<p>' . $this->faker->paragraph() . ' (FR)</p>',
+                ],
+            ],
+        ];
+
         return [
-            'title' => $this->faker->sentence,
-            'slug' => $this->faker->slug,
+            'title' => [
+                'es' => $title,
+                'fr' => $title . ' (FR)',
+            ],
+            'slug' => [
+                'es' => $slug,
+                'fr' => $slug . '-fr',
+            ],
             'content' => [
-                [
-                    'type' => 'paragraph',
-                    'data' => [
-                        'text' => '<p>' . $this->faker->paragraph() . '</p>',
-                    ],
-                ],
-                [
-                    'type' => 'quote',
-                    'data' => [
-                        'text' => $this->faker->sentence(),
-                        'author' => $this->faker->name(),
-                    ],
-                ],
-                [
-                    'type' => 'paragraph',
-                    'data' => [
-                        'text' => '<p>' . $this->faker->paragraph() . '</p>',
-                    ],
-                ],
-                [
-                    'type' => 'two_images',
-                    'data' => [
-                        'image_left' => $this->createImage(),
-                        'image_right' => $this->createImage(),
-                        'caption' => $this->faker->sentence(),
-                    ],
-                ],
-                [
-                    'type' => 'paragraph',
-                    'data' => [
-                        'text' => '<p>' . $this->faker->paragraph() . '</p>',
-                    ],
-                ],
+                'es' => $esBlocks,
+                'fr' => $frBlocks,
             ],
             'is_visible' => true,
             'published_at' => $this->faker->dateTimeBetween('-1 year', 'now'),

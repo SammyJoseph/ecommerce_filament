@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TagResource extends Resource
 {
+    use \Filament\Resources\Concerns\Translatable;
+
     protected static ?string $model = Tag::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';

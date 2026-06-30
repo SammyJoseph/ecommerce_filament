@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Translatable\HasTranslations;
 
 class Category extends Model
 {
     /** @use HasFactory<\Database\Factories\CategoryFactory> */
-    use HasFactory;
+    use HasFactory, HasTranslations;
+
+    public $translatable = ['name', 'slug', 'description'];
 
     protected $fillable = [
         'name',
@@ -43,5 +46,19 @@ class Category extends Model
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class);
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        $field = $field ?? $this->getRouteKeyName();
+        
+        if ($field === 'slug' && method_exists($this, 'getTranslatableAttributes') && in_array('slug', $this->getTranslatableAttributes())) {
+            $locale = app()->getLocale();
+            return $this->where("slug->{$locale}", $value)
+                ->orWhere("slug->es", $value)
+                ->first() ?? parent::resolveRouteBinding($value, $field);
+        }
+
+        return parent::resolveRouteBinding($value, $field);
     }
 }

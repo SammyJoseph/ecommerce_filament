@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('hero_slides', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->nullable();
-            $table->string('subtitle')->nullable();
-            $table->text('description')->nullable();
-            $table->string('button_text')->nullable();
+            $table->json('title')->nullable();
+            $table->json('subtitle')->nullable();
+            $table->json('description')->nullable();
+            $table->json('button_text')->nullable();
             $table->string('button_link')->nullable();
             $table->string('button_bg_color')->nullable();
             $table->string('button_hover_bg_color')->nullable();
